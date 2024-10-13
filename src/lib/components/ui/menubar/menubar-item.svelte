@@ -1,8 +1,14 @@
-<script>
+<script lang="ts">
   import { Menubar as MenubarPrimitive } from 'bits-ui';
-  import { cn } from '$lib/utils.js';
-  let className = undefined;
-  export let inset = undefined;
+  import { cn } from '$lib/utils';
+
+  type $$Props = MenubarPrimitive.ItemProps & {
+    inset?: boolean;
+  };
+  type $$Events = MenubarPrimitive.ItemEvents;
+
+  let className: $$Props['class'] = undefined;
+  export let inset: $$Props['inset'] = undefined;
   export { className as class };
 </script>
 
@@ -19,7 +25,6 @@
   on:focusout
   on:pointerleave
   on:pointermove
-  on:pointerdown
->
+  on:pointerdown>
   <slot />
 </MenubarPrimitive.Item>

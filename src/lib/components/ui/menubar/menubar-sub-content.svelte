@@ -1,9 +1,11 @@
-<script>
+<script lang="ts">
   import { Menubar as MenubarPrimitive } from 'bits-ui';
-  import { cn, flyAndScale } from '$lib/utils.js';
-  let className = undefined;
-  export let transition = flyAndScale;
-  export let transitionConfig = {
+  import { cn, flyAndScale } from '$lib/utils';
+
+  type $$Props = MenubarPrimitive.SubContentProps;
+  let className: $$Props['class'] = undefined;
+  export let transition: $$Props['transition'] = flyAndScale;
+  export let transitionConfig: $$Props['transitionConfig'] = {
     x: -10,
     y: 0
   };
@@ -17,7 +19,6 @@
     'z-50 min-w-max rounded-md border bg-popover p-1 text-popover-foreground shadow-lg focus:outline-none',
     className
   )}
-  {...$$restProps}
->
+  {...$$restProps}>
   <slot />
 </MenubarPrimitive.SubContent>
