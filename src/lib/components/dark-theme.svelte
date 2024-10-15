@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import clsx from 'clsx';
   import { setMode, userPrefersMode } from 'mode-watcher';
   import UserSystem from './icons/user-system.svelte';
@@ -10,6 +10,7 @@
     { mode: 'light', icon: Sun },
     { mode: 'dark', icon: Moon }
   ];
+
   const setTheme = (mode: string) => {
     return setMode(mode as 'dark' | 'light' | 'system');
   };
@@ -23,13 +24,11 @@
       <button
         type="button"
         on:click={() => setTheme(theme.mode)}
-        class={clsx($userPrefersMode === theme.mode && 'theme_active')}
-      >
+        class={clsx($userPrefersMode === theme.mode && 'theme_active')}>
         <svelte:component
           this={theme.icon}
           size="16"
-          strokeWidth={$userPrefersMode === theme.mode ? '2' : '1.5'}
-        />
+          strokeWidth={$userPrefersMode === theme.mode ? '2' : '1.5'} />
       </button>
     {/each}
   </div>
