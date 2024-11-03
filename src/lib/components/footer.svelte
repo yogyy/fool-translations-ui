@@ -1,7 +1,7 @@
 <footer class="border-t py-8">
   <div class="container">
     <div class="flex flex-col items-center gap-y-3">
-      <div class="flex flex-row gap-x-4 text-lg font-medium opacity-60">
+      <div class="flex flex-row flex-wrap justify-center gap-4 text-lg font-medium opacity-60">
         <a href="#discord" class="transition-opacity hover:opacity-65">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
             <path
@@ -39,7 +39,7 @@
         </a>
       </div>
       <div
-        class="flex flex-row gap-x-3 py-1 text-sm font-medium text-accent-foreground/90 md:gap-x-6 md:py-2 md:text-lg">
+        class="flex flex-row flex-wrap justify-center gap-x-3 py-1 text-sm font-medium text-accent-foreground/90 md:gap-x-6 md:py-2 md:text-lg">
         <a href="/support/about" class="hover:opacity-70">About</a>
         <a href="/support/announcements" class="hover:opacity-70">Announcements</a>
         <a href="/support/contact" class="hover:opacity-70">Contact</a>
