@@ -9,12 +9,15 @@
   viewBox="0 0 24 24"
   class={$$props.class}
   {...$$props}>
-  <path
+  <g
     fill="none"
     stroke="currentColor"
     stroke-linecap="round"
     stroke-linejoin="round"
     stroke-width="2"
-    d="m14 14l2.5 2.5m-.067 2.025a1.48 1.48 0 1 1 2.092-2.092l3.042 3.042a1.48 1.48 0 1 1-2.092 2.092zM16 9A7 7 0 1 0 2 9a7 7 0 0 0 14 0"
-    color="currentColor" />
+    color="currentColor">
+    <path
+      d="m5.048 8.607l-2.51-.153C4.338 3.704 9.503 1 14.54 2.344c5.364 1.433 8.55 6.917 7.117 12.25c-1.434 5.332-6.945 8.494-12.31 7.061A10.04 10.04 0 0 1 2 13.485" /><path
+      d="M12 8v4l2 2" />
+  </g>
 </svg>
