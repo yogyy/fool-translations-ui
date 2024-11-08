@@ -1,5 +1,6 @@
 <script>
   export let size = '24';
+  export let fill = 'none';
 </script>
 
 <svg
@@ -10,7 +11,7 @@
   class={$$props.class}
   {...$$props}>
   <path
-    fill="none"
+    {fill}
     stroke="currentColor"
     stroke-linecap="round"
     stroke-linejoin="round"
