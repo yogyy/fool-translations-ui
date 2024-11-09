@@ -31,7 +31,7 @@
   }
 </script>
 
-<Command.Root class="group w-fit border-none">
+<Command.Root class="group hidden w-fit border-none md:block">
   <div class="relative flex items-center">
     <CommandPrimitive.Input
       class="h-8 w-36 flex-grow truncate rounded-md border border-opacity-20 bg-background py-3 pl-2 pr-6 text-sm outline-none transition-all duration-300 ease-in-out focus:border-accent group-focus-within:w-52"
@@ -62,3 +62,8 @@
     {/if}
   </Command.Group>
 </Command.Root>
+<a
+  href="/search"
+  class="inline-flex h-auto w-8 items-center justify-center whitespace-nowrap rounded-md px-0 text-xs font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring md:hidden">
+  <SearchGlass size="20" />
+</a>
