@@ -5,6 +5,7 @@
   import { toast } from 'svelte-sonner';
   import Bell from '../icons/bell.svelte';
   import Favourite from '../icons/favourite.svelte';
+  import { goto } from '$app/navigation';
 
   export let subscribed: Subs;
   let className: string = $$props.class;
@@ -18,18 +19,20 @@
   const subscribe = async () => {
     await fetch(`/api/novel/subscribed?novelId=nvl_${$page.params.slug}`, { method: 'POST' }).then(
       async (res) => {
-        const data: FavoriteResponse = await res.json();
-        if (data.success && data.action === 'added') {
-          totalfav += 1;
-          favorited = true;
-
-          toast('Favorited', { position: 'top-center' });
-        } else if (data.success && data.action === 'deleted') {
-          totalfav -= 1;
-          favorited = false;
-          toast('Unfavorited', { position: 'top-center' });
+        if (res.status === 200) {
+          const data: FavoriteResponse = await res.json();
+          if (data.success && data.action === 'added') {
+            totalfav += 1;
+            favorited = true;
+            toast('Favorited', { position: 'top-center' });
+          } else if (data.success && data.action === 'deleted') {
+            totalfav -= 1;
+            favorited = false;
+            toast('Unfavorited', { position: 'top-center' });
+          }
         } else {
-          toast.error(data.error, { position: 'top-center' });
+          toast.error(res.statusText, { position: 'top-center' });
+          goto('/auth/login');
         }
       }
     );
