@@ -63,7 +63,7 @@
   </Command.Group>
 </Command.Root>
 <a
-  href="/search"
+  href="/novels"
   class="inline-flex h-auto w-8 items-center justify-center whitespace-nowrap rounded-md px-0 text-xs font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring md:hidden">
   <SearchGlass size="20" />
 </a>
