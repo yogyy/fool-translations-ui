@@ -9,9 +9,6 @@
   export let data;
 </script>
 
-<svelte:head>
-  <title>Fool Translations</title>
-</svelte:head>
 <ModeWatcher />
 <Navbar user={data.user} />
 

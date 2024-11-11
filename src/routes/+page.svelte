@@ -7,6 +7,10 @@
   const { featured } = data;
 </script>
 
+<svelte:head>
+  <title>Fool Translations</title>
+</svelte:head>
+
 <main class="min-h-dvh overflow-hidden sm:mt-14">
   <h1 class="sr-only">
     Welcome to Fools Translations. Read the latest and most popular Korean web novels with high
