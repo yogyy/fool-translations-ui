@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Novel } from '$lib/types';
+  import * as Tooltip from '$lib/components/ui/tooltip';
   import { cn } from '$lib/utils';
   import Badge from '../badge.svelte';
   import Clock from '../icons/clock.svelte';
@@ -8,24 +9,25 @@
   import View from '../icons/view.svelte';
   export let novel: Novel;
 
-  $: formatedDate = new Intl.DateTimeFormat('en-US', {
+  let formatedDate = new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'short',
     day: '2-digit'
   }).format(new Date(novel.last_updated.replace(' ', 'T')));
-  $: formatedViews = new Intl.NumberFormat('en-US', {
+
+  let formatedViews = new Intl.NumberFormat('en-US', {
     notation: 'compact',
     maximumFractionDigits: 1
   }).format(novel.totalViews);
 
-  const summary = [
-    { icon: Pencil, content: novel.author },
-    { icon: View, content: 'view' },
-    { icon: Star, content: novel.average_rating.toFixed(1) },
-    { icon: Clock, content: 'date' }
+  let summary = [
+    { icon: Pencil, data: novel.author, content: 'Author' },
+    { icon: View, data: formatedViews, content: 'Views' },
+    { icon: Star, data: novel.average_rating.toFixed(1), content: 'Rating' },
+    { icon: Clock, data: formatedDate, content: 'Last Updated' }
   ];
 
-  let className: string = $$props.class;
+  let className: string;
 
   export { className as class };
 </script>
@@ -39,21 +41,20 @@
     {novel.title}
   </h2>
   <div class="flex flex-row items-center justify-start gap-x-2">
-    {#each summary as { content, icon }}
-      <button>
-        <div class="flex flex-row items-center gap-x-1">
-          <svelte:component this={icon} size="16" />
-          <p class="text-center text-xs font-medium opacity-90">
-            {#if content === 'view'}
-              {formatedViews}
-            {:else if content === 'date'}
-              {formatedDate}
-            {:else}
-              {content}
-            {/if}
-          </p>
-        </div>
-      </button>
+    {#each summary as sum}
+      <Tooltip.Root>
+        <Tooltip.Trigger>
+          <div class="flex flex-row items-center gap-x-1">
+            <svelte:component this={sum.icon} size="16" />
+            <p class="text-center text-xs font-medium opacity-90">
+              {sum.data}
+            </p>
+          </div>
+        </Tooltip.Trigger>
+        <Tooltip.Content class="bg-badge px-2.5 py-2 text-foreground">
+          <p>{sum.content}</p>
+        </Tooltip.Content>
+      </Tooltip.Root>
     {/each}
   </div>
   <div class="flex flex-row flex-wrap justify-center gap-2 md:justify-start">
