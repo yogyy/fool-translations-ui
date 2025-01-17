@@ -8,18 +8,20 @@ const config = {
   theme: {
     container: {
       center: true,
-      padding: '2rem',
+      padding: '.75rem',
       screens: {
-        '2xl': '1400px'
+        '2xl': '1200px'
       }
     },
     extend: {
       colors: {
         border: 'hsl(var(--border) / <alpha-value>)',
         input: 'hsl(var(--input) / <alpha-value>)',
+        badge: 'hsl(var(--badge) / <alpha-value>)',
         ring: 'hsl(var(--ring) / <alpha-value>)',
         background: 'hsl(var(--background) / <alpha-value>)',
         foreground: 'hsl(var(--foreground) / <alpha-value>)',
+        complimentary: 'hsl(var(--complimentary) / <alpha-value>)',
         primary: {
           DEFAULT: 'hsl(var(--primary) / <alpha-value>)',
           foreground: 'hsl(var(--primary-foreground) / <alpha-value>)'
@@ -53,6 +55,9 @@ const config = {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)'
+      },
+      spacing: {
+        pgsize: '75rem'
       },
       fontFamily: {
         sans: [...fontFamily.sans]

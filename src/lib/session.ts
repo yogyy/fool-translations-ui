@@ -11,8 +11,6 @@ export async function validateSessionToken(event: RequestEvent): Promise<Validat
   const res = await event.fetch(`${BE_URL}/auth/validate`);
   const data = await res.json();
 
-  console.log('validate cookie', res.headers.getSetCookie());
-
   return data;
 }
 
@@ -26,7 +24,6 @@ export function setSessionTokenCookie(event: RequestEvent, token: string, expire
 }
 
 export function deleteSessionTokenCookie(event: RequestEvent): void {
-  console.log('session deleted');
   event.cookies.set('session', '', {
     httpOnly: true,
     sameSite: 'lax',

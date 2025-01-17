@@ -1,5 +1,5 @@
 import { BE_URL } from '$env/static/private';
-import type { NovelResponse, SubsResponse } from '$lib/types.js';
+import type { NovelResponse } from '$lib/types.js';
 import { error } from '@sveltejs/kit';
 
 export const load = async ({ fetch, params }) => {

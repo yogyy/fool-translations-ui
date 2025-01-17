@@ -16,7 +16,6 @@
     onUpdate({ result }) {
       const { signin } = result.data as FormResult<ActionData>;
 
-      console.log(signin);
       if (signin?.success === false) {
         toast.error(signin?.error);
       } else {
@@ -24,7 +23,6 @@
       }
     }
   });
-
   const { form: formData, enhance } = form;
 </script>
 
