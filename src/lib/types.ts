@@ -18,18 +18,18 @@ export interface NovelResponse {
 }
 
 export interface Subs {
-  is_subscribed: boolean;
-  total_subscribe: number;
+  isSubscribed: boolean;
+  total: number;
 }
 
 export interface Favs {
-  is_favorited: boolean;
-  total_favorite: number;
+  isFavorited: boolean;
+  total: number;
 }
 
-export interface SubsResponse {
+export interface SubsResponse<T> {
   success: boolean;
-  data: Subs;
+  data: T;
 }
 
 export interface Rating {
