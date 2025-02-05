@@ -9,9 +9,7 @@
 
   export let data;
 
-  const { novel, subscribed, rating } = data;
-
-  console.log(subscribed);
+  const { novel, subs, rating } = data;
 </script>
 
 <svelte:head>
@@ -36,7 +34,7 @@
         color="currentColor" />
     </svg>
   </a>
-  <Subscribed {subscribed} />
+  <Subscribed data={subs} />
 </header>
 <div class="container min-h-dvh px-0 md:max-w-pgsize">
   <div class="grid grid-cols-1 md:mx-24 md:my-2 md:flex md:flex-row md:gap-x-2 md:gap-y-0">
@@ -65,12 +63,12 @@
       </div>
       <div class="mb-5 flex w-full flex-col md:mb-0 md:mt-4 md:gap-y-2 md:px-14">
         <Summary {novel} class="flex items-center md:hidden" />
-        <Subscribed {subscribed} class="-mt-16 hidden md:flex" />
+        <Subscribed data={subs} class="-mt-16 hidden md:flex" />
         <ReleasedDay />
         <div class="flex flex-grow justify-center">
           <a
             class="mx-auto inline-flex h-10 w-1/2 select-none items-center justify-center whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 dark:bg-cyan-300/90 dark:hover:bg-cyan-300/60 md:w-full"
-            href="/viewer/2442">Start Reading</a>
+            href="#viewer/somenumber">Start Reading</a>
         </div>
         <Rate class="hidden md:block" {rating} />
       </div>
