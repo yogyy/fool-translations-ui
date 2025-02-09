@@ -74,3 +74,12 @@ export type Session = {
   userId: string;
   expiresAt: Date;
 };
+
+export interface Notification {
+  id: string;
+  userId: string;
+  type: string;
+  isRead: boolean;
+  createdAt: Date;
+  novel: Pick<Novel, 'id' | 'title' | 'cover'>;
+}
