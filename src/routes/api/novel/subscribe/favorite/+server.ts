@@ -11,14 +11,11 @@ export const GET: RequestHandler = async ({ fetch, url }) => {
 };
 
 export const POST: RequestHandler = async ({ cookies, fetch, url, locals }) => {
-  if (!locals.session) {
-    return new Response('Unauthorized', { status: 401 });
-  }
+  if (!locals.session) return new Response('Unauthorized', { status: 401 });
 
   const novelId = url.searchParams.get('novelId');
-  if (!novelId) {
-    return json({ success: false, error: 'novelId param required' });
-  }
+  if (!novelId) return json({ success: false, error: 'novelId param required' });
+
   const res = await fetch(`${BE_URL}/favorites`, {
     method: 'POST',
     body: JSON.stringify({ novelId }),
