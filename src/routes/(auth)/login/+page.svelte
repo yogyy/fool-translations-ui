@@ -7,6 +7,7 @@
   import Button from '$lib/components/ui/button/button.svelte';
   import type { ActionData } from './$types.js';
   import { toast } from 'svelte-sonner';
+  import { goto } from '$app/navigation';
 
   export let data;
 
@@ -20,11 +21,16 @@
         toast.error(signin?.error);
       } else {
         toast.info('Login successful! Welcome back.');
+        goto('/');
       }
     }
   });
   const { form: formData, enhance } = form;
 </script>
+
+<svelte:head>
+  <title>Login | Fool Translations</title>
+</svelte:head>
 
 <div class="container flex max-w-lg flex-col justify-center gap-4">
   <div class="mt-48 space-y-3">
@@ -76,7 +82,7 @@
   <div class="flex flex-col gap-4 text-center text-sm">
     <p class="opacity-80">
       Don't have an account?
-      <a href="/auth/register" class="underline opacity-90">Sign Up</a>
+      <a href="/register" class="underline opacity-90">Sign Up</a>
     </p>
 
     <a href="/auth/forgot-password" class="underline opacity-90">Forgot Password?</a>

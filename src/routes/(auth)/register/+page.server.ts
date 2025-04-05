@@ -1,4 +1,4 @@
-import type { Actions } from '@sveltejs/kit';
+import { redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { fail, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -33,6 +33,7 @@ export const actions: Actions = {
     if (signup.success) {
       const cookie = parseString(res.headers.get('set-cookie')!);
       setSessionTokenCookie(event, signup.token, cookie.expires as Date);
+      redirect(301, '/');
     }
     return { form, signup };
   }

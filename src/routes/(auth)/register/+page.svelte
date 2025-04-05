@@ -6,6 +6,7 @@
   import { registerSchema } from '../schema';
   import type { ActionData } from './$types.js';
   import { toast } from 'svelte-sonner';
+  import { goto } from '$app/navigation';
 
   export let data;
 
@@ -20,6 +21,7 @@
           toast.error(signup?.error);
         } else {
           toast.success(`Account created successfully! Welcome to Fools Translations!`);
+          goto('/');
         }
       }
     }
@@ -27,6 +29,10 @@
 
   const { form: formData, enhance, errors } = form;
 </script>
+
+<svelte:head>
+  <title>Register | Fool Translations</title>
+</svelte:head>
 
 <div class="container flex max-w-lg flex-col justify-center gap-4">
   <div class="mt-48 space-y-3">
@@ -74,7 +80,7 @@
     </p>
     <p>
       <span class="opacity-80">Already have an account?</span>
-      <a href="/auth/login" class="underline">Sign In</a>
+      <a href="/login" class="underline">Sign In</a>
     </p>
   </div>
 </div>
