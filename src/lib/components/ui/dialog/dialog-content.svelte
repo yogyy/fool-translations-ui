@@ -4,7 +4,7 @@
   import * as Dialog from './index.js';
   import { cn, flyAndScale } from '$lib/utils.js';
 
-  type $$Props = DialogPrimitive.ContentProps;
+  type $$Props = DialogPrimitive.ContentProps & { overlayClass: string };
 
   let className: $$Props['class'] = undefined;
   export let transition: $$Props['transition'] = flyAndScale;
@@ -12,10 +12,11 @@
     duration: 200
   };
   export { className as class };
+  export let overlayClass = '';
 </script>
 
 <Dialog.Portal>
-  <Dialog.Overlay />
+  <Dialog.Overlay class={overlayClass} />
   <DialogPrimitive.Content
     {transition}
     {transitionConfig}
