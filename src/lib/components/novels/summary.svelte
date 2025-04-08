@@ -45,7 +45,7 @@
       <Tooltip.Root>
         <Tooltip.Trigger>
           <div class="flex flex-row items-center gap-x-1">
-            <svelte:component this={sum.icon} size="16" />
+            <svelte:component this={sum.icon} size="16" class="fill-none" />
             <p class="text-center text-xs font-medium opacity-90">
               {sum.data}
             </p>

@@ -1,23 +1,23 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import type { RatingResponse } from '$lib/types';
+  import type { RatingData } from '$lib/types';
   import { cn } from '$lib/utils';
   import { toast } from 'svelte-sonner';
   import Star from '../icons/star.svelte';
   import { goto } from '$app/navigation';
 
   let className: string = $$props.class;
-  export let rating: RatingResponse;
+  export let data: RatingData;
 
   export { className as class };
 
   let userRate = 0;
 
   async function addRating(rate: number) {
-    const novelId = `nvl_${$page.params.slug}`;
-    const res = await fetch('/api/novel/rating', {
+    const novelId = $page.params.slug;
+    const res = await fetch(`/api/novel/${novelId}/rating`, {
       method: 'POST',
-      body: JSON.stringify({ novelId, rating: rate })
+      body: JSON.stringify({ rating: rate })
     });
 
     if (res.ok) {
@@ -25,12 +25,12 @@
       toast('Rating Updated', { position: 'top-center' });
     } else {
       toast.error(res.statusText, { position: 'top-center' });
-      goto('/auth/login');
+      goto('/login');
     }
   }
 
-  if (rating.success) {
-    userRate = rating.data.rating;
+  if (data.isRated) {
+    userRate = data.rating;
   }
 </script>
 
@@ -38,9 +38,7 @@
   <div class="flex items-center justify-center">
     {#each [1, 2, 3, 4, 5] as rate}
       <button on:click={() => addRating(rate)}>
-        <Star
-          class={userRate >= rate ? 'text-[gold]' : ''}
-          fill={userRate >= rate ? 'gold' : 'none'} />
+        <Star class={userRate >= rate ? 'fill-[gold] text-[gold]' : 'fill-none'} />
       </button>
     {/each}
   </div>
