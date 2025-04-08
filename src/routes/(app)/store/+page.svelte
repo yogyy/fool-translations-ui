@@ -5,5 +5,7 @@
   console.log('dari store page', data);
 </script>
 
-<p>hello</p>
-<a href="/auth/login?from=store">login</a>
+<div class="min-h-dvh overflow-hidden sm:mt-14">
+  <p>hello</p>
+  <a href="/login?from=store">login</a>
+</div>

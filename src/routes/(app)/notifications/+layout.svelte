@@ -5,7 +5,7 @@
   let current = 'chapters';
 </script>
 
-<main class="min-h-dvh overflow-hidden md:mt-14">
+<main class="mt-14 min-h-dvh overflow-hidden">
   <nav class="container flex justify-center space-x-2 overflow-x-auto whitespace-nowrap">
     <div
       class="no-scrollbar relative h-10 w-auto snap-x snap-mandatory items-center justify-center overflow-x-auto scroll-smooth whitespace-nowrap rounded-none bg-transparent px-1 pb-0">

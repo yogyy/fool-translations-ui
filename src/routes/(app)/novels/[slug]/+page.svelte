@@ -1,7 +1,8 @@
 <script lang="ts">
+  import Chapters from '$lib/components/novels/chapters.svelte';
   import Rate from '$lib/components/novels/rate.svelte';
   import ReleasedDay from '$lib/components/novels/released-day.svelte';
-  import Subscribed from '$lib/components/novels/subscribed.svelte';
+  import SubscribeAndFavorite from '$lib/components/novels/subscribe-and-favorite.svelte';
   import Summary from '$lib/components/novels/summary.svelte';
   import Synopsis from '$lib/components/novels/synopsis.svelte';
   import { buttonVariants } from '$lib/components/ui/button/index.js';
@@ -9,7 +10,7 @@
 
   export let data;
 
-  const { novel, subs, rating } = data;
+  const { novel, favorite, rating, subscribe, chapters } = data;
 </script>
 
 <svelte:head>
@@ -34,9 +35,9 @@
         color="currentColor" />
     </svg>
   </a>
-  <Subscribed data={subs} />
+  <SubscribeAndFavorite {favorite} {subscribe} />
 </header>
-<div class="container min-h-dvh px-0 md:max-w-pgsize">
+<div class="container min-h-dvh px-0 xl:max-w-pgsize">
   <div class="grid grid-cols-1 md:mx-24 md:my-2 md:flex md:flex-row md:gap-x-2 md:gap-y-0">
     <div
       class="mx-0 grid grid-cols-1 bg-complimentary md:flex md:flex-col md:items-center md:rounded-xl md:pb-8">
@@ -44,7 +45,7 @@
         <div class="min-h-max overflow-hidden border border-border/20 md:rounded-t-xl">
           <div class="relative w-full">
             <img
-              src={novel.cover}
+              src=""
               alt={`${novel.title} Blurred Cover`}
               class="aspect-square w-full object-top opacity-80 blur-md md:aspect-[2/3] md:rounded-t-xl xl:max-w-[300px]"
               style="object-fit: cover;" />
@@ -54,7 +55,7 @@
           </div>
           <div class="absolute inset-0 mt-5 flex items-center justify-center md:-mt-10">
             <img
-              src={novel.cover}
+              src=""
               alt={`${novel.title} Cover`}
               class="aspect-[2/3] scale-50 rounded-3xl border border-zinc-700/40 shadow-sm md:scale-[77%] md:rounded-xl"
               style="object-fit: cover; max-width: 400px; max-height: 600px; aspect-ratio: 0.666667 / 1; width: 100%;" />
@@ -63,49 +64,40 @@
       </div>
       <div class="mb-5 flex w-full flex-col md:mb-0 md:mt-4 md:gap-y-2 md:px-14">
         <Summary {novel} class="flex items-center md:hidden" />
-        <Subscribed data={subs} class="-mt-16 hidden md:flex" />
+        <SubscribeAndFavorite {favorite} {subscribe} class="-mt-16 hidden md:flex" />
         <ReleasedDay />
         <div class="flex flex-grow justify-center">
           <a
             class="mx-auto inline-flex h-10 w-1/2 select-none items-center justify-center whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 dark:bg-cyan-300/90 dark:hover:bg-cyan-300/60 md:w-full"
             href="#viewer/somenumber">Start Reading</a>
         </div>
-        <Rate class="hidden md:block" {rating} />
+        <Rate class="hidden md:block" data={rating} />
       </div>
     </div>
     <div class="col-span-1 flex flex-grow flex-col gap-y-2 md:max-w-[691.25px] md:gap-y-2 md:pt-0">
       <div class="hidden bg-complimentary md:block md:rounded-xl" id="banner">
-        <!-- {#if novel.banner} -->
         <img
-          class="md:rounded-xl"
-          src="/1f73ba04-392e-4149-869b-0062a138818a.webp"
+          class="dark:brightness-75 md:rounded-xl"
+          draggable="false"
+          src="/default-banner.webp"
           alt={`${novel.title} Banner`}
           style="object-fit: cover; max-width: 900px; max-height: 350px; aspect-ratio: 2.57143 / 1; width: 100%;" />
-        <!-- {:else}
-          <img
-            class="md:rounded-xl"
-            src="https://api.genesistudio.com/storage/v1/render/image/public/directus/ab40f57a-e889-4e96-83d5-2f8e4b0268f3.png?width=900&height=350"
-            srcset="https://api.genesistudio.com/storage/v1/render/image/public/directus/ab40f57a-e889-4e96-83d5-2f8e4b0268f3.png?width=640&height=249 640w,
-                  https://api.genesistudio.com/storage/v1/render/image/public/directus/ab40f57a-e889-4e96-83d5-2f8e4b0268f3.png?width=1080&height=420 1080w"
-            alt="banner demo"
-            sizes="(min-width: 900px) 900px, 100vw"
-            style="object-fit: cover; max-width: 900px; max-height: 350px; aspect-ratio: 2.57143 / 1; width: 100%;" /> -->
-        <!-- {/if} -->
       </div>
       <Summary {novel} class="hidden md:flex" />
       <div class="relative block md:hidden">
         <img
           class="md:rounded-xl"
-          src="/1f73ba04-392e-4149-869b-0062a138818a.webp"
+          draggable="false"
+          src="/default-banner.webp"
           alt={`${novel.title} Banner`}
           style="object-fit: cover; max-width: 900px; max-height: 350px; aspect-ratio: 2.57143 / 1; width: 100%;" />
         <div
           class="absolute inset-0 flex flex-col items-center justify-center gap-y-4 bg-background/60">
-          <Rate class="mt-0 block md:hidden" {rating} />
+          <Rate class="mt-0 block md:hidden" data={rating} />
         </div>
       </div>
       <Synopsis synopsis={novel.synopsis} />
-      <div class="">chapter</div>
+      <Chapters {chapters} />
     </div>
   </div>
 </div>
