@@ -3,28 +3,34 @@
   import * as Tooltip from '$lib/components/ui/tooltip';
   import { cn } from '$lib/utils';
   import Badge from '../badge.svelte';
-  import Clock from '../icons/clock.svelte';
   import Pencil from '../icons/pencil.svelte';
   import Star from '../icons/star.svelte';
   import View from '../icons/view.svelte';
+  import CalendarUpload from '../icons/calendar-upload.svelte';
+  import CalendarDateTime from '../icons/calendar-date-time.svelte';
   export let novel: Novel;
 
   let formatedDate = new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'short',
     day: '2-digit'
-  }).format(new Date(novel.last_updated.replace(' ', 'T')));
+  }).format(new Date(novel.lastUpdated.toString().replace(' ', 'T')));
 
   let formatedViews = new Intl.NumberFormat('en-US', {
     notation: 'compact',
     maximumFractionDigits: 1
   }).format(novel.totalViews);
 
-  let summary = [
+  $: summary = [
     { icon: Pencil, data: novel.author, content: 'Author' },
     { icon: View, data: formatedViews, content: 'Views' },
-    { icon: Star, data: novel.average_rating.toFixed(1), content: 'Rating' },
-    { icon: Clock, data: formatedDate, content: 'Last Updated' }
+    { icon: Star, data: novel.averageRating.toFixed(1), content: 'Rating' },
+    {
+      icon: CalendarUpload,
+      data: new Date(novel.publishedAt).getFullYear(),
+      content: 'Year of publishing'
+    },
+    { icon: CalendarDateTime, data: formatedDate, content: 'Last Updated' }
   ];
 
   let className: string;
@@ -45,7 +51,7 @@
       <Tooltip.Root>
         <Tooltip.Trigger>
           <div class="flex flex-row items-center gap-x-1">
-            <svelte:component this={sum.icon} size="16" class="fill-none" />
+            <svelte:component this={sum.icon} size="16" class="h-4 w-4 fill-none" />
             <p class="text-center text-xs font-medium opacity-90">
               {sum.data}
             </p>

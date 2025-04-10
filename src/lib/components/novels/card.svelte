@@ -4,7 +4,10 @@
   export let id: string;
 </script>
 
-<a href={`/novels/${id.slice(4)}`} class="card aspect-[2/3] hover:scale-105">
+<a
+  data-sveltekit-preload-data="tap"
+  href={`/novels/${id.slice(4)}`}
+  class="card aspect-[2/3] hover:scale-105">
   <img
     src={image}
     alt={`${title} Cover`}
