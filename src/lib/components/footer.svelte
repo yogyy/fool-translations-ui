@@ -48,7 +48,7 @@
       </div>
       <div
         class="flex flex-col items-center text-xs font-medium md:flex-row md:justify-between md:gap-y-0">
-        <p class="mb-1 text-muted-foreground md:mb-0">Copyright © Fools Translations 2024</p>
+        <p class="mb-1 text-muted-foreground md:mb-0">Copyright © Fool Translations 2024</p>
         <div class="flex flex-row gap-x-1 md:pl-4">
           <a href="/support/privacy-policy" class="text-accent-foreground/90 hover:opacity-70">
             Privacy Policy

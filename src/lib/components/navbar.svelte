@@ -37,7 +37,7 @@
                   fill="currentColor" />
               </g>
             </svg>
-            <p class="hidden md:block">FOOLS</p>
+            <p class="hidden md:block">FOOL</p>
           </a>
           <nav class="hidden h-full items-center gap-6 md:flex">
             {#each [{ name: 'novels' }, { name: 'library' }, { name: 'store' }] as route}

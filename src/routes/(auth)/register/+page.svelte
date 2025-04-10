@@ -20,7 +20,7 @@
         if (signup?.success === false) {
           toast.error(signup?.error);
         } else {
-          toast.success(`Account created successfully! Welcome to Fools Translations!`);
+          toast.success(`Account created successfully! Welcome to Fool Translations!`);
           goto('/');
         }
       }
