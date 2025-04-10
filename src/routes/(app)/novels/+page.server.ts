@@ -1,20 +1,12 @@
 import { BE_URL } from '$env/static/private';
 import type { Novel, NovelResponse } from '$lib/types';
-import { error } from '@sveltejs/kit';
 
-interface NovelsResponse extends Pick<Novel, 'id' | 'title' | 'genres' | 'cover'> {
-  totalRatings: number;
-  averageRating: string;
+interface NovelsResponse extends Omit<Novel, 'author' | 'synopsis' | 'average_rating' | 'banner'> {
   popularityScore: number;
 }
 
-export const load = async ({ fetch }) => {
-  const res = await fetch(`${BE_URL}/novels`);
-
-  if (res.status === 404) {
-    throw error(404, 'Novel Not Found');
-  }
-
+export const load = async ({ fetch, url }) => {
+  const res = await fetch(`${BE_URL}/novels?pageSize=12`);
   const novels: { data: NovelsResponse[] } = await res.json();
 
   return { novels: novels.data };
