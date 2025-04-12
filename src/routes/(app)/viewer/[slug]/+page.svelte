@@ -3,13 +3,13 @@
   import ReaderSidebar from '$lib/components/layout/reader-sidebar.svelte';
   import { buttonVariants } from '$lib/components/ui/button/index.js';
   import { cn } from '$lib/utils.js';
-  import ArrowLeft from 'svelte-radix/ArrowLeft.svelte';
   import { fly } from 'svelte/transition';
   import { onDestroy, onMount } from 'svelte';
   import { browser } from '$app/environment';
   import { inview } from 'svelte-inview';
   import type { ObserverEventDetails, Options } from 'svelte-inview';
   import { goto } from '$app/navigation';
+  import ArrowLeft_02 from '$lib/components/icons/arrow-left-02.svelte';
 
   export let data;
 
@@ -70,7 +70,7 @@
               buttonVariants({ size: 'icon' }),
               'shrink-0 rounded-full bg-accent text-foreground hover:bg-foreground/10'
             )}>
-            <ArrowLeft size="20" />
+            <ArrowLeft_02 class="h-5 w-5" />
           </button>
           <div class="flex min-w-0 grow justify-center">
             <div class="flex w-full flex-col items-center gap-1">
