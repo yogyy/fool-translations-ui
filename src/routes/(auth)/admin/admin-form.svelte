@@ -13,6 +13,7 @@
   import { Editor } from '@tiptap/core';
   import StarterKit from '@tiptap/starter-kit';
   import Placeholder from '@tiptap/extension-placeholder';
+  import { focusEditor } from '$lib/utils';
 
   export let data: SuperValidated<Infer<FormSchema>>;
 
@@ -36,13 +37,6 @@
 
       onUpdate(props) {
         $formData.synopsis = props.editor.getText();
-      },
-
-      editorProps: {
-        attributes: {
-          class:
-            'hide-scrollbar prose prose-sm max-h-52 min-h-32 max-w-2xl rounded-md border border-input p-2 text-foreground focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring'
-        }
       }
     });
   });
@@ -60,7 +54,7 @@
       const action = result.data as FormResult<ActionData>;
       if (form.valid) {
         console.log(action.newNovel);
-        if (action.newNovel.success === false) {
+        if (action.newNovel.success === false || action.newNovel.error) {
           toast.error(action.newNovel.error);
         } else {
           editor.commands.clearContent();
@@ -77,59 +71,106 @@
   method="POST"
   action="?/create"
   use:enhance
-  class="max-w-2xl space-y-1 [&>div>label]:text-foreground/70">
-  <Form.Field {form} name="title">
+  class="relative mb-10 grid grid-cols-1 gap-3 space-y-2 lg:grid-cols-2 [&>div>label]:text-foreground/70">
+  <Form.Field {form} name="title" class="mt-2">
     <Form.Control let:attrs>
-      <Form.Label>Title</Form.Label>
-      <Input {...attrs} bind:value={$formData.title} />
-      <Form.FieldErrors />
+      <div class="flex flex-wrap items-center gap-1 md:justify-between">
+        <Form.Label>Title</Form.Label>
+        <Form.FieldErrors />
+      </div>
+      <Input {...attrs} bind:value={$formData.title} class="rounded-sm border-border" />
     </Form.Control>
   </Form.Field>
-  <Form.Field {form} name="synopsis">
+  <Form.Field {form} name="synopsis" class="row-span-4">
     <Form.Control let:attrs>
-      <div class="flex items-center">
+      <div class="flex flex-wrap items-center gap-1 md:justify-between">
         <Form.Label>Synopsis</Form.Label>
         <Form.FieldErrors />
       </div>
-      <textarea class="hidden" {...attrs} bind:value={$formData.synopsis} />
-      <div bind:this={element}></div>
+      <div class="h-[20rem] rounded-sm border">
+        <textarea class="hidden" {...attrs} bind:value={$formData.synopsis} />
+        <div
+          role="button"
+          tabindex="0"
+          bind:this={element}
+          on:click={(e) => focusEditor(editor, e)}
+          on:keydown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              focusEditor(editor, event);
+            }
+          }}
+          class="hide-scrollbar h-full min-w-full max-w-2xl cursor-auto p-2 text-foreground/80 dark:prose-invert">
+        </div>
+      </div>
     </Form.Control>
   </Form.Field>
   <Form.Field {form} name="author">
     <Form.Control let:attrs>
-      <Form.Label>Author</Form.Label>
-      <Input {...attrs} bind:value={$formData.author} />
-      <Form.FieldErrors />
+      <div class="flex flex-wrap items-center gap-1 md:justify-between">
+        <Form.Label>Author</Form.Label>
+        <Form.FieldErrors />
+      </div>
+      <Input {...attrs} bind:value={$formData.author} class="rounded-sm border-border" />
     </Form.Control>
   </Form.Field>
-  <Form.Field {form} name="genres" class="space-y-0">
+  <Form.Field {form} name="genres">
     <Form.Control let:attrs>
-      <Form.Label>Genres</Form.Label>
+      <div class="flex flex-wrap items-center gap-1 md:justify-between">
+        <Form.Label>Genres</Form.Label>
+        <Form.FieldErrors />
+      </div>
       <span class="text-sm italic text-foreground/60">separate genre with coma (,)</span>
       <GenresHelper bind:genres={$formData.genres} />
-      <Input {...attrs} bind:value={$formData.genres} />
-      <Form.FieldErrors />
+      <Input {...attrs} bind:value={$formData.genres} class="rounded-sm border-border" />
     </Form.Control>
   </Form.Field>
-  <Form.Field {form} name="cover" class="space-y-0">
+  <Form.Field {form} name="cover">
     <Form.Control let:attrs>
-      <Form.Label>Cover</Form.Label>
-      {#if $formData.cover}
-        <ImagePreview src={$formData.cover} alt={`${$formData.title}'s cover'`} />
-      {/if}
-      <Input {...attrs} bind:value={$formData.cover} />
-      <Form.FieldErrors />
+      <div class="flex items-center gap-3">
+        <Form.Label>Cover</Form.Label>
+        {#if $formData.cover}
+          <ImagePreview src={$formData.cover} alt={`${$formData.title}'s cover'`} />
+        {/if}
+        <Form.FieldErrors />
+      </div>
+      <Input
+        {...attrs}
+        bind:value={$formData.cover}
+        class="rounded-sm border-border"
+        placeholder="https://" />
     </Form.Control>
   </Form.Field>
   <Form.Field {form} name="banner">
     <Form.Control let:attrs>
-      <Form.Label>Banner</Form.Label>
-      {#if $formData.banner}
-        <ImagePreview src={$formData.banner} alt={`${$formData.title}'s banner'`} />
-      {/if}
-      <Input {...attrs} bind:value={$formData.banner} />
-      <Form.FieldErrors />
+      <div class="flex items-center gap-3">
+        <Form.Label>Banner</Form.Label>
+        {#if $formData.banner}
+          <ImagePreview src={$formData.banner} alt={`${$formData.title}'s banner'`} />
+        {/if}
+        <Form.FieldErrors />
+      </div>
+      <Input
+        {...attrs}
+        bind:value={$formData.banner}
+        class="rounded-sm border-border"
+        placeholder="https://" />
     </Form.Control>
   </Form.Field>
-  <Form.Button variant="outline">Add</Form.Button>
+  <Form.Button variant="outline" class="absolute bottom-0 right-0 w-1/2 rounded-sm border-border"
+    >Add</Form.Button>
 </form>
+
+<style>
+  :global(.ProseMirror) {
+    min-height: 100%;
+    position: relative;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    cursor: auto;
+    -webkit-font-variant-ligatures: none;
+    font-variant-ligatures: none;
+    &:focus {
+      outline: none;
+    }
+  }
+</style>
