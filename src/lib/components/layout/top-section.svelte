@@ -80,8 +80,8 @@
                     </p>
                   </div>
                   <span
-                    class="mx-auto line-clamp-3 block px-6 text-left text-xs text-zinc-300 md:px-2 md:text-xs lg:text-xs">
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    class="mx-auto line-clamp-3 block truncate px-6 text-left text-xs text-zinc-300 md:px-2 md:text-xs lg:text-xs">
+                    {top.genres.join(', ')}
                   </span>
                 </div>
                 <p

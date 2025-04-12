@@ -51,7 +51,7 @@
       </Carousel.Root>
       <div class="mx-auto -mb-2 mt-2 hidden h-6 w-6 justify-center md:flex">
         <div class="flex h-6 w-fit items-center gap-2">
-          <button on:click={() => api.scrollPrev()}>
+          <button class="rounded-full" on:click={() => api.scrollPrev()}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -76,7 +76,7 @@
               )}
               aria-label={idx.toString()}></button>
           {/each}
-          <button on:click={() => api.scrollNext()}>
+          <button class="rounded-full" on:click={() => api.scrollNext()}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -88,7 +88,8 @@
               stroke-linecap="round"
               stroke-linejoin="round"
               class="">
-              <path d="m9 18 6-6-6-6" /></svg>
+              <path d="m9 18 6-6-6-6" />
+            </svg>
           </button>
         </div>
       </div>
