@@ -38,6 +38,8 @@
   $: sortedChapters = chapters.sort((a, b) => {
     return order === 'asc' ? a.chapterNum - b.chapterNum : b.chapterNum - a.chapterNum;
   });
+
+  let imageError = false;
 </script>
 
 <Dialog.Root bind:open={sidebarState}>
@@ -45,7 +47,7 @@
     <button
       class={cn(
         buttonVariants({ size: 'icon' }),
-        'rounded-full bg-accent text-foreground hover:bg-foreground/10'
+        'shrink-0 rounded-full bg-accent text-foreground hover:bg-foreground/10'
       )}
       on:click|stopPropagation={() => (sidebarState = !sidebarState)}>
       <LeftToRightListDash class="h-5 w-5" />
@@ -90,10 +92,15 @@
                   })}
                 href={`${$page.url.pathname}#${ch.id}`}
                 class="flex items-center gap-4 px-2.5 py-2 outline-offset-0">
-                <img
-                  src={novel.cover}
-                  alt={novel.title + ' cover'}
-                  class="h-16 w-16 flex-none rounded-lg object-cover object-top" />
+                {#if novel.cover && !imageError}
+                  <img
+                    src={novel.cover}
+                    alt={novel.title + ' cover'}
+                    on:error={() => (imageError = true)}
+                    class="h-16 w-16 flex-none rounded-lg object-cover object-top" />
+                {:else}
+                  <div class="h-16 w-16 flex-none rounded-lg bg-cyan-900"></div>
+                {/if}
                 <div class="flex flex-col items-start justify-center">
                   <p class="text-[13px] text-foreground/30">Chapter {ch.chapterNum}</p>
                   <p class="text-pretty text-sm font-semibold leading-4 text-foreground/80">
