@@ -1,9 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import BarMenu from './icons/menu.svelte';
-  import Calendar from './icons/calendar.svelte';
-  import Comment from './icons/comment.svelte';
-  import * as Menubar from '$lib/components/ui/menubar';
+  import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
   import DarkTheme from './dark-theme.svelte';
   import SearchBar from './search-bar.svelte';
   import { cn } from '$lib/utils';
@@ -11,8 +8,38 @@
   import { enhance } from '$app/forms';
   import { toast } from 'svelte-sonner';
   import { goto } from '$app/navigation';
+  import NotificationSquare from './icons/notification-square.svelte';
+  import UserCircle from './icons/user-circle.svelte';
+  import { fly, slide } from 'svelte/transition';
+  import { onDestroy, onMount } from 'svelte';
+  import { browser } from '$app/environment';
+  import Logo from './icons/logo.svelte';
 
   export let user: User | null;
+  let userMenu = false;
+  let lastScrollY = 0;
+  let showNav = true;
+
+  function handleScroll() {
+    const currentScrollY = window.scrollY;
+    showNav = currentScrollY < lastScrollY;
+    lastScrollY = currentScrollY;
+
+    userMenu = false;
+  }
+
+  onMount(() => {
+    if (browser) {
+      lastScrollY = window.scrollY;
+      window.addEventListener('scroll', handleScroll);
+    }
+  });
+
+  onDestroy(() => {
+    if (browser) {
+      window.removeEventListener('scroll', handleScroll);
+    }
+  });
 </script>
 
 <div
@@ -20,95 +47,101 @@
     'fixed top-0 z-50 w-dvw',
     $page.url.pathname.startsWith('/novels/') && 'hidden md:block'
   )}>
-  <div class="transform-gpu transition-transform duration-300 md:backdrop-blur-sm">
-    <header
-      class="top-0 z-50 w-full bg-gradient-to-b from-zinc-950/80 via-zinc-950/50 to-transparent transition-opacity duration-300 md:bg-background/80 md:from-transparent">
-      <div class="container flex h-14 items-center px-2 pr-4">
-        <div class="mt-2 flex items-center justify-center gap-4">
-          <a
-            href="/"
-            class="inline-flex items-center gap-1.5 text-lg font-semibold transition-colors duration-200 hover:text-cyan-300">
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
-              <g fill="none">
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M5 1a4 4 0 0 0-4 4v14a4 4 0 0 0 4 4h14a4 4 0 0 0 4-4V5a4 4 0 0 0-4-4H5zm4 3a1 1 0 0 0-2 0v1H4a1 1 0 0 0 0 2h6.432a8.323 8.323 0 0 1-1.117 3.127L7.753 8.34a1 1 0 1 0-1.506 1.32l1.837 2.098C6.7 13.231 5.1 14 4 14a1 1 0 1 0 0 2c1.806 0 3.83-1.111 5.406-2.732l.341.39a1 1 0 0 0 1.506-1.316l-.567-.648c.908-1.341 1.573-2.941 1.76-4.694H14a1 1 0 1 0 0-2H9V4zm7.894 5.553a1 1 0 0 0-1.788 0l-3 6a.998.998 0 0 0-.055.13l-1 3a1 1 0 0 0 1.898.633L13.72 17h4.558l.772 2.316a1 1 0 0 0 1.898-.632l-1-3a.998.998 0 0 0-.055-.131l-3-6zM16 12.236L17.382 15h-2.764L16 12.236z"
-                  fill="currentColor" />
-              </g>
-            </svg>
-            <p class="hidden md:block">FOOL</p>
-          </a>
-          <nav class="hidden h-full items-center gap-6 md:flex">
-            {#each [{ name: 'novels' }, { name: 'library' }, { name: 'store' }] as route}
+  {#if showNav}
+    <div
+      class="transform-gpu transition-transform duration-300 md:backdrop-blur-sm"
+      in:fly={{ y: 0, duration: 300 }}
+      out:fly={{ y: -100, duration: 300 }}>
+      <header
+        class={cn(
+          'top-0 z-50 w-full bg-gradient-to-b from-zinc-950/80 via-zinc-950/50 to-transparent transition duration-500 md:bg-background md:from-transparent',
+          userMenu ? 'border-b border-opacity-20 ' : '',
+          showNav && lastScrollY > 100 ? 'border-b border-opacity-20' : ''
+        )}>
+        <div class="container flex h-14 max-w-pgsize items-center justify-between px-6">
+          <div class="mt-2 flex items-center justify-center gap-4">
+            <a
+              href="/"
+              class="inline-flex items-center gap-1.5 text-lg font-semibold transition-colors duration-200 hover:text-cyan-300">
+              <Logo style="width: 30px; height: 30px;" />
+              <p class="hidden md:block">FOOL</p>
+            </a>
+            <nav class="hidden h-full items-center gap-6 md:flex">
+              {#each ['novels', 'library', 'store'] as route}
+                <a
+                  href={`/${route}`}
+                  class={cn(
+                    'anim-text text-base font-medium capitalize transition-colors duration-200 hover:text-foreground/80',
+                    $page.url.pathname.includes(route) ? 'text-foreground' : 'text-muted-foreground'
+                  )}>
+                  {route}
+                </a>
+              {/each}
+            </nav>
+          </div>
+          <div class="mt-2 flex flex-1 items-center justify-end">
+            <div class="flex gap-1">
+              <SearchBar />
               <a
-                href={`/${route.name}`}
-                class={cn(
-                  'anim-text text-base font-medium capitalize transition-colors duration-200 hover:text-foreground/80',
-                  $page.url.pathname.includes(route.name)
-                    ? 'text-foreground'
-                    : 'text-muted-foreground'
-                )}>
-                {route.name}
+                href="/notifications/chapters"
+                class="inline-flex h-auto w-8 items-center justify-center whitespace-nowrap rounded-md px-0 text-xs font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
+                <NotificationSquare class="h-5 w-5" />
               </a>
-            {/each}
-          </nav>
-        </div>
-        <div class="mt-2 flex flex-1 items-center justify-end">
-          <div class="search-input flex gap-1">
-            <SearchBar />
-            <a
-              href="/notifications/chapters"
-              class="inline-flex h-auto w-8 items-center justify-center whitespace-nowrap rounded-md px-0 text-xs font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
-              <Comment size="20" />
-            </a>
-            <a
-              href="/updates"
-              class="inline-flex h-auto w-8 items-center justify-center whitespace-nowrap rounded-md px-0 text-xs font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
-              <Calendar size="20" />
-            </a>
-
-            <Menubar.Root class="h-auto space-x-0 border-none bg-transparent p-0">
-              <Menubar.Menu>
-                <Menubar.Trigger
+              <DropdownMenu.Root bind:open={userMenu}>
+                <DropdownMenu.Trigger
                   class="inline-flex h-8 w-8 cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-0 py-0 text-xs font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-transparent focus-visible:text-current focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
-                  <BarMenu size="20" />
-                </Menubar.Trigger>
-                <Menubar.Content align="end" class="border-border/20">
-                  <Menubar.Item asChild>
-                    <div class="flex items-center gap-2 text-sm">
-                      <DarkTheme />
-                    </div>
-                  </Menubar.Item>
-                  <Menubar.Item class="cursor-pointer">
+                  {#if user === null}
+                    <UserCircle class="h-6 w-6" />
+                  {:else}
+                    <img
+                      src={user?.avatar ?? '/default-avatar.png'}
+                      alt={`${user.name}'s avatar`}
+                      class="h-6 w-6 rounded-full" />
+                  {/if}
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content
+                  transition={slide}
+                  align="end"
+                  side="bottom"
+                  sideOffset={7.5}
+                  class="w-full max-w-xs rounded-tl-none rounded-tr-none border-t-0 bg-background transition-opacity duration-300">
+                  <DropdownMenu.Item class="p-0">
+                    <DarkTheme />
+                  </DropdownMenu.Item>
+                  {#if user?.type === 'admin'}
+                    <DropdownMenu.Item class="p-0">
+                      <a href="/admin" class="w-full px-2 py-1.5">Admin</a>
+                    </DropdownMenu.Item>
+                  {/if}
+                  <DropdownMenu.Item class="p-0">
                     {#if user !== null}
                       <form
-                        action="/auth/logout"
+                        action="/logout"
                         method="POST"
-                        class="w-full"
+                        class="w-full px-2 py-1.5"
                         use:enhance={() => {
                           return async ({ result }) => {
                             user = null;
                             if (result) {
-                              toast.info('You have been logged out successfully. See you soon!');
+                              toast.info('out successfully. See you soon!');
                             }
-                            goto('/auth/login');
+                            goto('/login');
                           };
                         }}>
                         <button class="inline-flex w-full">Logout</button>
                       </form>
                     {:else}
-                      <a href="/auth/login" class="w-full">Login</a>
+                      <a href="/login" class="w-full px-2 py-1.5">Login</a>
                     {/if}
-                  </Menubar.Item>
-                </Menubar.Content>
-              </Menubar.Menu>
-            </Menubar.Root>
+                  </DropdownMenu.Item>
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
+            </div>
           </div>
         </div>
-      </div>
-    </header>
-  </div>
+      </header>
+    </div>
+  {/if}
 </div>
 
 <style>
