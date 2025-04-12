@@ -1,12 +1,8 @@
 <script lang="ts">
-  import Check from 'svelte-radix/Check.svelte';
-  import CaretSort from 'svelte-radix/CaretSort.svelte';
   import { Command as CommandPrimitive } from 'cmdk-sv';
   import { tick } from 'svelte';
   import * as Command from '$lib/components/ui/command/index.js';
-  import { Button } from '$lib/components/ui/button/index.js';
-  import { cn } from '$lib/utils';
-  import SearchGlass from './icons/search-glass.svelte';
+  import SearchGlass from './icons/search-01.svelte';
 
   const frameworks = [
     { value: 'sveltekit', label: 'SvelteKit' },
@@ -41,7 +37,7 @@
       class="absolute end-0 top-1/2 inline-flex size-4 h-8 w-8 flex-grow -translate-y-1/2 items-center justify-center whitespace-nowrap rounded-md p-[1px] px-0 py-0 text-xs font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-transparent focus-visible:text-current focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
       <div
         class="inline-flex h-full w-full items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
-        <SearchGlass size="16" />
+        <SearchGlass class="h-4 w-4" />
       </div>
     </button>
   </div>
