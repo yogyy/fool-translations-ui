@@ -13,7 +13,8 @@
 </script>
 
 <Dialog.Root>
-  <Dialog.Trigger class="inline-flex text-sm italic text-accent">Preview</Dialog.Trigger>
+  <Dialog.Trigger class="inline-flex text-sm italic text-sky-400 dark:text-sky-800"
+    >Preview</Dialog.Trigger>
   <Dialog.Content class="border-none p-0 outline-none">
     <Dialog.Header>
       <Dialog.Description class="flex items-center justify-center">

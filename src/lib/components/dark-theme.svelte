@@ -16,13 +16,14 @@
   };
 </script>
 
-<div class="flex w-full justify-between px-2 py-1.5">
+<div class="flex w-full items-center justify-between px-2 py-1.5">
   <span>Theme</span>
   <div class="theme_switcher flex items-center justify-center rounded-full border border-border/20">
     <span class="sr-only">select a display theme:</span>
     {#each themes as theme}
       <button
         type="button"
+        title={theme.mode}
         on:click={() => setTheme(theme.mode)}
         class={clsx($userPrefersMode === theme.mode && 'theme_active')}>
         <svelte:component

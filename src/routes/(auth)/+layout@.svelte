@@ -1,7 +1,8 @@
-<svelte:head>
-  <title>Fool Translations</title>
-</svelte:head>
+<script>
+  import Footer from '$lib/components/footer.svelte';
+</script>
 
-<main class="min-h-dvh overflow-hidden md:mt-14">
+<main class="min-h-dvh overflow-hidden">
   <slot></slot>
 </main>
+<Footer />

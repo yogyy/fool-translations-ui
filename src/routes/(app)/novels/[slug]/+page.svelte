@@ -1,4 +1,5 @@
 <script lang="ts">
+  import ArrowLeft_01 from '$lib/components/icons/arrow-left-01.svelte';
   import Chapters from '$lib/components/novels/chapters.svelte';
   import Rate from '$lib/components/novels/rate.svelte';
   import ReleasedDay from '$lib/components/novels/released-day.svelte';
@@ -24,20 +25,11 @@
     href="/"
     aria-label="return">
     <span class="sr-only">back</span>
-    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
-      <path
-        fill="none"
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="1.5"
-        d="M15 6s-6 4.419-6 6s6 6 6 6"
-        color="currentColor" />
-    </svg>
+    <ArrowLeft_01 class="h-8 w-7" />
   </a>
   <SubscribeAndFavorite {favorite} {subscribe} />
 </header>
-<div class="container min-h-dvh px-0 xl:max-w-pgsize">
+<div class="container min-h-dvh min-w-[300px] px-0">
   <div class="grid grid-cols-1 md:mx-24 md:my-2 md:flex md:flex-row md:gap-x-2 md:gap-y-0">
     <div
       class="mx-0 grid grid-cols-1 bg-complimentary md:flex md:flex-col md:items-center md:rounded-xl md:pb-8">
@@ -45,8 +37,9 @@
         <div class="min-h-max overflow-hidden border border-border/20 md:rounded-t-xl">
           <div class="relative w-full">
             <img
-              src=""
+              src={novel.cover}
               alt={`${novel.title} Blurred Cover`}
+              draggable="false"
               class="aspect-square w-full object-top opacity-80 blur-md md:aspect-[2/3] md:rounded-t-xl xl:max-w-[300px]"
               style="object-fit: cover;" />
             <div
@@ -55,8 +48,9 @@
           </div>
           <div class="absolute inset-0 mt-5 flex items-center justify-center md:-mt-10">
             <img
-              src=""
+              src={novel.cover}
               alt={`${novel.title} Cover`}
+              draggable="false"
               class="aspect-[2/3] scale-50 rounded-3xl border border-zinc-700/40 shadow-sm md:scale-[77%] md:rounded-xl"
               style="object-fit: cover; max-width: 400px; max-height: 600px; aspect-ratio: 0.666667 / 1; width: 100%;" />
           </div>
