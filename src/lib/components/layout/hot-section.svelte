@@ -38,7 +38,7 @@
                     <img
                       src={hot.image}
                       alt="top novels"
-                      class="rounded-xl object-top group-hover:border-2 group-hover:border-cyan-300"
+                      class="rounded-xl object-top"
                       style="object-fit: cover; max-width: 1400px; max-height: 535px; aspect-ratio: 2.616822429906542; width: 100%;"
                       fetchpriority="high"
                       loading="eager" />
