@@ -57,7 +57,7 @@ const config = {
         sm: 'calc(var(--radius) - 4px)'
       },
       spacing: {
-        pgsize: '75rem'
+        pgsize: '80rem'
       },
       fontFamily: {
         sans: [...fontFamily.sans]
