@@ -8,8 +8,17 @@ export interface Novel {
   banner: string | null;
   totalViews: number;
   status: 'ongoing' | 'completed';
-  last_updated: string;
-  average_rating: number;
+  publishedAt: Date;
+  lastUpdated: Date;
+  averageRating: number;
+}
+
+export interface Chapter {
+  id: string;
+  chapterNum: number;
+  title: string;
+  createdAt: Date;
+  content: string;
 }
 
 export interface NovelResponse {
@@ -17,12 +26,12 @@ export interface NovelResponse {
   data: Novel;
 }
 
-export interface Subs {
+export interface SubscribeData {
   isSubscribed: boolean;
   total: number;
 }
 
-export interface Favs {
+export interface FavoriteData {
   isFavorited: boolean;
   total: number;
 }
@@ -32,15 +41,10 @@ export interface ApiResponse<T> {
   data: T;
 }
 
-export interface Rating {
-  createdAt: string;
-  id: number;
-  novelId: string;
+export interface RatingData {
+  isRated: boolean;
   rating: number;
-  userId: string;
 }
-
-export type RatingResponse = { success: false; error: string } | { success: true; data: Rating };
 
 export interface HotNovel {
   id: number;
@@ -53,11 +57,12 @@ export interface Topnovel {
   id: string;
   title: string;
   cover: string;
+  genres: string[];
 }
 
-export type FavoriteResponse =
+export type MutateResponse =
   | { success: true; action: 'added'; data: string }
-  | { success: true; action: 'deleted'; data: string }
+  | { success: true; action: 'removed'; data: string }
   | { success: false; error: string };
 
 export type User = {
@@ -65,7 +70,7 @@ export type User = {
   email: string;
   name: string;
   type?: 'user' | 'admin';
-  image?: string | undefined;
+  avatar?: string | undefined;
   createdAt?: string | undefined;
 };
 
@@ -82,4 +87,38 @@ export interface Notification {
   isRead: boolean;
   createdAt: Date;
   novel: Pick<Novel, 'id' | 'title' | 'cover'>;
+}
+
+export interface GoogleOAuthResponse {
+  sub: string;
+  email: string;
+  email_verified: boolean;
+  name: string;
+  picture: string;
+  given_name: string;
+  family_name: string;
+}
+
+export interface DiscordOAuthResponse {
+  id: string;
+  username: string;
+  avatar: string | null;
+  discriminator: string;
+  public_flags: number;
+  flags: number;
+  banner: string | null;
+  accent_color: number | null;
+  global_name: string | null;
+  avatar_decoration_data: {
+    sku_id: string;
+    asset: string;
+  } | null;
+  banner_color: number | null;
+  clan: string | null;
+  primary_guild: string | null;
+  mfa_enabled: boolean;
+  locale: string;
+  premium_type: number;
+  email: string;
+  verified: boolean;
 }
