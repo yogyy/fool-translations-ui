@@ -87,7 +87,10 @@
               </button>
             </div>
           </div>
-          <ReaderSidebar novel={data.novel} currentChapter={data.chapter.chapterNum} />
+          <ReaderSidebar
+            chapters={data.chapters}
+            novel={data.novel}
+            currentChapter={data.chapter.chapterNum} />
         </div>
         <div class="content max-w-pgsize">
           {#each paragraphs as par}

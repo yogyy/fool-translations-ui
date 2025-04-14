@@ -1,6 +1,5 @@
 <script lang="ts">
   import { cn, slideHorizontal } from '$lib/utils';
-  import { onMount } from 'svelte';
   import Sorting_19 from '../icons/sorting-19.svelte';
   import Sorting_91 from '../icons/sorting-91.svelte';
   import { buttonVariants } from '../ui/button';
@@ -28,12 +27,8 @@
     order = order === 'asc' ? 'desc' : 'asc';
   }
 
-  let chapters: Chapter[] = [];
+  export let chapters: Chapter[] = [];
   let sidebarState: boolean = false;
-  onMount(async () => {
-    const res = await fetch('/MOCK_DATA_chapters.json');
-    chapters = await res.json();
-  });
 
   $: sortedChapters = chapters.sort((a, b) => {
     return order === 'asc' ? a.chapterNum - b.chapterNum : b.chapterNum - a.chapterNum;
