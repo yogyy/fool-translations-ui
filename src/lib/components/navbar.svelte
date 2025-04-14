@@ -123,7 +123,7 @@
                           return async ({ result }) => {
                             user = null;
                             if (result) {
-                              toast.info('out successfully. See you soon!');
+                              toast.info('Logout successfully. See you soon!');
                             }
                             goto('/login');
                           };
