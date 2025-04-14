@@ -7,8 +7,14 @@ type ValidateResponse = {
   session: Session | null;
 };
 
-export async function validateSessionToken(event: RequestEvent): Promise<ValidateResponse> {
-  const res = await event.fetch(`${BE_URL}/auth/validate`);
+export async function validateSessionToken({
+  fetch,
+  cookies
+}: RequestEvent): Promise<ValidateResponse> {
+  const res = await fetch(`${BE_URL}/auth/validate`, {
+    headers: { Cookie: `session=${cookies.get('session')}` }
+  });
+
   const data = await res.json();
 
   return data;
