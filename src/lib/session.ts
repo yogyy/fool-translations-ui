@@ -1,4 +1,4 @@
-import { BE_URL } from '$env/static/private';
+import { APP_ENV, BE_URL } from '$env/static/private';
 import type { RequestEvent } from '@sveltejs/kit';
 import type { Session, User } from './types';
 
@@ -19,7 +19,7 @@ export function setSessionTokenCookie(event: RequestEvent, token: string, expire
     httpOnly: true,
     sameSite: 'lax',
     expires: new Date(expiresAt),
-    secure: process.env.NODE_ENV === 'production',
+    secure: APP_ENV !== 'development',
     path: '/'
   });
 }
@@ -28,7 +28,7 @@ export function deleteSessionTokenCookie(event: RequestEvent): void {
   event.cookies.set('session', '', {
     httpOnly: true,
     sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
+    secure: APP_ENV !== 'development',
     maxAge: 0,
     path: '/'
   });
