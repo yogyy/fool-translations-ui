@@ -24,7 +24,7 @@
       userRate = rate;
       toast('Rating Updated', { position: 'top-center' });
     } else {
-      toast.error(res.statusText, { position: 'top-center' });
+      toast.error('Unauthorized', { position: 'top-center' });
       goto('/login');
     }
   }
