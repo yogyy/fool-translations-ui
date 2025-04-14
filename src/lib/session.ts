@@ -19,7 +19,7 @@ export function setSessionTokenCookie(event: RequestEvent, token: string, expire
     httpOnly: true,
     sameSite: 'lax',
     expires: new Date(expiresAt),
-    secure: process.env.NODE_ENV !== 'development',
+    secure: process.env.NODE_ENV === 'production',
     path: '/'
   });
 }
@@ -28,7 +28,7 @@ export function deleteSessionTokenCookie(event: RequestEvent): void {
   event.cookies.set('session', '', {
     httpOnly: true,
     sameSite: 'lax',
-    secure: process.env.NODE_ENV !== 'development',
+    secure: process.env.NODE_ENV === 'production',
     maxAge: 0,
     path: '/'
   });
