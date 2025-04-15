@@ -1,15 +1,12 @@
 import { z } from 'zod';
 
 export const loginSchema = z.object({
-  email: z.string().email().default('const@test.svelte'),
-  password: z.string().min(8).default('root1234')
+  email: z.string().email(),
+  password: z.string().min(8)
 });
 
 export const registerSchema = loginSchema
-  .extend({
-    name: z.string().default('constantine'),
-    confirmPassword: z.string().min(8).default('root1234')
-  })
+  .extend({ name: z.string(), confirmPassword: z.string().min(8) })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
     path: ['confirmPassword']

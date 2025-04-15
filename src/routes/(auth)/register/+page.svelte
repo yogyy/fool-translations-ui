@@ -37,28 +37,32 @@
   <Form.Field {form} name="email">
     <Form.Control let:attrs>
       <Form.Label>Email</Form.Label>
-      <Input type="email" {...attrs} bind:value={$formData.email} />
+      <Input
+        placeholder="sherlock@moriarty.tarot"
+        type="email"
+        {...attrs}
+        bind:value={$formData.email} />
       <Form.FieldErrors />
     </Form.Control>
   </Form.Field>
   <Form.Field {form} name="name">
     <Form.Control let:attrs>
       <Form.Label>Username</Form.Label>
-      <Input {...attrs} bind:value={$formData.name} />
+      <Input placeholder="Sherlock Moriarty" {...attrs} bind:value={$formData.name} />
       <Form.FieldErrors />
     </Form.Control>
   </Form.Field>
   <Form.Field {form} name="password">
     <Form.Control let:attrs>
       <Form.Label>Password</Form.Label>
-      <Input type="password" {...attrs} bind:value={$formData.password} />
+      <Input placeholder="****" type="password" {...attrs} bind:value={$formData.password} />
       <Form.FieldErrors />
     </Form.Control>
   </Form.Field>
   <Form.Field {form} name="confirmPassword">
     <Form.Control let:attrs>
       <Form.Label>Confirm Password</Form.Label>
-      <Input type="password" {...attrs} bind:value={$formData.confirmPassword} />
+      <Input placeholder="****" type="password" {...attrs} bind:value={$formData.confirmPassword} />
       <Form.FieldErrors />
     </Form.Control>
   </Form.Field>

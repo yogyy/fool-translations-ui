@@ -39,14 +39,18 @@
   <Form.Field {form} name="email">
     <Form.Control let:attrs>
       <Form.Label>Email</Form.Label>
-      <Input type="email" {...attrs} bind:value={$formData.email} />
+      <Input
+        placeholder="gehrman@sparrow.tarot"
+        type="email"
+        {...attrs}
+        bind:value={$formData.email} />
       <Form.FieldErrors />
     </Form.Control>
   </Form.Field>
   <Form.Field {form} name="password">
     <Form.Control let:attrs>
       <Form.Label>Password</Form.Label>
-      <Input type="password" {...attrs} bind:value={$formData.password} />
+      <Input placeholder="****" type="password" {...attrs} bind:value={$formData.password} />
       <Form.FieldErrors />
     </Form.Control>
   </Form.Field>
