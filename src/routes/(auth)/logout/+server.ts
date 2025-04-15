@@ -8,8 +8,8 @@ export const POST: RequestHandler = async (event) => {
   }
 
   const res = await event.fetch(`${BE_URL}/auth/signout`, {
-    method: 'POST',
-    credentials: 'include'
+    headers: { Cookie: `session=${event.cookies.get('session')}` },
+    method: 'POST'
   });
   const data = await res.json();
   if (res.ok) deleteSessionTokenCookie(event);
