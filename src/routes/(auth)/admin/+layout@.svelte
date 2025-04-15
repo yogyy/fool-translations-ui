@@ -1,4 +1,5 @@
 <script>
+  import Footer from '$lib/components/footer.svelte';
   import Navbar from '$lib/components/navbar.svelte';
 
   export let data;
@@ -9,4 +10,7 @@
 </svelte:head>
 
 <Navbar user={data.user} />
-<slot></slot>
+<main class="min-h-dvh overflow-hidden">
+  <slot></slot>
+</main>
+<Footer />
