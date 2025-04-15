@@ -29,7 +29,7 @@
     }
   }
 
-  if (data.isRated) {
+  if (data?.isRated) {
     userRate = data.rating;
   }
 </script>

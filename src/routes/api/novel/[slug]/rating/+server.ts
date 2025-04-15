@@ -1,10 +1,12 @@
 import { BE_URL } from '$env/static/private';
-import { error, json, type RequestHandler } from '@sveltejs/kit';
+import { json, type RequestHandler } from '@sveltejs/kit';
 
 export const GET: RequestHandler = async ({ locals, fetch, params }) => {
   if (!locals.session) return json({ success: true, data: { isRated: false, rating: 0 } });
 
-  const res = await fetch(`${BE_URL}/novels/nvl_${params.slug}/rating`);
+  const res = await fetch(`${BE_URL}/novels/nvl_${params.slug}/rating`, {
+    credentials: 'include'
+  });
   const data = await res.json();
 
   return json(data);
