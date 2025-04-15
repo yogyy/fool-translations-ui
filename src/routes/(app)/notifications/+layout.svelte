@@ -34,8 +34,8 @@
 <main class="mt-14 min-h-dvh overflow-hidden">
   <div
     class={cn(
-      'fixed left-0 right-0 z-40 w-full transform-gpu border-b bg-background transition-transform duration-300 ease-in-out',
-      showNav ? 'translate-y-0' : '-translate-y-14'
+      'fixed left-0 right-0 z-40 flex h-24 w-full transform-gpu items-end border-b bg-background transition-transform duration-300 ease-in-out',
+      showNav ? '-translate-y-14' : '-translate-y-28 '
     )}>
     <div class="relative w-dvw">
       <nav
