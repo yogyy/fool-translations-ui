@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as Form from '$lib/components/ui/form';
   import { Input } from '$lib/components/ui/input';
-  import { novelSchema, type FormSchema } from './schema';
+  import { novelSchema } from './schema';
   import { superForm } from 'sveltekit-superforms';
   import type { Infer, FormResult, SuperValidated } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
@@ -14,8 +14,9 @@
   import StarterKit from '@tiptap/starter-kit';
   import Placeholder from '@tiptap/extension-placeholder';
   import { focusEditor } from '$lib/utils';
+  import DatePicker from '$lib/components/date-picker.svelte';
 
-  export let data: SuperValidated<Infer<FormSchema>>;
+  export let data: SuperValidated<Infer<typeof novelSchema>>;
 
   let element: Element;
   let editor: Editor;
@@ -71,7 +72,7 @@
   method="POST"
   action="?/create"
   use:enhance
-  class="relative mb-10 grid grid-cols-1 gap-3 space-y-2 lg:grid-cols-2 [&>div>label]:text-foreground/70">
+  class="relative mb-10 gap-3 space-y-2 [&>div>label]:text-foreground/70">
   <Form.Field {form} name="title" class="mt-2">
     <Form.Control let:attrs>
       <div class="flex flex-wrap items-center gap-1 md:justify-between">
@@ -99,65 +100,80 @@
               focusEditor(editor, event);
             }
           }}
-          class="hide-scrollbar h-full min-w-full max-w-2xl cursor-auto p-2 text-foreground/80 dark:prose-invert">
+          class="hide-scrollbar prose h-full min-w-full max-w-2xl cursor-auto p-2 text-foreground/80 dark:prose-invert prose-p:m-0 prose-p:mb-2">
         </div>
       </div>
     </Form.Control>
   </Form.Field>
-  <Form.Field {form} name="author">
-    <Form.Control let:attrs>
-      <div class="flex flex-wrap items-center gap-1 md:justify-between">
-        <Form.Label>Author</Form.Label>
-        <Form.FieldErrors />
-      </div>
-      <Input {...attrs} bind:value={$formData.author} class="rounded-sm border-border" />
-    </Form.Control>
-  </Form.Field>
-  <Form.Field {form} name="genres">
-    <Form.Control let:attrs>
-      <div class="flex flex-wrap items-center gap-1 md:justify-between">
-        <Form.Label>Genres</Form.Label>
-        <Form.FieldErrors />
-      </div>
-      <span class="text-sm italic text-foreground/60">separate genre with coma (,)</span>
-      <GenresHelper bind:genres={$formData.genres} />
-      <Input {...attrs} bind:value={$formData.genres} class="rounded-sm border-border" />
-    </Form.Control>
-  </Form.Field>
-  <Form.Field {form} name="cover">
-    <Form.Control let:attrs>
-      <div class="flex items-center gap-3">
-        <Form.Label>Cover</Form.Label>
-        {#if $formData.cover}
-          <ImagePreview src={$formData.cover} alt={`${$formData.title}'s cover'`} />
-        {/if}
-        <Form.FieldErrors />
-      </div>
-      <Input
-        {...attrs}
-        bind:value={$formData.cover}
-        class="rounded-sm border-border"
-        placeholder="https://" />
-    </Form.Control>
-  </Form.Field>
-  <Form.Field {form} name="banner">
-    <Form.Control let:attrs>
-      <div class="flex items-center gap-3">
-        <Form.Label>Banner</Form.Label>
-        {#if $formData.banner}
-          <ImagePreview src={$formData.banner} alt={`${$formData.title}'s banner'`} />
-        {/if}
-        <Form.FieldErrors />
-      </div>
-      <Input
-        {...attrs}
-        bind:value={$formData.banner}
-        class="rounded-sm border-border"
-        placeholder="https://" />
-    </Form.Control>
-  </Form.Field>
-  <Form.Button variant="outline" class="absolute bottom-0 right-0 w-1/2 rounded-sm border-border"
-    >Add</Form.Button>
+  <div class="flex flex-col items-end gap-5 *:w-full md:flex-row">
+    <Form.Field {form} name="author">
+      <Form.Control let:attrs>
+        <div class="flex flex-wrap items-center gap-1 md:justify-between">
+          <Form.Label>Author</Form.Label>
+          <Form.FieldErrors />
+        </div>
+        <Input {...attrs} bind:value={$formData.author} class="rounded-sm border-border" />
+      </Form.Control>
+    </Form.Field>
+    <Form.Field {form} name="publishedAt">
+      <Form.Control let:attrs>
+        <div class="flex flex-wrap items-center gap-1 md:justify-between">
+          <Form.Label>Year of Publishing</Form.Label>
+          <Form.FieldErrors />
+        </div>
+        <DatePicker {...attrs} bind:date={$formData.publishedAt} />
+      </Form.Control>
+    </Form.Field>
+    <Form.Field {form} name="genres" class="grow">
+      <Form.Control let:attrs>
+        <div class="flex flex-wrap items-center gap-1">
+          <Form.Label title="separate genre with coma (,)">Genres</Form.Label>
+          <GenresHelper bind:genres={$formData.genres} />
+          <Form.FieldErrors class="place-self-end" />
+        </div>
+        <Input {...attrs} bind:value={$formData.genres} class="rounded-sm border-border" />
+      </Form.Control>
+    </Form.Field>
+  </div>
+
+  <div class="flex flex-col justify-between gap-5 *:grow md:flex-row md:items-end">
+    <Form.Field {form} name="cover">
+      <Form.Control let:attrs>
+        <div class="flex items-center gap-3">
+          <Form.Label>Cover</Form.Label>
+          {#if $formData.cover}
+            <ImagePreview src={$formData.cover} alt={`${$formData.title}'s cover'`} />
+          {/if}
+          <Form.FieldErrors />
+        </div>
+        <Input
+          {...attrs}
+          bind:value={$formData.cover}
+          class="rounded-sm border-border"
+          placeholder="https://" />
+      </Form.Control>
+    </Form.Field>
+    <Form.Field {form} name="banner">
+      <Form.Control let:attrs>
+        <div class="flex items-center gap-3">
+          <Form.Label>Banner</Form.Label>
+          {#if $formData.banner}
+            <ImagePreview src={$formData.banner} alt={`${$formData.title}'s banner'`} />
+          {/if}
+          <Form.FieldErrors />
+        </div>
+        <Input
+          {...attrs}
+          bind:value={$formData.banner}
+          class="rounded-sm border-border"
+          placeholder="https://" />
+      </Form.Control>
+    </Form.Field>
+    <Form.Button
+      variant="outline"
+      class="rounded-sm border-border bg-cyan-400 text-background hover:bg-cyan-700"
+      >Add</Form.Button>
+  </div>
 </form>
 
 <style>
