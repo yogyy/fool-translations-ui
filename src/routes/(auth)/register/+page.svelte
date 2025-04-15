@@ -7,6 +7,7 @@
   import type { ActionData } from './$types.js';
   import { toast } from 'svelte-sonner';
   import { goto } from '$app/navigation';
+  import Loading from '$lib/components/icons/loading.svelte';
 
   export let data;
 
@@ -27,60 +28,58 @@
     }
   });
 
-  const { form: formData, enhance, errors } = form;
+  const { form: formData, enhance, submitting } = form;
 </script>
 
-<svelte:head>
-  <title>Register | Fool Translations</title>
-</svelte:head>
+<svelte:head><title>Register | Fool Translations</title></svelte:head>
 
-<div class="container flex max-w-lg flex-col justify-center gap-4">
-  <div class="mt-48 space-y-3">
-    <h1 class="text-3xl font-medium opacity-90">Sign Up</h1>
-    <p class="opacity-60">Enter your detail below to create your account</p>
-  </div>
-  <form method="POST" use:enhance class="w-full space-y-2">
-    <Form.Field {form} name="email">
-      <Form.Control let:attrs>
-        <Form.Label>Email</Form.Label>
-        <Input type="email" {...attrs} bind:value={$formData.email} />
-        <Form.FieldErrors />
-      </Form.Control>
-    </Form.Field>
-    <Form.Field {form} name="name">
-      <Form.Control let:attrs>
-        <Form.Label>Username</Form.Label>
-        <Input {...attrs} bind:value={$formData.name} />
-        <Form.FieldErrors />
-      </Form.Control>
-    </Form.Field>
-    <Form.Field {form} name="password">
-      <Form.Control let:attrs>
-        <Form.Label>Password</Form.Label>
-        <Input type="password" {...attrs} bind:value={$formData.password} />
-        <Form.FieldErrors />
-      </Form.Control>
-    </Form.Field>
-    <Form.Field {form} name="confirmPassword">
-      <Form.Control let:attrs>
-        <Form.Label>Confirm Password</Form.Label>
-        <Input type="password" {...attrs} bind:value={$formData.confirmPassword} />
-        <Form.FieldErrors />
-      </Form.Control>
-    </Form.Field>
-    <Form.Button class="w-full">Create Account</Form.Button>
-  </form>
+<form method="POST" use:enhance class="w-full space-y-2">
+  <Form.Field {form} name="email">
+    <Form.Control let:attrs>
+      <Form.Label>Email</Form.Label>
+      <Input type="email" {...attrs} bind:value={$formData.email} />
+      <Form.FieldErrors />
+    </Form.Control>
+  </Form.Field>
+  <Form.Field {form} name="name">
+    <Form.Control let:attrs>
+      <Form.Label>Username</Form.Label>
+      <Input {...attrs} bind:value={$formData.name} />
+      <Form.FieldErrors />
+    </Form.Control>
+  </Form.Field>
+  <Form.Field {form} name="password">
+    <Form.Control let:attrs>
+      <Form.Label>Password</Form.Label>
+      <Input type="password" {...attrs} bind:value={$formData.password} />
+      <Form.FieldErrors />
+    </Form.Control>
+  </Form.Field>
+  <Form.Field {form} name="confirmPassword">
+    <Form.Control let:attrs>
+      <Form.Label>Confirm Password</Form.Label>
+      <Input type="password" {...attrs} bind:value={$formData.confirmPassword} />
+      <Form.FieldErrors />
+    </Form.Control>
+  </Form.Field>
+  <Form.Button disabled={$submitting} class="w-full">
+    {#if $submitting}
+      <Loading class="h-5 w-5 animate-[spin_1.2s_linear_infinite]" />
+    {:else}
+      Create Account
+    {/if}
+  </Form.Button>
+</form>
 
-  <div class="flex flex-col gap-4 text-center text-sm">
-    <p>
-      <span class="opacity-80">By clicking continue, you agree to our</span>
-      <a href="/support/terms-of-service" class="underline">Terms of Services</a>
-      <span class="opacity-80">and</span>
-      <a href="/support/privacy-policy" class="underline">Privacy Policy</a>
-    </p>
-    <p>
-      <span class="opacity-80">Already have an account?</span>
-      <a href="/login" class="underline">Sign In</a>
-    </p>
-  </div>
+<div class="flex flex-col gap-4 text-pretty text-center text-sm">
+  <p>
+    <span class="opacity-80">By clicking continue, you agree to our</span>
+    <a href="/support/terms-of-service" class="underline">Terms of Services</a>
+    <span class="opacity-80">and</span>
+    <a href="/support/privacy-policy" class="underline">Privacy Policy</a>
+  </p>
+  <p>
+    <span class="opacity-80">Already have an account?</span>
+    <a href="/login" class="underline">Sign In</a>
+  </p>
 </div>
