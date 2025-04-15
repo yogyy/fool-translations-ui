@@ -8,11 +8,12 @@ export const GET: RequestHandler = async ({ fetch, params }) => {
   return json(data);
 };
 
-export const POST: RequestHandler = async ({ fetch, locals, params }) => {
+export const POST: RequestHandler = async ({ fetch, locals, params, cookies }) => {
   if (!locals.session) return new Response('Unauthorized', { status: 401 });
 
   const res = await fetch(`${BE_URL}/novels/nvl_${params.slug}/favorite`, {
-    method: 'POST'
+    method: 'POST',
+    headers: { Cookie: `session=${cookies.get('session')}` }
   });
 
   const data = await res.json();
