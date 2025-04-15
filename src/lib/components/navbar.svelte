@@ -50,8 +50,8 @@
   {#if showNav}
     <div
       class="transform-gpu transition-transform duration-300 md:backdrop-blur-sm"
-      in:fly={{ y: 0, duration: 300 }}
-      out:fly={{ y: -100, duration: 300 }}>
+      in:fly={{ y: -50, duration: 300 }}
+      out:fly={{ y: -50, duration: 300 }}>
       <header
         class={cn(
           'top-0 z-50 w-full bg-gradient-to-b from-zinc-950/80 via-zinc-950/50 to-transparent transition duration-500 md:bg-background md:from-transparent',

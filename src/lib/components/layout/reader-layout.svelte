@@ -19,13 +19,14 @@
   export let isInView;
 </script>
 
-<div
-  class={cn(
-    'container fixed top-0 z-50 flex h-14 w-dvw max-w-screen-xl items-center px-4 pt-1 transition duration-300',
-    showNav || isInView ? 'bg-background/80 backdrop-blur-sm' : 'bg-transparent'
-  )}>
+<div class={cn('container fixed top-0 z-50 w-dvw max-w-screen-xl')}>
   {#if showNav || !!isInView}
-    <slot name="navbar"></slot>
+    <div
+      in:fly={{ y: -50, duration: 400 }}
+      out:fly={{ y: -50, duration: 400 }}
+      class="flex h-14 items-center px-4 pt-1">
+      <slot name="navbar"></slot>
+    </div>
   {/if}
 </div>
 <slot></slot>
@@ -76,13 +77,14 @@
           variant="secondary">
           <Settings_02 class="h-6 w-6 [&>g:first-child>path:first-child]:fill-current" />
         </Button>
-        <div class="flex bg-background capitalize">
+        <div
+          class="flex h-fit overflow-hidden rounded-full bg-background capitalize shadow-md shadow-cyan-400">
           <button
             disabled={data.prev === null}
             on:click|stopPropagation={() => goto(`/viewer/${data.prev?.slice(3)}`)}
             class={cn(
               buttonVariants({ variant: 'secondary' }),
-              'items-center rounded-full rounded-br-none rounded-tr-none no-underline shadow-none hover:bg-background'
+              'items-center rounded-full rounded-br-none rounded-tr-none no-underline hover:bg-background'
             )}>
             <ArrowLeft_01 class="h-5 w-5" />
             <span>prev</span>
@@ -92,7 +94,7 @@
             on:click|stopPropagation={() => goto(`/viewer/${data.next?.slice(3)}`)}
             class={cn(
               buttonVariants({ variant: 'secondary' }),
-              'items-center rounded-full rounded-bl-none rounded-tl-none no-underline shadow-none hover:bg-background'
+              'items-center rounded-full rounded-bl-none rounded-tl-none no-underline hover:bg-background'
             )}>
             <span>next</span>
             <ArrowRight_01 class="h-5 w-5" />

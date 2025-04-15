@@ -60,8 +60,6 @@
       class="container prose relative flex flex-col items-center justify-center px-4 dark:prose-invert md:max-w-screen-lg">
       <ReaderLayout {data} {showNav} {isInView}>
         <div
-          in:fly={{ y: -100, duration: 300 }}
-          out:fly={{ y: -100, duration: 300 }}
           slot="navbar"
           class="flex w-full scale-90 gap-3 min-[400px]:scale-100 md:justify-between">
           <button
@@ -78,7 +76,7 @@
                 on:click|stopPropagation
                 class={cn(
                   buttonVariants({ variant: 'secondary' }),
-                  'overflow-hidden rounded-full shadow-accent hover:bg-[#191C1D]'
+                  'overflow-hidden rounded-full shadow-md shadow-cyan-400 hover:bg-[#191C1D]'
                 )}>
                 <p class="overflow-hidden text-wrap text-xs font-medium leading-none sm:text-sm">
                   <span class="opacity-80">Chapter {data.chapter.chapterNum}:</span>
@@ -92,7 +90,7 @@
             novel={data.novel}
             currentChapter={data.chapter.chapterNum} />
         </div>
-        <div class="content max-w-pgsize">
+        <div class="content prose max-w-pgsize scroll-smooth dark:prose-invert">
           {#each paragraphs as par}
             <p class={cn('', par.startsWith('"') ? 'dialogue' : 'narration')}>{par}</p>
           {/each}
