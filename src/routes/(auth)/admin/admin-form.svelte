@@ -15,6 +15,7 @@
   import Placeholder from '@tiptap/extension-placeholder';
   import { focusEditor } from '$lib/utils';
   import DatePicker from '$lib/components/date-picker.svelte';
+  import Loading from '$lib/components/icons/loading.svelte';
 
   export let data: SuperValidated<Infer<typeof novelSchema>>;
 
@@ -65,7 +66,7 @@
     }
   });
 
-  const { form: formData, enhance } = form;
+  const { form: formData, enhance, submitting } = form;
 </script>
 
 <form
@@ -171,13 +172,19 @@
     </Form.Field>
     <Form.Button
       variant="outline"
-      class="rounded-sm border-border bg-cyan-400 text-background hover:bg-cyan-700"
-      >Add</Form.Button>
+      disabled={$submitting}
+      class="rounded-sm border-border bg-cyan-400 text-background hover:bg-cyan-700">
+      {#if $submitting}
+        <Loading class="h-5 w-5 animate-[spin_1.2s_linear_infinite]" />
+      {:else}
+        Add
+      {/if}
+    </Form.Button>
   </div>
 </form>
 
-<style>
-  :global(.ProseMirror) {
+<style scoped>
+  .ProseMirror {
     min-height: 100%;
     position: relative;
     word-wrap: break-word;
