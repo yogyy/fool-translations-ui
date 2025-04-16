@@ -6,7 +6,13 @@ export const loginSchema = z.object({
 });
 
 export const registerSchema = loginSchema
-  .extend({ name: z.string(), confirmPassword: z.string().min(8) })
+  .extend({
+    name: z
+      .string()
+      .min(4, 'Name needs to be at least 4 characters')
+      .regex(/^[a-zA-Z0-9]+$/, 'name can only contain letters and numbers'),
+    confirmPassword: z.string().min(8)
+  })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
     path: ['confirmPassword']

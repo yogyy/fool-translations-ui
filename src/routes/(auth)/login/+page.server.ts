@@ -7,8 +7,8 @@ import { BE_URL } from '$env/static/private';
 import { parseString } from 'set-cookie-parser';
 import { setSessionTokenCookie } from '$lib/session';
 
-export const load: PageServerLoad = async (event) => {
-  if (event.locals.user !== null) {
+export const load: PageServerLoad = async ({ locals }) => {
+  if (locals.user) {
     return redirect(302, '/');
   }
 

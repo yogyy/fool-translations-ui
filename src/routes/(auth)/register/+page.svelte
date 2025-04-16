@@ -6,7 +6,6 @@
   import { registerSchema } from '../schema';
   import type { ActionData } from './$types.js';
   import { toast } from 'svelte-sonner';
-  import { goto } from '$app/navigation';
   import Loading from '$lib/components/icons/loading.svelte';
 
   export let data;
@@ -14,17 +13,18 @@
   const form = superForm(data.form, {
     dataType: 'json',
     validators: zodClient(registerSchema),
+    resetForm: false,
     onUpdate({ form, result }) {
       const { signup } = result.data as FormResult<ActionData>;
 
-      if (form.valid) {
-        if (signup?.success === false) {
-          toast.error(signup?.error);
-        } else {
-          toast.success(`Account created successfully! Welcome to Fool Translations!`);
-          goto('/');
-        }
+      if (!form.valid) return;
+
+      if (signup?.success === false) {
+        toast.error(signup.error, { id: form.data.email });
+        return;
       }
+
+      toast.success('Account created successfully! Welcome to Fool Translations!');
     }
   });
 
@@ -66,7 +66,14 @@
       <Form.FieldErrors />
     </Form.Control>
   </Form.Field>
-  <Form.Button disabled={$submitting} class="w-full">
+  <Form.Button
+    disabled={$submitting ||
+      !$formData.email.includes('@') ||
+      $formData.password.length < 8 ||
+      $formData.confirmPassword.length < 8 ||
+      $formData.password !== $formData.confirmPassword ||
+      $formData.name.trim().length < 8}
+    class="w-full">
     {#if $submitting}
       <Loading class="h-5 w-5 animate-[spin_1.2s_linear_infinite]" />
     {:else}
@@ -78,9 +85,11 @@
 <div class="flex flex-col gap-4 text-pretty text-center text-sm">
   <p>
     <span class="opacity-80">By clicking continue, you agree to our</span>
-    <a href="/support/terms-of-service" class="underline">Terms of Services</a>
+    <a data-sveltekit-preload-data="off" href="/support/terms-of-service" class="underline"
+      >Terms of Services</a>
     <span class="opacity-80">and</span>
-    <a href="/support/privacy-policy" class="underline">Privacy Policy</a>
+    <a data-sveltekit-preload-data="off" href="/support/privacy-policy" class="underline"
+      >Privacy Policy</a>
   </p>
   <p>
     <span class="opacity-80">Already have an account?</span>

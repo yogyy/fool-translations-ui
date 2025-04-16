@@ -6,7 +6,6 @@
   import { loginSchema } from '../schema';
   import type { ActionData } from './$types.js';
   import { toast } from 'svelte-sonner';
-  import { goto } from '$app/navigation';
   import { cn } from '$lib/utils';
   import { buttonVariants } from '$lib/components/ui/button';
   import Loading from '$lib/components/icons/loading.svelte';
@@ -16,15 +15,17 @@
   const form = superForm(data.form, {
     dataType: 'json',
     validators: zodClient(loginSchema),
-    onUpdate({ result }) {
+    resetForm: false,
+    onUpdate({ form, result }) {
       const { signin } = result.data as FormResult<ActionData>;
 
+      if (!form.valid) return;
       if (signin?.success === false) {
-        toast.error(signin?.error);
-      } else {
-        toast.info('Login successful! Welcome back.');
-        goto('/');
+        toast.error(signin.error, { id: form.data.email });
+        return;
       }
+
+      toast.info('Login successful! Welcome back.');
     }
   });
   const { form: formData, enhance, submitting } = form;
@@ -54,7 +55,12 @@
       <Form.FieldErrors />
     </Form.Control>
   </Form.Field>
-  <Form.Button disabled={$submitting} class="w-full">
+  <Form.Button
+    disabled={$submitting ||
+      oauthLoading ||
+      !$formData.email.includes('@') ||
+      $formData.password.length < 8}
+    class="w-full">
     {#if $submitting}
       <Loading class="h-5 w-5 animate-[spin_1.2s_linear_infinite]" />
     {:else}
@@ -119,7 +125,8 @@
     <a href="/register" class="underline opacity-90">Sign Up</a>
   </p>
 
-  <a href="/auth/forgot-password" class="underline opacity-90">Forgot Password?</a>
+  <a data-sveltekit-preload-data="off" href="/auth/forgot-password" class="underline opacity-90"
+    >Forgot Password?</a>
 </div>
 
 <style>
