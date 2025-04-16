@@ -3,5 +3,12 @@
 </script>
 
 <main class="-mt-14 flex min-h-dvh items-center justify-center">
-  <h1 class="text-3xl font-medium text-foreground">{$page.error?.message}</h1>
+  <div class="flex min-h-dvh flex-col items-center justify-center gap-3">
+    <h1 class="text-3xl font-medium capitalize text-foreground">
+      {$page.error?.message}
+    </h1>
+    <button
+      on:click={() => history.back()}
+      class="rounded-sm border px-2 py-1.5 hover:text-cyan-300">RETURN</button>
+  </div>
 </main>
