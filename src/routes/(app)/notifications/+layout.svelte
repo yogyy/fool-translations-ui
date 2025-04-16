@@ -34,14 +34,14 @@
 <main class="mt-14 min-h-dvh overflow-hidden">
   <div
     class={cn(
-      'fixed left-0 right-0 z-40 flex h-24 w-full transform-gpu items-end border-b bg-background transition-transform duration-300 ease-in-out',
+      'fixed left-0 right-0 z-40 flex h-24 w-dvw transform-gpu items-end border-b bg-background transition-transform duration-300 ease-in-out',
       showNav ? '-translate-y-14' : '-translate-y-28 '
     )}>
     <div class="relative w-dvw">
       <nav
-        class="container mx-auto flex justify-center space-x-2 overflow-x-auto whitespace-nowrap">
+        class="mx-auto flex justify-center space-x-2 overflow-x-auto whitespace-nowrap md:container">
         <div
-          class="no-scrollbar relative h-10 w-auto grow-0 snap-x snap-mandatory items-center justify-center overflow-x-hidden scroll-smooth whitespace-nowrap rounded-none bg-transparent px-1 pb-0">
+          class="no-scrollbar relative h-10 w-auto grow-0 scale-90 snap-x snap-mandatory items-center justify-center overflow-x-hidden scroll-smooth whitespace-nowrap rounded-none bg-transparent px-1 pb-0 md:scale-100">
           {#each ['chapters', 'announcements', 'replies'] as menu, i}
             <a
               href={`/notifications/${menu}`}
