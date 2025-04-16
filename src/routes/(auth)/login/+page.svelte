@@ -84,7 +84,7 @@
     class:is-disabled={oauthLoading || $submitting}
     class={cn(
       buttonVariants({ variant: 'default' }),
-      'flex w-full items-center gap-2 bg-[#5865F2] text-foreground hover:bg-[#5865F2]/80'
+      'flex w-full items-center gap-2 bg-[#5865F2] text-white hover:bg-[#5865F2]/80'
     )}>
     {#if selectedProvider === 'discord'}
       <Loading class="h-5 w-5 animate-[spin_1.2s_linear_infinite]" />
@@ -105,7 +105,7 @@
     class:is-disabled={oauthLoading || $submitting}
     class={cn(
       buttonVariants({ variant: 'default' }),
-      'flex w-full items-center gap-2 bg-[#D0463B] text-foreground hover:bg-[#D0463B]/80'
+      'flex w-full items-center gap-2 bg-[#D0463B] text-white hover:bg-[#D0463B]/80'
     )}>
     {#if selectedProvider === 'google'}
       <Loading class="h-5 w-5 animate-[spin_1.2s_linear_infinite]" />
