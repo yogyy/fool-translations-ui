@@ -4,13 +4,13 @@
   import { ModeWatcher } from 'mode-watcher';
   import { userPrefersMode } from 'mode-watcher';
 
-  import { navigating } from '$app/stores';
+  import { navigating, page } from '$app/stores';
   import Loading from '$lib/components/icons/loading.svelte';
 </script>
 
 <ModeWatcher />
 
-{#if $navigating}
+{#if $navigating && !$page.route.id?.includes('(auth)')}
   <div class="fixed z-50 -mt-14 flex h-dvh w-dvw items-center justify-center bg-background/40">
     <Loading class="h-7 w-7 animate-[spin_1.2s_linear_infinite] text-cyan-800 dark:text-cyan-400" />
   </div>
