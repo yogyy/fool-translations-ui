@@ -11,3 +11,12 @@ export const novelSchema = z.object({
 });
 
 export type NovelSchema = typeof novelSchema;
+
+export const chapterSchema = z.object({
+  title: z.string(),
+  novelId: z.string(),
+  chapterNum: z.string().min(1),
+  content: z.string().min(200)
+});
+
+export type ChapterSchema = typeof chapterSchema;
