@@ -3,7 +3,6 @@
   import ReaderSidebar from '$lib/components/layout/reader-sidebar.svelte';
   import { buttonVariants } from '$lib/components/ui/button/index.js';
   import { cn } from '$lib/utils.js';
-  import { fly } from 'svelte/transition';
   import { onDestroy, onMount } from 'svelte';
   import { browser } from '$app/environment';
   import { inview } from 'svelte-inview';
@@ -51,7 +50,7 @@
 
 <main class="mt-14 min-h-svh overflow-hidden">
   <div
-    class="relative z-0 min-h-[90dvh] cursor-default select-none focus:outline-none"
+    class="relative z-0 cursor-default select-none focus:outline-none"
     on:click={() => (showNav = !showNav)}
     role="button"
     tabindex="0"

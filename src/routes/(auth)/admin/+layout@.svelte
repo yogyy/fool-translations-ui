@@ -10,7 +10,7 @@
 </svelte:head>
 
 <Navbar user={data.user} />
-<main class="min-h-dvh overflow-hidden">
+<main class="min-h-svh overflow-hidden">
   <slot></slot>
 </main>
 <Footer />

@@ -51,7 +51,7 @@
   <Dialog.Content
     transition={slideHorizontal}
     overlayClass="backdrop-blur-none"
-    class="left-auto right-0 flex max-h-full min-h-dvh max-w-sm translate-x-0 flex-col gap-0 p-0 sm:rounded-none">
+    class="left-auto right-0 flex max-h-full min-h-svh max-w-sm translate-x-0 flex-col gap-0 p-0 sm:rounded-none">
     <div class="min-h-36 shrink-0 bg-cyan-700"></div>
     <div class="bg-background p-1">
       <div
@@ -70,7 +70,7 @@
           {/if}
         </Button>
       </div>
-      <ScrollArea class="h-[77dvh] overflow-y-auto bg-slate-600">
+      <ScrollArea class="h-[77svh] overflow-y-auto bg-slate-600">
         <ul class="bg-background pt-0.5">
           {#each sortedChapters as ch}
             <li

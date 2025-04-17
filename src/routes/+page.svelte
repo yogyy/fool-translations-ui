@@ -14,7 +14,7 @@
 </svelte:head>
 
 <Navbar user={data.user} />
-<main class="mt-14 min-h-dvh overflow-hidden">
+<main class="mt-14 min-h-svh overflow-hidden">
   <h1 class="sr-only">
     Welcome to Fool Translations. Read the latest and most popular Korean and Chinese web novels
     with high quality English translations.

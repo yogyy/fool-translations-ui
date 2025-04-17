@@ -4,6 +4,6 @@
   export let data;
 </script>
 
-<div class="container min-h-svh max-w-pgsize pt-20">
+<div class="container max-w-pgsize pt-20">
   <SettingsForm data={data.form} />
 </div>

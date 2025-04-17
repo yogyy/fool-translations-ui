@@ -31,7 +31,7 @@
 </script>
 
 <Navbar user={data.user} />
-<main class="mt-14 min-h-dvh overflow-hidden">
+<main class="mt-14 min-h-svh overflow-hidden">
   <div
     class={cn(
       'fixed left-0 right-0 z-40 flex h-24 w-dvw transform-gpu items-end border-b bg-background transition-transform duration-300 ease-in-out',

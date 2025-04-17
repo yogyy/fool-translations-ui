@@ -18,7 +18,7 @@
   <title>{novel.title} | Fool Translations</title>
 </svelte:head>
 
-<header
+<nav
   class="fixed top-0 z-10 flex h-14 w-full items-center justify-between bg-transparent px-4 md:hidden">
   <a
     class={cn(buttonVariants({ size: 'icon', variant: 'ghost' }), 'hover:bg-opacity-30')}
@@ -28,8 +28,8 @@
     <ArrowLeft_01 class="h-8 w-7" />
   </a>
   <SubscribeAndFavorite {favorite} {subscribe} />
-</header>
-<div class="container min-h-dvh min-w-[300px] px-0">
+</nav>
+<div class="container min-w-[300px] px-0">
   <div class="grid grid-cols-1 md:mx-24 md:my-2 md:flex md:flex-row md:gap-x-2 md:gap-y-0">
     <div
       class="mx-0 grid grid-cols-1 bg-complimentary md:flex md:flex-col md:items-center md:rounded-xl md:pb-8">
