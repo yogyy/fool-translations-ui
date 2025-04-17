@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as Form from '$lib/components/ui/form';
   import { Input } from '$lib/components/ui/input';
-  import { novelSchema } from './schema';
+  import { novelSchema } from '../schema';
   import { superForm } from 'sveltekit-superforms';
   import type { Infer, FormResult, SuperValidated } from 'sveltekit-superforms';
   import { zodClient } from 'sveltekit-superforms/adapters';
@@ -54,15 +54,15 @@
     validators: zodClient(novelSchema),
     onUpdate({ form, result }) {
       const action = result.data as FormResult<ActionData>;
-      if (form.valid) {
-        console.log(action.newNovel);
-        if (action.newNovel.success === false || action.newNovel.error) {
-          toast.error(action.newNovel.error);
-        } else {
-          editor.commands.clearContent();
-          toast.success(`Novel ${action.newNovel.data.title} added`);
-        }
+
+      if (!form.valid) return;
+      if (action.newNovel.success === false || action.newNovel.error) {
+        toast.error(action.newNovel.error);
+        return;
       }
+
+      editor.commands.clearContent();
+      toast.success(`Novel ${action.newNovel.data.title} added`);
     }
   });
 
@@ -74,6 +74,7 @@
   action="?/create"
   use:enhance
   class="relative mb-10 gap-3 space-y-2 [&>div>label]:text-foreground/70">
+  <h1 class="text-xl font-semibold">Add Novel</h1>
   <Form.Field {form} name="title" class="mt-2">
     <Form.Control let:attrs>
       <div class="flex flex-wrap items-center gap-1 md:justify-between">
