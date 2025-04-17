@@ -182,18 +182,3 @@
     </Form.Button>
   </div>
 </form>
-
-<style scoped>
-  .ProseMirror {
-    min-height: 100%;
-    position: relative;
-    word-wrap: break-word;
-    white-space: pre-wrap;
-    cursor: auto;
-    -webkit-font-variant-ligatures: none;
-    font-variant-ligatures: none;
-    &:focus {
-      outline: none;
-    }
-  }
-</style>
