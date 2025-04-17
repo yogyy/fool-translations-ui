@@ -120,8 +120,8 @@
 </div>
 
 <div class="flex flex-col gap-4 text-center text-sm">
-  <p class="opacity-80">
-    Don't have an account?
+  <p>
+    <span class="opacity-80">Don't have an account?</span>
     <a href="/register" class="underline opacity-90">Sign Up</a>
   </p>
 

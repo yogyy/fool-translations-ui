@@ -85,14 +85,16 @@
 <div class="flex flex-col gap-4 text-pretty text-center text-sm">
   <p>
     <span class="opacity-80">By clicking continue, you agree to our</span>
-    <a data-sveltekit-preload-data="off" href="/support/terms-of-service" class="underline"
-      >Terms of Services</a>
+    <a
+      data-sveltekit-preload-data="off"
+      href="/support/terms-of-service"
+      class="underline opacity-90">Terms of Services</a>
     <span class="opacity-80">and</span>
-    <a data-sveltekit-preload-data="off" href="/support/privacy-policy" class="underline"
+    <a data-sveltekit-preload-data="off" href="/support/privacy-policy" class="underline opacity-90"
       >Privacy Policy</a>
   </p>
   <p>
     <span class="opacity-80">Already have an account?</span>
-    <a href="/login" class="underline">Sign In</a>
+    <a href="/login" class="underline opacity-90">Sign In</a>
   </p>
 </div>
