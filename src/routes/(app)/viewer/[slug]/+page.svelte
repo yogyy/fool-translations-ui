@@ -49,15 +49,14 @@
   <title>{data.novel.title} Chapter {data.chapter.chapterNum}</title>
 </svelte:head>
 
-<main class="mt-14 min-h-dvh overflow-hidden px-4 md:px-0">
+<main class="mt-14 min-h-svh overflow-hidden">
   <div
     class="relative z-0 min-h-[90dvh] cursor-default select-none focus:outline-none"
     on:click={() => (showNav = !showNav)}
     role="button"
     tabindex="0"
     on:keypress>
-    <div
-      class="container prose relative flex flex-col items-center justify-center px-4 dark:prose-invert md:max-w-screen-lg">
+    <div class="container relative flex flex-col items-center justify-center md:max-w-screen-lg">
       <ReaderLayout {data} {showNav} {isInView}>
         <div
           slot="navbar"

@@ -24,7 +24,7 @@
     <div
       in:fly={{ y: -50, duration: 400 }}
       out:fly={{ y: -50, duration: 400 }}
-      class="flex h-14 items-center px-4 pt-1">
+      class="flex h-14 items-center pt-1 md:px-4">
       <slot name="navbar"></slot>
     </div>
   {/if}
@@ -32,7 +32,7 @@
 <slot></slot>
 <div
   class={cn(
-    'bottom-0 z-50 h-14 w-dvw max-w-screen-xl bg-transparent px-4',
+    'bottom-0 z-50 h-14 w-dvw max-w-screen-xl bg-transparent md:px-4',
     isInView ? 'sticky' : 'fixed'
   )}>
   {#if showNav || !!isInView}
