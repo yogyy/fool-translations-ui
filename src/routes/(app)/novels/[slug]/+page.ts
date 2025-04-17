@@ -1,21 +1,23 @@
 import type { ApiResponse, Chapter, FavoriteData, RatingData, SubscribeData } from '$lib/types.js';
 
-export const load = async ({ data, fetch, params, depends }) => {
-  const favorite = await fetch(`/api/novel/${params.slug}/favorite`);
-  const favoriteData: ApiResponse<FavoriteData> = await favorite.json();
+export const load = async ({ data, fetch, params }) => {
+  const [favoriteRes, subsRes, rateRes, chaptersRes] = await Promise.all([
+    fetch(`/api/novel/${params.slug}/favorite`),
+    fetch(`/api/novel/${params.slug}/subscribe`),
+    fetch(`/api/novel/${params.slug}/rating`),
+    fetch(`/api/novel/${params.slug}/chapters`)
+  ]);
 
-  const subs = await fetch(`/api/novel/${params.slug}/subscribe`);
-  const SubsData: ApiResponse<SubscribeData> = await subs.json();
-
-  const rate = await fetch(`/api/novel/${params.slug}/rating`);
-  const rateData: ApiResponse<RatingData> = await rate.json();
-
-  const chapters = await fetch(`/api/novel/${params.slug}/chapters`);
-  const chaptersData: ApiResponse<Omit<Chapter, 'content'>[]> = await chapters.json();
+  const [favoriteData, subsData, rateData, chaptersData] = await Promise.all([
+    favoriteRes.json() as Promise<ApiResponse<FavoriteData>>,
+    subsRes.json() as Promise<ApiResponse<SubscribeData>>,
+    rateRes.json() as Promise<ApiResponse<RatingData>>,
+    chaptersRes.json() as Promise<ApiResponse<Omit<Chapter, 'content'>[]>>
+  ]);
 
   return {
     ...data,
-    subscribe: SubsData.data,
+    subscribe: subsData.data,
     favorite: favoriteData.data,
     rating: rateData.data,
     chapters: chaptersData.data
