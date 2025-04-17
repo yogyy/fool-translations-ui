@@ -51,7 +51,7 @@
               src={novel.cover}
               alt={`${novel.title} Cover`}
               draggable="false"
-              class="aspect-[2/3] scale-50 rounded-3xl border border-zinc-700/40 shadow-sm md:scale-[77%] md:rounded-xl"
+              class="scale-50 rounded-3xl border border-zinc-700/40 shadow-sm md:scale-[77%] md:rounded-xl"
               style="object-fit: cover; max-width: 400px; max-height: 600px; aspect-ratio: 0.666667 / 1; width: 100%;" />
           </div>
         </div>
@@ -60,10 +60,16 @@
         <Summary {novel} class="flex items-center md:hidden" />
         <SubscribeAndFavorite {favorite} {subscribe} class="-mt-16 hidden md:flex" />
         <ReleasedDay />
-        <div class="flex flex-grow justify-center">
+        <div class="flex flex-grow flex-col justify-center gap-2">
           <a
             class="mx-auto inline-flex h-10 w-1/2 select-none items-center justify-center whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 dark:bg-cyan-300/90 dark:hover:bg-cyan-300/60 md:w-full"
             href="#viewer/somenumber">Start Reading</a>
+          {#if data.user?.type === 'admin'}
+            <a
+              href={`/admin/chapter?novelId=${novel.id}`}
+              class="mx-auto inline-flex h-10 w-1/2 select-none items-center justify-center whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 dark:bg-cyan-300/90 dark:hover:bg-cyan-300/60 md:w-full"
+              >Add Chapter</a>
+          {/if}
         </div>
         <Rate class="hidden md:block" data={rating} />
       </div>
