@@ -1,3 +1,7 @@
+<script>
+  let currentYear = new Date().getFullYear();
+</script>
+
 <footer class="border-t py-8">
   <div class="container">
     <div class="flex flex-col items-center gap-y-3">
@@ -48,7 +52,9 @@
       </div>
       <div
         class="flex flex-col items-center text-xs font-medium md:flex-row md:justify-between md:gap-y-0">
-        <p class="mb-1 text-muted-foreground md:mb-0">Copyright © Fool Translations 2024</p>
+        <p class="mb-1 text-muted-foreground md:mb-0">
+          Copyright © Fool Translations {currentYear}
+        </p>
         <div class="flex flex-row gap-x-1 md:pl-4">
           <a href="/support/privacy-policy" class="text-accent-foreground/90 hover:opacity-70">
             Privacy Policy
