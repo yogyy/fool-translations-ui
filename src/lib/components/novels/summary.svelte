@@ -43,15 +43,16 @@
     'flex-col justify-start gap-y-2 bg-complimentary p-4 md:mt-0 md:rounded-xl md:p-4',
     className
   )}>
-  <h2 class="text-2xl font-medium leading-none text-foreground/90 md:-mt-2 md:text-3xl">
+  <h2
+    class="text-pretty text-center text-2xl font-medium leading-none text-foreground/90 md:-mt-2 md:text-left lg:text-3xl">
     {novel.title}
   </h2>
-  <div class="flex flex-row items-center justify-start gap-x-2">
+  <div class="flex flex-row flex-wrap justify-center gap-2 md:justify-start">
     {#each summary as sum}
       <Tooltip.Root>
         <Tooltip.Trigger>
-          <div class="flex flex-row items-center gap-x-1">
-            <svelte:component this={sum.icon} size="16" class="h-4 w-4 fill-none" />
+          <div class="flex flex-row flex-wrap items-center gap-1">
+            <svelte:component this={sum.icon} size="16" class="h-4 w-4 shrink-0 fill-none" />
             <p class="text-center text-xs font-medium opacity-90">
               {sum.data}
             </p>

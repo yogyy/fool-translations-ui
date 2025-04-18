@@ -30,7 +30,7 @@
   <SubscribeAndFavorite {favorite} {subscribe} />
 </nav>
 <div class="container min-w-[300px] px-0">
-  <div class="grid grid-cols-1 md:mx-24 md:my-2 md:flex md:flex-row md:gap-x-2 md:gap-y-0">
+  <div class="grid grid-cols-1 md:mx-12 md:my-2 md:flex md:flex-row md:gap-x-2 md:gap-y-0 lg:mx-24">
     <div
       class="mx-0 grid grid-cols-1 bg-complimentary md:flex md:flex-col md:items-center md:rounded-xl md:pb-8">
       <div class="relative">
@@ -74,7 +74,8 @@
         <Rate class="hidden md:block" data={rating} />
       </div>
     </div>
-    <div class="col-span-1 flex flex-grow flex-col gap-y-2 md:max-w-[691.25px] md:gap-y-2 md:pt-0">
+    <div
+      class="col-span-1 flex flex-grow flex-col gap-y-2 pb-10 md:max-w-[691.25px] md:gap-y-2 md:pb-0 md:pt-0">
       <div class="hidden bg-complimentary md:block md:rounded-xl" id="banner">
         <img
           class="dark:brightness-75 md:rounded-xl"
