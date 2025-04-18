@@ -1,15 +1,14 @@
 <script lang="ts">
-  import { toast, type ExternalToast } from 'svelte-sonner';
+  import { toast } from 'svelte-sonner';
 
   export let genres: string;
 
-  const toastSetting: ExternalToast = { position: 'top-left' };
   function genrehandler() {
-    let msg = genres.replace(/([a-z])([A-Z])/g, '$1, $2');
+    let msg = genres.replace(/([a-z])([A-Z])/g, '$1, $2').replaceAll(' ', '');
     if (genres.length === 0) {
-      toast.info('genre is empty', toastSetting);
-    } else if (genres.includes(',')) {
-      toast.error('genre already separated', toastSetting);
+      toast.info('genre is empty', { position: 'top-left' });
+    } else if (genres.includes(',') && !genres.includes(' ')) {
+      toast.error('genre already separated', { position: 'top-left' });
     } else {
       genres = msg;
     }
