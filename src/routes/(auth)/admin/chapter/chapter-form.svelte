@@ -61,7 +61,9 @@
       }
 
       editor.commands.clearContent();
-      toast.success(`Chapter ${action.newChapter.data.title} added`);
+      toast.success(
+        `Chapter ${action.newChapter.data.chapterNum}. ${action.newChapter.data.title} added`
+      );
     }
   });
 
@@ -122,14 +124,6 @@
       <div class="flex flex-wrap items-center gap-1 md:justify-between">
         <Form.Label>Content</Form.Label>
         <Form.FieldErrors />
-        <a
-          href="data:text/plain,{$formData.content}"
-          download="Untitled.md"
-          title="Download"
-          class="button">
-          <svg.Save />
-          <span class="hidden lg:inline">Download</span>
-        </a>
       </div>
       <div class="h-[40rem] rounded-sm border">
         <textarea class="hidden" {...attrs} bind:value={$formData.content} />
