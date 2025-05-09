@@ -78,20 +78,20 @@
       class="col-span-1 flex flex-grow flex-col gap-y-2 pb-10 md:max-w-[691.25px] md:gap-y-2 md:pb-0 md:pt-0">
       <div class="hidden bg-complimentary md:block md:rounded-xl" id="banner">
         <img
-          class="dark:brightness-75 md:rounded-xl"
+          class="w-full object-cover dark:brightness-75 md:rounded-xl"
           draggable="false"
           src="/default-banner.webp"
           alt={`${novel.title} Banner`}
-          style="object-fit: cover; max-width: 900px; max-height: 350px; aspect-ratio: 2.57143 / 1; width: 100%;" />
+          style="max-width: 900px; max-height: 350px; aspect-ratio: 2.57143 / 1;" />
       </div>
       <Summary {novel} class="hidden md:flex" />
       <div class="relative block md:hidden">
         <img
-          class="md:rounded-xl"
+          class="w-full object-cover md:rounded-xl"
           draggable="false"
           src="/default-banner.webp"
           alt={`${novel.title} Banner`}
-          style="object-fit: cover; max-width: 900px; max-height: 350px; aspect-ratio: 2.57143 / 1; width: 100%;" />
+          style="max-width: 900px; max-height: 350px; aspect-ratio: 2.57143 / 1;" />
         <div
           class="absolute inset-0 flex flex-col items-center justify-center gap-y-4 bg-background/60">
           <Rate class="mt-0 block md:hidden" data={rating} />
