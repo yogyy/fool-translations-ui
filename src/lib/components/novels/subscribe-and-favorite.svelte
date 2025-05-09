@@ -13,10 +13,6 @@
 
   export { className as class };
 
-  let favorited = favorite.isFavorited;
-  let totalfav = favorite.total;
-  let notified = subscribe.isSubscribed;
-  let totalntf = subscribe.total;
   let isLoading = false;
 
   async function favoriteNovel() {
@@ -29,12 +25,12 @@
       isLoading = false;
       const data: MutateResponse = await res.json();
       if (data.success && data.action === 'added') {
-        totalfav += 1;
-        favorited = true;
+        favorite.total += 1;
+        favorite.isFavorited = true;
         toast('Favorited', { position: 'top-center' });
       } else if (data.success && data.action === 'removed') {
-        totalfav -= 1;
-        favorited = false;
+        favorite.total -= 1;
+        favorite.isFavorited = false;
         toast('Unfavorited', { position: 'top-center' });
       }
     } else {
@@ -53,12 +49,12 @@
       isLoading = false;
       const data: MutateResponse = await res.json();
       if (data.success && data.action === 'added') {
-        totalntf += 1;
-        notified = true;
+        subscribe.total += 1;
+        subscribe.isSubscribed = true;
         toast('Subscribed', { position: 'top-center' });
       } else if (data.success && data.action === 'removed') {
-        totalntf -= 1;
-        notified = false;
+        subscribe.total -= 1;
+        subscribe.isSubscribed = false;
         toast('Unsubscribed', { position: 'top-center' });
       }
     } else {
@@ -75,28 +71,30 @@
       on:click={subscribeNovel}
       class={cn(
         'flex cursor-pointer flex-col items-center transition-colors duration-300 active:scale-110',
-        notified ? 'text-[#eab308]' : ''
+        subscribe.isSubscribed ? 'text-[#eab308]' : ''
       )}
-      title={notified ? 'Unsubscribe' : 'Subscribe'}
-      aria-label={notified ? 'unsubscribed from this novel' : 'subscribed to this novel'}>
+      title={subscribe.isSubscribed ? 'Unsubscribe' : 'Subscribe'}
+      aria-label={subscribe.isSubscribed
+        ? 'unsubscribed from this novel'
+        : 'subscribed to this novel'}>
       <Bell class="" size="22" />
       <p class="hidden text-center text-xs font-medium opacity-90 md:block">
-        {totalntf}
+        {subscribe.total}
       </p>
     </button>
     <button
       class={cn(
         'flex cursor-pointer flex-col items-center transition-colors duration-300 active:scale-110',
-        favorited ? 'fill-none text-[#ef4444]' : 'fill-none'
+        favorite.isFavorited ? 'fill-none text-[#ef4444]' : 'fill-none'
       )}
       disabled={isLoading}
       on:click={favoriteNovel}
       type="button"
-      title={favorited ? 'Unfavorite' : 'Favorite'}
-      aria-label={favorited ? 'remove from favorites' : 'add to favorites'}>
+      title={favorite.isFavorited ? 'Unfavorite' : 'Favorite'}
+      aria-label={favorite.isFavorited ? 'remove from favorites' : 'add to favorites'}>
       <Favourite size="22" class="stroke-red-600" />
       <p class="hidden text-center text-xs font-medium opacity-90 md:block">
-        {totalfav}
+        {favorite.total}
       </p>
     </button>
   </div>
