@@ -2,7 +2,9 @@ import { BE_URL } from '$env/static/private';
 import { json, redirect, type RequestHandler } from '@sveltejs/kit';
 
 export const GET: RequestHandler = async ({ fetch, params }) => {
-  const res = await fetch(`${BE_URL}/novels/nvl_${params.slug}/subscribe`);
+  const res = await fetch(`${BE_URL}/novels/nvl_${params.slug}/subscribe`, {
+    credentials: 'include'
+  });
   const data = await res.json();
 
   return json(data);
