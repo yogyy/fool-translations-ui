@@ -1,9 +1,9 @@
 import { BE_URL } from '$env/static/private';
 import { json, type RequestHandler } from '@sveltejs/kit';
 
-export const GET: RequestHandler = async ({ fetch, params }) => {
+export const GET: RequestHandler = async ({ fetch, params, cookies }) => {
   const res = await fetch(`${BE_URL}/novels/nvl_${params.slug}/favorite`, {
-    credentials: 'include'
+    headers: { Cookie: `session=${cookies.get('session')}` }
   });
   const data = await res.json();
 
