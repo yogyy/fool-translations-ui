@@ -20,3 +20,9 @@ export const chapterSchema = z.object({
 });
 
 export type ChapterSchema = typeof chapterSchema;
+
+export const updateNovelSchema = novelSchema.extend({
+  id: z.string()
+});
+
+export type UpdateNovelSchema = typeof updateNovelSchema;
