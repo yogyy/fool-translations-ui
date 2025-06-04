@@ -143,3 +143,9 @@ export interface CloudinaryResponse {
   existing: boolean;
   original_filename: string;
 }
+
+export interface TurnstileResponse {
+  success: boolean;
+  'error-codes': string[];
+  messages: string[];
+}

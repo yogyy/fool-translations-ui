@@ -7,6 +7,8 @@
   import type { ActionData } from './$types.js';
   import { toast } from 'svelte-sonner';
   import Loading from '$lib/components/icons/loading.svelte';
+  import { onMount } from 'svelte';
+  import { PUBLIC_APP_ENV, PUBLIC_TURNSLITE_SITE_KEY } from '$env/static/public';
 
   export let data;
 
@@ -15,23 +17,48 @@
     validators: zodClient(registerSchema),
     resetForm: false,
     onUpdate({ form, result }) {
-      const { signup } = result.data as FormResult<ActionData>;
+      const { signup, turnstile } = result.data as FormResult<ActionData>;
 
       if (!form.valid) return;
-
+      if (turnstile?.success === false) {
+        toast.error(`Turnstile verification failed: ${turnstile?.['error-codes'] || ''}`, {
+          id: form.data.email,
+          position: 'top-right'
+        });
+        return;
+      }
       if (signup?.success === false) {
-        toast.error(signup.error, { id: form.data.email });
+        toast.error(signup.error, { id: form.data.email, position: 'top-right' });
         return;
       }
 
-      toast.success('Account created successfully! Welcome to Fool Translations!');
+      toast.success('Register successful! Welcome to Fool Translations!', {
+        position: 'top-right'
+      });
     }
   });
 
   const { form: formData, enhance, submitting } = form;
+  let turnstileToken = '';
+
+  onMount(() => {
+    if (window.turnstile) {
+      window.turnstile.render('#turnstile-widget', {
+        sitekey:
+          PUBLIC_APP_ENV === 'production' ? PUBLIC_TURNSLITE_SITE_KEY : '3x00000000000000000000FF',
+        callback: (t) => {
+          $formData.token = t;
+          turnstileToken = t;
+        }
+      });
+    }
+  });
 </script>
 
-<svelte:head><title>Register | Fool Translations</title></svelte:head>
+<svelte:head>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+  <title>Register | Fool Translations</title>
+</svelte:head>
 
 <form method="POST" use:enhance class="w-full space-y-2">
   <Form.Field {form} name="email">
@@ -66,13 +93,15 @@
       <Form.FieldErrors />
     </Form.Control>
   </Form.Field>
+  <div id="turnstile-widget" data-size="flexible"></div>
   <Form.Button
     disabled={$submitting ||
       !$formData.email.includes('@') ||
       $formData.password.length < 8 ||
       $formData.confirmPassword.length < 8 ||
       $formData.password !== $formData.confirmPassword ||
-      $formData.name.trim().length < 8}
+      $formData.name.trim().length < 8 ||
+      turnstileToken === ''}
     class="w-full">
     {#if $submitting}
       <Loading class="h-5 w-5 animate-[spin_1.2s_linear_infinite]" />
