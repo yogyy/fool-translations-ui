@@ -1,17 +1,14 @@
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 export const loginSchema = z.object({
-  email: z.string().email(),
+  email: z.email(),
   password: z.string().min(8),
   token: z.string().optional()
 });
 
 export const registerSchema = loginSchema
   .extend({
-    name: z
-      .string()
-      .min(4, 'Name needs to be at least 4 characters')
-      .regex(/^[a-zA-Z0-9]+$/, 'name can only contain letters and numbers'),
+    name: z.string().min(4, 'Name needs to be at least 4 characters').max(100),
     confirmPassword: z.string().min(8)
   })
   .refine((data) => data.password === data.confirmPassword, {

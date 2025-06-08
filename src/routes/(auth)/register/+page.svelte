@@ -1,10 +1,9 @@
 <script lang="ts">
   import * as Form from '$lib/components/ui/form';
-  import { superForm, type FormResult } from 'sveltekit-superforms';
+  import { superForm } from 'sveltekit-superforms';
   import Input from '$lib/components/ui/input/input.svelte';
-  import { zodClient } from 'sveltekit-superforms/adapters';
-  import { registerSchema } from '../schema';
-  import type { ActionData } from './$types.js';
+  import { zod4Client } from 'sveltekit-superforms/adapters';
+  import { registerSchema } from '../auth.validation';
   import { toast } from 'svelte-sonner';
   import Loading from '$lib/components/icons/loading.svelte';
   import { onMount } from 'svelte';
@@ -14,31 +13,24 @@
 
   const form = superForm(data.form, {
     dataType: 'json',
-    validators: zodClient(registerSchema),
+    validators: zod4Client(registerSchema),
     resetForm: false,
     onUpdate({ form, result }) {
-      const { signup, turnstile } = result.data as FormResult<ActionData>;
-
-      if (!form.valid) return;
-      if (turnstile?.success === false) {
-        toast.error(`Turnstile verification failed: ${turnstile?.['error-codes'] || ''}`, {
-          id: form.data.email,
+      if (result.type === 'failure') {
+        toast.error(form.message, { id: $formData.email, position: 'top-right' });
+      }
+    },
+    onResult({ result }) {
+      if (result.type === 'success') {
+        toast.info('Welcome to Fool Translations.', {
           position: 'top-right'
         });
-        return;
       }
-      if (signup?.success === false) {
-        toast.error(signup.error, { id: form.data.email, position: 'top-right' });
-        return;
-      }
-
-      toast.success('Register successful! Welcome to Fool Translations!', {
-        position: 'top-right'
-      });
     }
   });
 
   const { form: formData, enhance, submitting } = form;
+
   let turnstileToken = '';
 
   onMount(() => {
@@ -74,7 +66,7 @@
   </Form.Field>
   <Form.Field {form} name="name">
     <Form.Control let:attrs>
-      <Form.Label>Username</Form.Label>
+      <Form.Label>Name</Form.Label>
       <Input placeholder="Sherlock Moriarty" {...attrs} bind:value={$formData.name} />
       <Form.FieldErrors />
     </Form.Control>

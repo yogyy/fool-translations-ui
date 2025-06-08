@@ -1,10 +1,9 @@
 <script lang="ts">
   import * as Form from '$lib/components/ui/form';
-  import { superForm, type FormResult } from 'sveltekit-superforms';
+  import { superForm } from 'sveltekit-superforms';
   import Input from '$lib/components/ui/input/input.svelte';
-  import { zodClient } from 'sveltekit-superforms/adapters';
-  import { loginSchema } from '../schema';
-  import type { ActionData } from './$types.js';
+  import { zod4Client } from 'sveltekit-superforms/adapters';
+  import { loginSchema } from '../auth.validation';
   import { toast } from 'svelte-sonner';
   import { cn } from '$lib/utils';
   import { buttonVariants } from '$lib/components/ui/button';
@@ -16,24 +15,19 @@
 
   const form = superForm(data.form, {
     dataType: 'json',
-    validators: zodClient(loginSchema),
+    validators: zod4Client(loginSchema),
     resetForm: false,
     onUpdate({ form, result }) {
-      const { signin, turnstile } = result.data as FormResult<ActionData>;
-      if (!form.valid) return;
-      if (turnstile?.success === false) {
-        toast.error(`Turnstile verification failed: ${turnstile?.['error-codes'] || ''}`, {
-          id: form.data.email,
+      if (result.type === 'failure') {
+        toast.error(form.message, { id: $formData.email, position: 'top-right' });
+      }
+    },
+    onResult({ result }) {
+      if (result.type === 'success') {
+        toast.info('Welcome back to Fool Translations.', {
           position: 'top-right'
         });
-        return;
       }
-      if (signin?.success === false) {
-        toast.error(signin.error, { id: form.data.email, position: 'top-right' });
-        return;
-      }
-
-      toast.info('Login successful! Welcome back to Fool Translations.', { position: 'top-right' });
     }
   });
   const { form: formData, enhance, submitting } = form;
@@ -76,7 +70,7 @@
   <Form.Field {form} name="password">
     <Form.Control let:attrs>
       <Form.Label>Password</Form.Label>
-      <Input placeholder="****" type="password" {...attrs} bind:value={$formData.password} />
+      <Input placeholder="****word" type="password" {...attrs} bind:value={$formData.password} />
       <Form.FieldErrors />
     </Form.Control>
   </Form.Field>
@@ -162,7 +156,7 @@
     >Forgot Password?</a>
 </div>
 
-<style>
+<style scoped>
   .is-disabled {
     pointer-events: none;
     opacity: 0.5;
