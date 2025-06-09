@@ -1,4 +1,10 @@
-import type { ApiResponse, Chapter, FavoriteData, RatingData, SubscribeData } from '$lib/types.js';
+import type {
+  ApiResponse,
+  NovelChapters,
+  FavoriteData,
+  RatingData,
+  SubscribeData
+} from '$lib/types.js';
 
 export const load = async ({ data, fetch, params }) => {
   const [favoriteRes, subsRes, rateRes, chaptersRes] = await Promise.all([
@@ -12,7 +18,7 @@ export const load = async ({ data, fetch, params }) => {
     favoriteRes.json() as Promise<ApiResponse<FavoriteData>>,
     subsRes.json() as Promise<ApiResponse<SubscribeData>>,
     rateRes.json() as Promise<ApiResponse<RatingData>>,
-    chaptersRes.json() as Promise<ApiResponse<Omit<Chapter, 'content'>[]>>
+    chaptersRes.json() as Promise<ApiResponse<NovelChapters>>
   ]);
 
   return {

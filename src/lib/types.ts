@@ -46,6 +46,8 @@ export interface RatingData {
   rating: number;
 }
 
+export type NovelChapters = Array<Omit<Chapter, 'content' | 'novelId'>>;
+
 export interface HotNovel {
   id: number;
   image: string;

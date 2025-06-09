@@ -2,7 +2,7 @@
   import ArrowLeft_01 from '$lib/components/icons/arrow-left-01.svelte';
   import FileAdd from '$lib/components/icons/file-add.svelte';
   import BookEdit from '$lib/components/icons/book-edit.svelte';
-  import Chapters from '$lib/components/novels/chapters.svelte';
+  import Chapterlist from '$lib/components/novels/chapter-list.svelte';
   import Rate from '$lib/components/novels/rate.svelte';
   import ReleasedDay from '$lib/components/novels/released-day.svelte';
   import SubscribeAndFavorite from '$lib/components/novels/subscribe-and-favorite.svelte';
@@ -22,7 +22,7 @@
 </svelte:head>
 
 <nav
-  class="fixed top-0 z-10 flex h-14 w-full items-center justify-between bg-transparent px-4 md:hidden">
+  class="fixed top-0 z-10 flex h-14 w-full transform-gpu items-center justify-between bg-transparent px-4 backdrop-blur-sm transition-transform md:hidden">
   <a
     class={cn(buttonVariants({ size: 'icon', variant: 'ghost' }), 'hover:bg-opacity-30')}
     href="/"
@@ -122,7 +122,7 @@
         </div>
       </div>
       <Synopsis synopsis={novel.synopsis} />
-      <Chapters {chapters} />
+      <Chapterlist {chapters} />
     </div>
   </div>
 </div>
