@@ -4,29 +4,30 @@
   import Label from '$lib/components/ui/label/label.svelte';
   import * as Tabs from '$lib/components/ui/tabs';
 
-  export let data;
+  let { data } = $props();
 
-  const { novels } = data;
-  let sort: 'popular' | 'recent' | 'views' = 'popular';
-  let status: 'all' | 'ongoing' | 'completed' = 'all';
+  let sort = $state<'popular' | 'recent' | 'views'>('popular');
+  let status = $state<'all' | 'ongoing' | 'completed'>('all');
+  let searchTitle = $state('');
 
-  let searchTitle: string = '';
-  $: sortedNovels = novels
-    .filter((novel) => {
-      if (status === 'all') return true;
-      return novel.status === status;
-    })
-    .sort((a, b) => {
-      if (sort === 'popular') {
-        return b.popularityScore - a.popularityScore;
-      } else if (sort === 'views') {
-        return b.totalViews - a.totalViews;
-      } else if (sort === 'recent') {
-        return new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime();
-      }
-      return 0;
-    })
-    .filter((novel) => novel.title.toLowerCase().includes(searchTitle));
+  let sortedNovels = $derived(
+    data.novels
+      .filter((novel) => {
+        if (status === 'all') return true;
+        return novel.status === status;
+      })
+      .sort((a, b) => {
+        if (sort === 'popular') {
+          return b.popularityScore - a.popularityScore;
+        } else if (sort === 'views') {
+          return b.totalViews - a.totalViews;
+        } else if (sort === 'recent') {
+          return new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime();
+        }
+        return 0;
+      })
+      .filter((novel) => novel.title.toLowerCase().includes(searchTitle))
+  );
 </script>
 
 <svelte:head>
@@ -64,9 +65,6 @@
         </div>
       </div>
     </div>
-
-    <!-- <pre>{JSON.stringify(sortedNovels, null, 4)}</pre> -->
-
     <div class="h my-4 grid grid-cols-2 gap-4 md:grid-cols-4">
       {#each sortedNovels as novel}
         <Card id={novel.id} image={novel.cover} title={novel.title} />

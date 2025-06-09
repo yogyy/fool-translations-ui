@@ -1,13 +1,24 @@
-import { BE_URL } from '$env/static/private';
-import type { Novel, NovelResponse } from '$lib/types';
+import { createDB } from '$lib/server/db/index.js';
+import { novel, rating } from '$lib/server/db/schema/novel.schema.js';
+import { avg, count, desc, eq, sql } from 'drizzle-orm';
 
-interface NovelsResponse extends Omit<Novel, 'author' | 'synopsis' | 'average_rating' | 'banner'> {
-  popularityScore: number;
-}
+export const load = async ({ platform }) => {
+  const novels = await createDB(platform!.env.DB)
+    .select({
+      id: novel.id,
+      title: novel.title,
+      genres: novel.genres,
+      cover: novel.cover,
+      lastUpdated: novel.lastUpdated,
+      totalViews: novel.totalViews,
+      status: novel.status,
+      popularityScore: sql<number>`${count(rating.id)} * ${avg(rating.rating)}`
+    })
+    .from(novel)
+    .leftJoin(rating, eq(novel.id, rating.novelId))
+    .groupBy(novel.id)
+    .orderBy(desc(sql`${count(rating.id)} * ${avg(rating.rating)}`))
+    .limit(12);
 
-export const load = async ({ fetch, url }) => {
-  const res = await fetch(`${BE_URL}/novels?pageSize=12`);
-  const novels: { data: NovelsResponse[] } = await res.json();
-
-  return { novels: novels.data };
+  return { novels: novels };
 };
