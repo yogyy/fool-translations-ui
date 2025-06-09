@@ -1,34 +1,54 @@
-import { BE_URL } from '$env/static/private';
+import { createDB } from '$lib/server/db';
+import { notification } from '$lib/server/db/schema';
 import { json, type RequestHandler } from '@sveltejs/kit';
+import { eq } from 'drizzle-orm';
+import { z, prettifyError } from 'zod/v4';
 
-export const PATCH: RequestHandler = async ({ fetch, locals, request }) => {
-  if (!locals.session) {
-    return new Response('Unauthorized', { status: 401 });
-  }
+const Validation = z.object({
+  id: z.string().startsWith('ntf')
+});
 
-  const body = await request.json();
-  const res = await fetch(`${BE_URL}/notifications`, {
-    method: 'PATCH',
-    body: JSON.stringify(body),
-    headers: { 'Content-type': 'application/json' }
-  });
-
-  const data = await res.json();
-  return json(data);
+const notAuthorized = {
+  success: false,
+  error: 'You are not authorized to access this notification.'
 };
 
-export const DELETE: RequestHandler = async ({ fetch, locals, request }) => {
-  if (!locals.session) {
-    return new Response('Unauthorized', { status: 401 });
+export const PATCH: RequestHandler = async ({ locals, request, platform }) => {
+  if (!locals.user) {
+    return json('Unauthorized', { status: 401 });
   }
 
-  const body = await request.json();
-  const res = await fetch(`${BE_URL}/notifications`, {
-    method: 'DELETE',
-    body: JSON.stringify(body),
-    headers: { 'Content-type': 'application/json' }
-  });
+  const { success, data, error } = Validation.safeParse(await request.json());
+  if (!success) {
+    return json(prettifyError(error), { status: 400 });
+  }
 
-  const data = await res.json();
-  return json(data);
+  const db = createDB(platform!.env.DB);
+  const ntf = await db.query.notification.findFirst({ where: eq(notification.id, data.id) });
+  if (ntf?.userId !== locals.user.id) return json(notAuthorized, { status: 403 });
+  if (ntf.isRead) {
+    await db.update(notification).set({ isRead: false }).where(eq(notification.id, data.id));
+  } else {
+    await db.update(notification).set({ isRead: true }).where(eq(notification.id, data.id));
+  }
+
+  return json({ success: true });
+};
+
+export const DELETE: RequestHandler = async ({ locals, request, platform }) => {
+  if (!locals.user) {
+    return json('Unauthorized', { status: 401 });
+  }
+
+  const { success, data, error } = Validation.safeParse(await request.json());
+  if (!success) {
+    return json(prettifyError(error), { status: 400 });
+  }
+
+  const db = createDB(platform!.env.DB);
+  const ntf = await db.query.notification.findFirst({ where: eq(notification.id, data.id) });
+  if (ntf?.userId !== locals.user.id) return json(notAuthorized, { status: 403 });
+
+  await db.delete(notification).where(eq(notification.id, data.id));
+  return json({ success: true });
 };
