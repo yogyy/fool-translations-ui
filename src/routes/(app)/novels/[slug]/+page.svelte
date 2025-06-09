@@ -8,12 +8,11 @@
   import SubscribeAndFavorite from '$lib/components/novels/subscribe-and-favorite.svelte';
   import Summary from '$lib/components/novels/summary.svelte';
   import Synopsis from '$lib/components/novels/synopsis.svelte';
-  import { buttonVariants } from '$lib/components/ui/button/index.js';
+  import { buttonVariants } from '$lib/components/ui/button';
   import { cn } from '$lib/utils.js';
   import * as Tooltip from '$lib/components/ui/tooltip';
 
-  export let data;
-
+  let { data } = $props();
   const { novel, favorite, rating, subscribe, chapters } = data;
 </script>
 
