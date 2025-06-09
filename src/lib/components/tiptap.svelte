@@ -51,5 +51,5 @@
 
 <button on:click={() => editor?.commands.clearContent()}>reset</button>
 <div bind:this={element}>
-  <textarea class="hidden" {...$$restProps} bind:value={content} />
+  <textarea class="hidden" {...$$restProps} bind:value={content}></textarea>
 </div>

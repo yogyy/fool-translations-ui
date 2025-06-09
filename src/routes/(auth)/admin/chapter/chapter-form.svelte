@@ -126,7 +126,7 @@
         <Form.FieldErrors />
       </div>
       <div class="h-[40rem] rounded-sm border">
-        <textarea class="hidden" {...attrs} bind:value={$formData.content} />
+        <textarea class="hidden" {...attrs} bind:value={$formData.content}></textarea>
         <div
           role="button"
           tabindex="0"
