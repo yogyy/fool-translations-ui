@@ -2,7 +2,7 @@
   import Notification from '$lib/components/notification.svelte';
   import { buttonVariants } from '$lib/components/ui/button/index.js';
 
-  export let data;
+  let { data } = $props();
 </script>
 
 <svelte:head>
