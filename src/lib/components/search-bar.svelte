@@ -5,7 +5,7 @@
   let inputElement: HTMLInputElement;
 </script>
 
-<div class="group relative flex items-center overflow-hidden">
+<div class="group relative hidden items-center overflow-hidden md:flex">
   <form
     on:submit={() =>
       toast.info('This feature is under development', {
@@ -30,5 +30,6 @@
 <a
   href="/novels"
   class="inline-flex h-auto w-8 items-center justify-center whitespace-nowrap rounded-md px-0 text-xs font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring md:hidden">
-  <SearchGlass size="20" />
+  <span class="sr-only">go to search page</span>
+  <SearchGlass class="size-4" />
 </a>

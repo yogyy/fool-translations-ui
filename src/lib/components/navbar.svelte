@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
   import DarkTheme from './dark-theme.svelte';
   import SearchBar from './search-bar.svelte';
   import { cn } from '$lib/utils';
-  import type { User } from '$lib/types';
   import { enhance } from '$app/forms';
   import { toast } from 'svelte-sonner';
   import { goto } from '$app/navigation';
@@ -14,8 +13,9 @@
   import { onDestroy, onMount } from 'svelte';
   import { browser } from '$app/environment';
   import Logo from './icons/logo.svelte';
+  import { type User } from '$lib/server/db/schema/user.schema';
 
-  export let user: User | null;
+  export let user: Omit<User, 'provider' | 'password'> | null;
   let userMenu = false;
   let lastScrollY = 0;
   let showNav = true;
@@ -24,8 +24,6 @@
     const currentScrollY = window.scrollY;
     showNav = currentScrollY < lastScrollY;
     lastScrollY = currentScrollY;
-
-    userMenu = false;
   }
 
   onMount(() => {
@@ -45,7 +43,7 @@
 <div
   class={cn(
     'fixed top-0 z-50 w-svw',
-    $page.url.pathname.startsWith('/novels/') && 'hidden md:block'
+    page.url.pathname.startsWith('/novels/') && 'hidden md:block'
   )}>
   {#if showNav}
     <div
@@ -72,7 +70,7 @@
                   href={`/${route}`}
                   class={cn(
                     'anim-text text-base font-medium capitalize transition-colors duration-200 hover:text-foreground/80',
-                    $page.url.pathname.includes(route) ? 'text-foreground' : 'text-muted-foreground'
+                    page.url.pathname.includes(route) ? 'text-foreground' : 'text-muted-foreground'
                   )}>
                   {route}
                 </a>
@@ -85,7 +83,8 @@
               <a
                 href="/notifications/chapters"
                 class="inline-flex h-auto w-8 items-center justify-center whitespace-nowrap rounded-md px-0 text-xs font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
-                <NotificationSquare class="h-5 w-5" />
+                <span class="sr-only">notifications</span>
+                <NotificationSquare class="size-5" />
               </a>
               <DropdownMenu.Root bind:open={userMenu}>
                 <DropdownMenu.Trigger
@@ -98,13 +97,14 @@
                       alt={`${user.name}'s avatar`}
                       class="h-6 w-6 rounded-full" />
                   {/if}
+                  <span class="sr-only">user menu</span>
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Content
                   transition={slide}
                   align="end"
                   side="bottom"
                   sideOffset={7.5}
-                  class="w-full max-w-xs rounded-tl-none rounded-tr-none border-t-0 bg-background transition-opacity duration-300">
+                  class="w-full max-w-xs rounded-tl-none rounded-tr-none border-t-0 bg-background">
                   <DropdownMenu.Item class="p-0">
                     <DarkTheme />
                   </DropdownMenu.Item>
@@ -116,16 +116,16 @@
                   <DropdownMenu.Item class="p-0">
                     {#if user !== null}
                       <form
-                        action="/logout"
+                        action="?/logout"
                         method="POST"
                         class="w-full px-2 py-1.5"
                         use:enhance={() => {
                           return async ({ result }) => {
                             user = null;
-                            if (result) {
+                            if (result.type === 'success') {
                               toast.info('Logout successfully. See you soon!');
+                              goto('/login');
                             }
-                            goto('/login');
                           };
                         }}>
                         <button class="inline-flex w-full">Logout</button>
