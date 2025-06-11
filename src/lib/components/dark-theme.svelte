@@ -1,19 +1,16 @@
 <script lang="ts">
-  import clsx from 'clsx';
-  import { setMode, mode } from 'mode-watcher';
+  import { setMode, userPrefersMode } from 'mode-watcher';
   import UserSystem from './icons/user-system.svelte';
   import Sun from './icons/sun.svelte';
   import Moon from './icons/moon.svelte';
+  import type { Component } from 'svelte';
 
+  type Mode = 'system' | 'light' | 'dark';
   const themes = [
     { mode: 'system', icon: UserSystem },
     { mode: 'light', icon: Sun },
     { mode: 'dark', icon: Moon }
-  ];
-
-  const setTheme = (mode: string) => {
-    return setMode(mode as 'dark' | 'light' | 'system');
-  };
+  ] as { mode: Mode; icon: Component }[];
 </script>
 
 <div class="flex w-full items-center justify-between px-2 py-1.5">
@@ -24,12 +21,12 @@
       <button
         type="button"
         title={theme.mode}
-        on:click={() => setTheme(theme.mode)}
-        class={clsx(mode.current === theme.mode && 'theme_active')}>
+        on:click={() => setMode(theme.mode)}
+        class:theme_active={userPrefersMode.current === theme.mode}>
         <svelte:component
           this={theme.icon}
-          size="16"
-          strokeWidth={mode.current === theme.mode ? '2' : '1.5'} />
+          class="size-4"
+          strokeWidth={userPrefersMode.current === theme.mode ? '2' : '1.5'} />
       </button>
     {/each}
   </div>

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { Novel } from '$lib/types';
   import * as Tooltip from '$lib/components/ui/tooltip';
   import { cn } from '$lib/utils';
   import Badge from '../badge.svelte';
@@ -8,18 +7,22 @@
   import View from '../icons/view.svelte';
   import CalendarUpload from '../icons/calendar-upload.svelte';
   import CalendarDateTime from '../icons/calendar-date-time.svelte';
-  export let novel: Novel;
+  import type { Novel } from '$lib/server/db/schema/novel.schema';
+
+  export let novel: Novel & {
+    averageRating: number;
+  };
 
   let formatedDate = new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'short',
     day: '2-digit'
-  }).format(new Date(novel.lastUpdated.toString().replace(' ', 'T')));
+  }).format(new Date(novel.lastUpdated!.toString().replace(' ', 'T')));
 
   let formatedViews = new Intl.NumberFormat('en-US', {
     notation: 'compact',
     maximumFractionDigits: 1
-  }).format(novel.totalViews);
+  }).format(novel.totalViews!);
 
   $: summary = [
     { icon: Pencil, data: novel.author, content: 'Author' },
@@ -27,7 +30,7 @@
     { icon: Star, data: novel.averageRating.toFixed(1), content: 'Rating' },
     {
       icon: CalendarUpload,
-      data: new Date(novel.publishedAt).getFullYear(),
+      data: new Date(novel.publishedAt!).getFullYear(),
       content: 'Year of publishing'
     },
     { icon: CalendarDateTime, data: formatedDate, content: 'Last Updated' }
@@ -66,7 +69,7 @@
   </div>
   <div class="flex flex-row flex-wrap justify-center gap-2 md:justify-start">
     <h3 class="sr-only">genre</h3>
-    {#each novel.genres as genre}
+    {#each novel.genres ?? [] as genre}
       <button>
         <Badge class="text-center text-xs font-medium opacity-80">
           {genre}
