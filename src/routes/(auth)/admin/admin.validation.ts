@@ -13,10 +13,10 @@ export const novelSchema = z.object({
 export type NovelSchema = typeof novelSchema;
 
 export const chapterSchema = z.object({
-  title: z.string().min(5).default('testing title'),
+  title: z.string().nonempty({ error: 'Title Required' }),
   novelId: z.string().startsWith('nvl'),
-  chapterNum: z.coerce.number().min(1).default(1),
-  content: z.string().min(2).default('test')
+  chapterNum: z.coerce.number().min(1),
+  content: z.string().nonempty({ error: 'Content Required' })
 });
 
 export type ChapterSchema = typeof chapterSchema;

@@ -1,7 +1,7 @@
 <script lang="ts">
   import ChapterForm from './chapter-form.svelte';
 
-  export let data;
+  let { data } = $props();
 </script>
 
 <div class="container max-w-pgsize pt-28">
