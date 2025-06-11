@@ -13,7 +13,7 @@ export const GET: RequestHandler = async ({ params, platform }) => {
 
   try {
     const novelbyId = await createDB(platform!.env.DB).query.novel.findFirst({
-      where: eq(novel.id, params.slug)
+      where: eq(novel.id, `nvl_${params.slug}`)
     });
     if (!novelbyId) return json({ error: 'Novel Not Found' }, { status: 404 });
 
