@@ -7,6 +7,7 @@
     <div class="flex flex-col items-center gap-y-3">
       <div class="flex flex-row flex-wrap justify-center gap-4 text-lg font-medium opacity-60">
         <a href="#discord" class="transition-opacity hover:opacity-65">
+          <span class="sr-only">Discord</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
             <path
               fill="currentColor"
@@ -14,6 +15,7 @@
           </svg>
         </a>
         <a href="#facebook" class="transition-opacity hover:opacity-65">
+          <span class="sr-only">Facebook</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
             <path
               fill="currentColor"
@@ -21,6 +23,7 @@
           </svg>
         </a>
         <a href="#instagram" class="transition-opacity hover:opacity-65">
+          <span class="sr-only">Instagram</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
             <path
               fill="currentColor"
@@ -28,6 +31,7 @@
           </svg>
         </a>
         <a href="#reddit" class="transition-opacity hover:opacity-65">
+          <span class="sr-only">Reddit</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
             <path
               fill="currentColor"
@@ -35,6 +39,7 @@
           </svg>
         </a>
         <a href="#tiktok" class="transition-opacity hover:opacity-65">
+          <span class="sr-only">Tiktok</span>
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
             <path
               fill="currentColor"
