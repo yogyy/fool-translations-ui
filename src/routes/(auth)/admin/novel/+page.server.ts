@@ -1,36 +1,35 @@
-import { error, fail, type Actions } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms';
-import { novelSchema } from '../schema';
-import { zod } from 'sveltekit-superforms/adapters';
+import { fail, type Actions } from '@sveltejs/kit';
+import { message, superValidate } from 'sveltekit-superforms';
+import { novelSchema } from '../admin.validation';
+import { zod4 } from 'sveltekit-superforms/adapters';
 import type { PageServerLoad } from './$types';
-import { BE_URL } from '$env/static/private';
+import { addNewNovel } from '$lib/server/service';
+import { requireAdmin, UNIQUE_CONSTRAINT } from '$lib/server/utils';
 
 export const load: PageServerLoad = async ({ locals }) => {
-  if (!locals.user || locals.user.type !== 'admin') {
-    return error(404, 'Page Not Found');
-  }
-
-  return { form: await superValidate(zod(novelSchema)) };
+  requireAdmin(locals);
+  return { form: await superValidate(zod4(novelSchema)) };
 };
 
 export const actions: Actions = {
   create: async (event) => {
-    const form = await superValidate(event, zod(novelSchema));
+    requireAdmin(event.locals);
+
+    const form = await superValidate(event, zod4(novelSchema));
     if (!form.valid) return fail(400, { form });
 
     const arrGenres = form.data.genres.split(',');
     const bodyData = { ...form.data, genres: arrGenres };
 
-    const res = await fetch(`${BE_URL}/admin/novel`, {
-      method: 'POST',
-      body: JSON.stringify(bodyData),
-      headers: {
-        'Content-type': 'application/json',
-        Cookie: `session=${event.cookies.get('session')}`
+    try {
+      const newNovel = await addNewNovel(event.platform!.env, bodyData);
+      return { form, novel: newNovel };
+    } catch (err: any) {
+      if (String(err.cause).includes(UNIQUE_CONSTRAINT)) {
+        return message(form, `Novel '${bodyData.title}' Already Exists`, { status: 400 });
       }
-    });
-    const newNovel = await res.json();
-
-    return { form, newNovel };
+      console.log(err);
+      return message(form, 'Internal Server Errror', { status: 500 });
+    }
   }
-};
+} satisfies Actions;

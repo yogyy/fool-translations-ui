@@ -1,16 +1,11 @@
 import { z } from 'zod/v4';
 
 export const novelSchema = z.object({
-  title: z.string().min(3).default('testing novel'),
-  synopsis: z
-    .string()
-    .min(10)
-    .default(
-      '"Penghuni Dunia Lain… kami mohon padamu untuk menyelamatkan dunia kami dari kehancuran."'
-    ),
-  author: z.string().default('yogyy'),
-  publishedAt: z.iso.date().default('2025-06-07'),
-  genres: z.string().includes(',').default('Action,Adventure,Drama,Fantasy'),
+  title: z.string().nonempty({ error: 'Title Required' }),
+  synopsis: z.string().nonempty({ error: 'Synopsis Required' }),
+  author: z.string().nonempty({ error: 'Author Required' }),
+  publishedAt: z.iso.date(),
+  genres: z.string().includes(','),
   cover: z.url().optional().or(z.literal('')),
   banner: z.url().optional().or(z.literal(''))
 });
