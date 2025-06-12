@@ -10,11 +10,12 @@ export const novel = sqliteTable(
     author: text('author').notNull(),
     genres: text('genres', { mode: 'json' })
       .$type<string[]>()
+      .notNull()
       .default(sql`(json_array())`),
     synopsis: text('synopsis').notNull(),
     cover: text('cover'),
     banner: text('banner'),
-    totalViews: integer('total_views').default(0),
+    totalViews: integer('total_views').notNull().default(0),
     status: text('status', { enum: ['ongoing', 'completed'] }).default('ongoing'),
     publishedAt: text('published_at')
       .default(sql`(current_timestamp)`)
@@ -23,7 +24,7 @@ export const novel = sqliteTable(
       .default(sql`(current_timestamp)`)
       .notNull()
   },
-  (table) => ({ unq: unique().on(table.author, table.title) })
+  (table) => [unique().on(table.author, table.title)]
 );
 
 export const chapter = sqliteTable(
@@ -40,7 +41,7 @@ export const chapter = sqliteTable(
       .references(() => novel.id, { onDelete: 'cascade' })
       .notNull()
   },
-  (table) => ({ unq: unique().on(table.novelId, table.chapterNum) })
+  (table) => [unique().on(table.novelId, table.chapterNum)]
 );
 
 export const rating = sqliteTable(
@@ -58,7 +59,7 @@ export const rating = sqliteTable(
       .default(sql`(current_timestamp)`)
       .notNull()
   },
-  (table) => ({ unq: unique().on(table.novelId, table.userId) })
+  (table) => [unique().on(table.novelId, table.userId)]
 );
 
 export const spotlight = sqliteTable('novel_spotlight', {
@@ -86,7 +87,7 @@ export const favorite = sqliteTable(
       .references(() => novel.id, { onDelete: 'cascade' })
       .notNull()
   },
-  (table) => ({ unq: unique().on(table.novelId, table.userId) })
+  (table) => [unique().on(table.novelId, table.userId)]
 );
 
 export const subscribe = sqliteTable(
@@ -103,7 +104,7 @@ export const subscribe = sqliteTable(
       .references(() => novel.id, { onDelete: 'cascade' })
       .notNull()
   },
-  (table) => ({ unq: unique().on(table.novelId, table.userId) })
+  (table) => [unique().on(table.novelId, table.userId)]
 );
 
 export const novelRelations = relations(novel, ({ many }) => ({

@@ -19,12 +19,9 @@ export const notification = sqliteTable(
       .notNull()
       .default(sql`(current_timestamp)`)
   },
-  (table) => ({
-    checkConstraint: check(
-      `type_check`,
-      sql`${table.type} != 'new_chapter' OR ${table.novelId} IS NOT NULL`
-    )
-  })
+  (table) => [
+    check(`type_check`, sql`${table.type} != 'new_chapter' OR ${table.novelId} IS NOT NULL`)
+  ]
 );
 
 export const notifyRelation = relations(notification, ({ one }) => ({

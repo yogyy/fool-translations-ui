@@ -17,7 +17,9 @@ export const user = sqliteTable(
     id: text('id').primaryKey(),
     email: text('email').notNull(),
     name: text('name').notNull(),
-    type: text('type', { enum: ['user', 'admin'] }).default('user'),
+    type: text('type', { enum: ['user', 'admin'] })
+      .notNull()
+      .default('user'),
     avatar: text('avatar'),
     password: text('password'),
     provider: text('provider', {
