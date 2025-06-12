@@ -6,5 +6,5 @@ export const load: PageServerLoad = async ({ locals }) => {
     return error(404, 'Page Not Found');
   }
 
-  return redirect(302, '/admin/novel');
+  redirect(302, '/admin/novel');
 };
