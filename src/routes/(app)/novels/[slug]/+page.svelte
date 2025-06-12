@@ -34,8 +34,8 @@
 <div class="container min-w-[300px] px-0">
   <div class="grid grid-cols-1 md:mx-12 md:my-2 md:flex md:flex-row md:gap-x-2 md:gap-y-0 lg:mx-24">
     <div
-      class="mx-0 grid grid-cols-1 bg-complimentary md:flex md:flex-col md:items-center md:rounded-xl md:pb-8">
-      <div class="relative">
+      class="mx-0 grid grid-cols-1 bg-complimentary md:flex md:w-[30%] md:flex-col md:items-center md:rounded-xl md:pb-8">
+      <div class="relative w-full">
         <div class="min-h-max overflow-hidden border border-border/20 md:rounded-t-xl">
           <div class="relative w-full">
             <img
