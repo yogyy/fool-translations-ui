@@ -1,5 +1,5 @@
 import { createDB } from '$lib/server/db';
-import { subscribe } from '$lib/server/db/schema';
+import { subscribe } from '$lib/server/db/schema/novel.schema';
 import { IdValidLength } from '$lib/server/validation';
 import { FOREIGN_KEY_CONSTRAINT, UNIQUE_CONSTRAINT } from '$lib/server/utils';
 import { json, type RequestHandler } from '@sveltejs/kit';

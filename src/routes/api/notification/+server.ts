@@ -1,5 +1,5 @@
 import { createDB } from '$lib/server/db';
-import { notification } from '$lib/server/db/schema';
+import { notification } from '$lib/server/db/schema/notification.schema';
 import { json, type RequestHandler } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { z, prettifyError } from 'zod/v4';

@@ -1,6 +1,6 @@
 import { and, count, eq } from 'drizzle-orm';
 import { createDB } from '$lib/server/db';
-import { favorite } from '$lib/server/db/schema';
+import { favorite } from '$lib/server/db/schema/novel.schema';
 import { IdValidLength } from '$lib/server/validation';
 import { UNIQUE_CONSTRAINT } from '$lib/server/utils';
 import { json, type RequestHandler } from '@sveltejs/kit';

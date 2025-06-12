@@ -3,7 +3,9 @@
   import { formatDate } from '$lib/helper';
   import { cn } from '$lib/utils';
   import { toast } from 'svelte-sonner';
-  import type { Notification, Novel } from '$lib/server/db/schema';
+  import type { Notification } from '$lib/server/db/schema/notification.schema';
+  import type { Novel } from '$lib/server/db/schema/novel.schema';
+
   import Check from './icons/check.svelte';
   import CheckCheck from './icons/check-check.svelte';
   import Trash_2 from './icons/trash-2.svelte';

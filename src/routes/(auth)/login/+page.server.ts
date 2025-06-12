@@ -7,7 +7,7 @@ import type { TurnstileResponse } from '$lib/types';
 import { PUBLIC_APP_ENV } from '$env/static/public';
 import { createDB } from '$lib/server/db';
 import { and, eq } from 'drizzle-orm';
-import { user } from '$lib/server/db/schema';
+import { user } from '$lib/server/db/schema/user.schema';
 import { createSession, generateSessionToken, setSessionTokenCookie } from '$lib/server/auth';
 import { loginSchema } from '../auth.validation';
 
