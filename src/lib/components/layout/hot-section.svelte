@@ -52,6 +52,7 @@
       <div class="mx-auto -mb-2 mt-2 hidden h-6 w-6 justify-center md:flex">
         <div class="flex h-6 w-fit items-center gap-2">
           <button class="rounded-full" on:click={() => api.scrollPrev()}>
+            <span class="sr-only">Prev</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -77,6 +78,7 @@
               aria-label={idx.toString()}></button>
           {/each}
           <button class="rounded-full" on:click={() => api.scrollNext()}>
+            <span class="sr-only">Next</span>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"

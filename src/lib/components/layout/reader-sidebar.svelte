@@ -6,17 +6,17 @@
   import Button from '../ui/button/button.svelte';
   import * as Dialog from '../ui/dialog';
   import ScrollArea from '../ui/scroll-area/scroll-area.svelte';
-  import type { Chapter } from '$lib/types';
   import LeftToRightListDash from '../icons/left-to-right-list-dash.svelte';
   import { toast } from 'svelte-sonner';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
+  import type { Chapter } from '$lib/server/db/schema/novel.schema.js';
 
   type Order = 'desc' | 'asc';
 
   interface Novel {
     title: string;
-    cover: string;
-    banner: string;
+    cover: string | null;
+    banner: string | null;
   }
 
   export let novel: Novel;
@@ -85,7 +85,7 @@
                     id: 'chapter-sidebar',
                     position: 'top-right'
                   })}
-                href={`${$page.url.pathname}#${ch.id}`}
+                href={`${page.url.pathname}#${ch.id}`}
                 class="flex items-center gap-4 px-2.5 py-2 outline-offset-0">
                 {#if novel.cover && !imageError}
                   <img

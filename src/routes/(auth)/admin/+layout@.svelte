@@ -1,6 +1,6 @@
 <script>
   import { browser } from '$app/environment';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import Footer from '$lib/components/footer.svelte';
   import Navbar from '$lib/components/navbar.svelte';
   import { cn } from '$lib/utils';
@@ -49,7 +49,7 @@
               data-sveltekit-replacestate
               class={cn(
                 ' relative inline-flex h-full flex-1 snap-center items-center justify-center border-b border-transparent px-3 capitalize hover:bg-muted hover:text-primary',
-                $page.url.pathname.includes(menu) ? 'text-primary' : 'text-muted-foreground'
+                page.url.pathname.includes(menu) ? 'text-primary' : 'text-muted-foreground'
               )}>
               <div class=" relative text-sm font-medium tracking-wide">{menu}</div>
             </a>
