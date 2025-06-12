@@ -1,5 +1,6 @@
 <script lang="ts">
   import Card from '$lib/components/novels/card.svelte';
+  import Seo from '$lib/components/SEO.svelte';
   import Input from '$lib/components/ui/input/input.svelte';
   import Label from '$lib/components/ui/label/label.svelte';
   import * as Tabs from '$lib/components/ui/tabs';
@@ -30,9 +31,7 @@
   );
 </script>
 
-<svelte:head>
-  <title>Fool Translations | Explore Popular Novels</title>
-</svelte:head>
+<Seo title="Explore Popular Novels | Fool Translations" />
 
 <div class="container mt-14 overflow-hidden md:mt-0">
   <div class="my-2 md:mx-20">

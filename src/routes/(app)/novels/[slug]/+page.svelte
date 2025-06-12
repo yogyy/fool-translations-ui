@@ -10,15 +10,13 @@
   import Synopsis from '$lib/components/novels/synopsis.svelte';
   import { buttonVariants } from '$lib/components/ui/button';
   import { cn } from '$lib/utils.js';
-  import * as Tooltip from '$lib/components/ui/tooltip';
+  import Seo from '$lib/components/SEO.svelte';
 
   let { data } = $props();
   const { novel, favorite, rating, subscribe, chapters } = data;
 </script>
 
-<svelte:head>
-  <title>{novel.title} | Fool Translations</title>
-</svelte:head>
+<Seo title={`${novel.title} | Fool Translations`} />
 
 <nav
   class="fixed top-0 z-10 flex h-14 w-full transform-gpu items-center justify-between bg-transparent px-4 backdrop-blur-sm transition-transform md:hidden">

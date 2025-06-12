@@ -3,16 +3,14 @@
   import HotSection from '$lib/components/layout/hot-section.svelte';
   import TopSection from '$lib/components/layout/top-section.svelte';
   import Navbar from '$lib/components/navbar.svelte';
+  import Seo from '$lib/components/SEO.svelte';
 
   export let data;
 
   const { featured } = data;
 </script>
 
-<svelte:head>
-  <title>Fool Translations</title>
-</svelte:head>
-
+<Seo title="Fool Translations" />
 <Navbar user={data.user} />
 <main class="mt-14 min-h-svh overflow-hidden">
   <h1 class="sr-only">
