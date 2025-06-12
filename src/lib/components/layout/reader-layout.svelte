@@ -52,6 +52,7 @@
           }}
           class="rounded-full bg-accent text-foreground hover:bg-background"
           variant="secondary">
+          <span class="sr-only">add chapter to bookmark</span>
           <BookmarkAdd class="h-5 w-5 [&>path]:fill-red-600 [&>path]:stroke-red-600" />
         </Button>
         <Button
@@ -62,6 +63,7 @@
           }}
           class="rounded-full bg-accent text-foreground hover:bg-background"
           variant="secondary">
+          <span class="sr-only">scroll to top</span>
           <ArrowUp_04 class="h-6 w-6 [&>path]:fill-current" />
         </Button>
         <Button
@@ -75,6 +77,7 @@
           }}
           class="rounded-full bg-accent text-foreground hover:bg-background"
           variant="secondary">
+          <span class="sr-only">reader settings</span>
           <Settings_02 class="h-6 w-6 [&>g:first-child>path:first-child]:fill-current" />
         </Button>
         <div

@@ -39,7 +39,7 @@
 <div class={cn('mt-4', className)}>
   <div class="flex items-center justify-center">
     {#each [1, 2, 3, 4, 5] as rate}
-      <button onclick={() => addRating(rate)}>
+      <button aria-label={`rate ${rate} star`} onclick={() => addRating(rate)}>
         <Star class={userRate >= rate ? 'fill-[gold] text-[gold]' : 'fill-none'} />
       </button>
     {/each}

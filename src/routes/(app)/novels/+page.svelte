@@ -37,12 +37,12 @@
 <div class="container mt-14 overflow-hidden md:mt-0">
   <div class="my-2 md:mx-20">
     <div class="mx-auto flex h-12 w-full flex-row items-center gap-2">
-      <Input placeholder="Search" bind:value={searchTitle} class="border-border" />
+      <Input placeholder="Search" bind:value={searchTitle} class="border-border" name="title" />
     </div>
     <div class="flex w-full flex-row gap-4">
       <div class="items-center gap-4 sm:flex sm:flex-row">
         <div class="flex flex-col gap-y-1 sm:w-auto">
-          <Label class="capitalize">{sort}</Label>
+          <p class="py-1 capitalize">{sort}</p>
           <Tabs.Root bind:value={sort} id="sort">
             <Tabs.List class="gap-2">
               <Tabs.Trigger value="popular">Popular</Tabs.Trigger>
@@ -54,7 +54,7 @@
       </div>
       <div class="items-center gap-4 sm:flex sm:flex-row">
         <div class="flex flex-col gap-y-1 sm:w-auto">
-          <Label class="capitalize">{status}</Label>
+          <p class="py-1 capitalize">{status}</p>
           <Tabs.Root bind:value={status} id="status">
             <Tabs.List class="gap-2">
               <Tabs.Trigger value="all">All</Tabs.Trigger>

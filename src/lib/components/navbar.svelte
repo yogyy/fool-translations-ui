@@ -88,6 +88,7 @@
               </a>
               <DropdownMenu.Root bind:open={userMenu}>
                 <DropdownMenu.Trigger
+                  aria-label="user-menu"
                   class="inline-flex h-8 w-8 cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-0 py-0 text-xs font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-transparent focus-visible:text-current focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
                   {#if user === null}
                     <UserCircle class="h-6 w-6" />
@@ -97,7 +98,6 @@
                       alt={`${user.name}'s avatar`}
                       class="h-6 w-6 rounded-full" />
                   {/if}
-                  <span class="sr-only">user menu</span>
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Content
                   transition={slide}

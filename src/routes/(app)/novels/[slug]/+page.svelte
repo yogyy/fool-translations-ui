@@ -68,29 +68,21 @@
             href="#viewer/somenumber">Start Reading</a>
           {#if data.user?.type === 'admin'}
             <div class="mx-auto flex h-10 w-1/2 gap-2 md:w-full">
-              <Tooltip.Root>
-                <Tooltip.Trigger class="relative w-1/2 flex-1 md:w-full">
-                  <a
-                    href={`/admin/chapter?novelId=${novel.id}`}
-                    class="mx-auto inline-flex h-10 w-full select-none items-center justify-center whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 dark:bg-cyan-300/90 dark:hover:bg-cyan-300/60">
-                    <span class="sr-only">Add New Chapter</span><FileAdd class="size-5" />
-                  </a>
-                </Tooltip.Trigger>
-                <Tooltip.Content class="bg-badge px-2.5 py-2 text-foreground">
-                  Add New Chapter
-                </Tooltip.Content>
-              </Tooltip.Root>
-              <Tooltip.Root>
-                <Tooltip.Trigger class="relative w-1/2 flex-1 md:w-full">
-                  <a
-                    href={`/admin/novel/update?novelId=${novel.id}`}
-                    class="mx-auto inline-flex h-10 w-full select-none items-center justify-center whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 dark:bg-cyan-300/90 dark:hover:bg-cyan-300/60">
-                    <span class="sr-only">Edit Novel</span><BookEdit class="size-5" /></a>
-                </Tooltip.Trigger>
-                <Tooltip.Content class="bg-badge px-2.5 py-2 text-foreground">
-                  Edit Novel
-                </Tooltip.Content>
-              </Tooltip.Root>
+              <div class="relative w-1/2 flex-1 md:w-full">
+                <a
+                  title="Add New Chapter"
+                  href={`/admin/chapter?novelId=${novel.id}`}
+                  class="mx-auto inline-flex h-10 w-full select-none items-center justify-center whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 dark:bg-cyan-300/90 dark:hover:bg-cyan-300/60">
+                  <FileAdd class="size-5" />
+                </a>
+              </div>
+              <div class="relative w-1/2 flex-1 md:w-full">
+                <a
+                  title="Edit Novel"
+                  href={`/admin/novel/update?novelId=${novel.id}`}
+                  class="mx-auto inline-flex h-10 w-full select-none items-center justify-center whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 dark:bg-cyan-300/90 dark:hover:bg-cyan-300/60">
+                  <BookEdit class="size-5" /></a>
+              </div>
             </div>
           {/if}
         </div>
