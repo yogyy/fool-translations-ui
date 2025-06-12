@@ -1,7 +1,6 @@
 import { and, eq } from 'drizzle-orm';
 import { createDB } from '../db';
-import { user, type User } from '../db/schema';
-import type { z } from 'zod/v4';
+import { user, type User } from '../db/schema/user.schema';
 
 export async function createUser({
   env,
