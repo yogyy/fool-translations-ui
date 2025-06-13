@@ -1,82 +1,59 @@
 <script lang="ts">
   import * as Form from '$lib/components/ui/form';
   import { Input } from '$lib/components/ui/input';
-  import { updateNovelSchema } from '../../schema';
+  import { updateNovelSchema } from '../../admin.validation';
   import { superForm } from 'sveltekit-superforms';
-  import type { Infer, FormResult, SuperValidated } from 'sveltekit-superforms';
-  import { zodClient } from 'sveltekit-superforms/adapters';
+  import type { Infer, SuperValidated } from 'sveltekit-superforms';
+  import { zod4Client } from 'sveltekit-superforms/adapters';
   import ImagePreview from '$lib/components/image-preview.svelte';
-  import { onMount, onDestroy } from 'svelte';
   import { Editor } from '@tiptap/core';
-  import StarterKit from '@tiptap/starter-kit';
-  import Placeholder from '@tiptap/extension-placeholder';
-  import { focusEditor } from '$lib/utils';
   import Loading from '$lib/components/icons/loading.svelte';
-  import type { Novel } from '$lib/types';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import DatePicker from '$lib/components/date-picker.svelte';
-  import type { ActionData } from './$types';
   import { toast } from 'svelte-sonner';
+  import type { Novel } from '$lib/server/db/schema/novel.schema';
+  import type { Transaction } from '@tiptap/pm/state';
+  import Tiptap from '$lib/components/tiptap.svelte';
 
-  export let data: SuperValidated<Infer<typeof updateNovelSchema>>;
-  export let novel: Novel;
-  let element: Element;
-  let editor: Editor;
+  interface Props {
+    data: SuperValidated<Infer<typeof updateNovelSchema>>;
+    novel: Novel;
+  }
 
-  onMount(() => {
-    editor = new Editor({
-      element: element,
-      extensions: [
-        StarterKit,
-        Placeholder.configure({
-          placeholder: 'Write something …'
-        })
-      ],
-      content: $formData.synopsis,
-      onTransaction: () => {
-        editor = editor;
-      },
-
-      onUpdate(props) {
-        $formData.synopsis = props.editor.getText();
-      }
-    });
-  });
-
-  onDestroy(() => {
-    if (editor) {
-      editor.destroy();
-    }
-  });
+  let { data, novel }: Props = $props();
+  let editor = $state<Editor>();
 
   const form = superForm(data, {
     dataType: 'json',
-    validators: zodClient(updateNovelSchema),
+    validators: zod4Client(updateNovelSchema),
     resetForm: false,
     clearOnSubmit: 'none',
     onUpdate({ form, result }) {
-      const action = result.data as FormResult<ActionData>;
-
       if (!form.valid) return;
-      if (action.updatedNovel.success === false || action.updatedNovel.error) {
-        toast.error(action.updatedNovel.error);
-        return;
+      if (result.type === 'failure') {
+        toast.error(form.message);
       }
 
-      toast.success(`Novel ${action.updatedNovel.data.title} updated`);
+      if (result.type === 'success') {
+        toast.success(`Novel ${form.data.title} updated`);
+      }
     }
   });
 
   const { form: formData, enhance, submitting } = form;
 
-  $formData.id = $page.url.searchParams.get('novelId') || '';
+  $formData.id = page.url.searchParams.get('novelId') || '';
   $formData.title = novel.title;
   $formData.author = novel.author;
-  $formData.genres = novel.genres.join(', ');
+  $formData.genres = novel.genres?.join(',') || '';
   $formData.synopsis = novel.synopsis;
   $formData.cover = novel.cover || '';
   $formData.banner = novel.banner || '';
-  $formData.publishedAt = new Date(novel.publishedAt).toISOString().split('T')[0];
+  $formData.publishedAt = new Date(novel.publishedAt!).toISOString().split('T')[0];
+
+  function onUpdate(props: { editor: Editor; transaction: Transaction }) {
+    $formData.synopsis = props.editor.getText();
+  }
 </script>
 
 <form
@@ -85,7 +62,7 @@
   class="relative mb-10 gap-3 space-y-2 [&>div>label]:text-foreground/70">
   <h1 class="text-xl font-semibold">Update Novel <i class="text-sky-500">{$formData.title}</i></h1>
   <div class="mt-2 flex w-full flex-col gap-3 md:flex-row">
-    <Form.Field {form} name="title" class="w-full md:w-1/2">
+    <Form.Field {form} name="id" class="w-full md:w-1/2">
       <Form.Control let:attrs>
         <Form.Label>Id</Form.Label>
         <Input {...attrs} value={$formData.id} class="rounded-sm border-border" disabled />
@@ -107,21 +84,9 @@
         <Form.Label>Synopsis</Form.Label>
         <Form.FieldErrors />
       </div>
-      <div class="h-[20rem] rounded-sm border">
-        <textarea class="hidden" {...attrs} bind:value={$formData.synopsis} />
-        <div
-          role="button"
-          tabindex="0"
-          bind:this={element}
-          on:click={(e) => focusEditor(editor, e)}
-          on:keydown={(event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              focusEditor(editor, event);
-            }
-          }}
-          class="hide-scrollbar prose h-full min-w-full max-w-2xl cursor-auto p-2 text-foreground/80 dark:prose-invert prose-p:m-0 prose-p:mb-2">
-        </div>
-      </div>
+      <Tiptap class="h-[20rem]" content={novel.synopsis} bind:editor {onUpdate}>
+        <textarea class="hidden" {...attrs} bind:value={$formData.synopsis}></textarea>
+      </Tiptap>
     </Form.Control>
   </Form.Field>
   <div class="flex flex-col items-end gap-5 *:w-full md:flex-row">

@@ -1,21 +1,33 @@
 <script lang="ts">
-  import { onMount, onDestroy } from 'svelte';
-  import { Editor } from '@tiptap/core';
+  import { Editor, type Content, type EditorEvents } from '@tiptap/core';
   import StarterKit from '@tiptap/starter-kit';
   import Placeholder from '@tiptap/extension-placeholder';
-  import { cn } from '$lib/utils';
+  import { cn, focusEditor } from '$lib/utils';
+  import { onDestroy, onMount, type Snippet } from 'svelte';
 
-  export let content: string;
-  export let placeholder = 'Write something …';
-  let className: string;
-  export { className as class };
+  interface Props {
+    content?: Content;
+    editor?: Editor;
+    placeholder?: string;
+    class?: string;
+    onUpdate?: (props: EditorEvents['update']) => void;
+    children: Snippet;
+  }
 
-  let element: Element;
-  let editor: Editor;
+  let {
+    editor = $bindable(),
+    placeholder = 'Write something...',
+    class: className,
+    content,
+    onUpdate,
+    children
+  }: Props = $props();
+
+  let element = $state<HTMLElement>();
 
   onMount(() => {
     editor = new Editor({
-      element: element,
+      element,
       extensions: [
         StarterKit,
         Placeholder.configure({
@@ -23,33 +35,34 @@
         })
       ],
       content,
-      onTransaction: () => {
-        // force re-render so `editor.isActive` works as expected
-        editor = editor;
+      onUpdate,
+      onTransaction(props) {
+        editor = undefined;
+        editor = props.editor;
       },
-      onUpdate(props) {
-        content = props.editor.getText();
-      },
-
-      editorProps: {
-        attributes: {
-          class: cn(
-            'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
-            className
-          )
-        }
+      parseOptions: {
+        preserveWhitespace: 'full'
       }
     });
   });
 
   onDestroy(() => {
-    if (editor) {
-      editor.destroy();
-    }
+    if (editor) editor.destroy();
   });
 </script>
 
-<button on:click={() => editor?.commands.clearContent()}>reset</button>
-<div bind:this={element}>
-  <textarea class="hidden" {...$$restProps} bind:value={content} />
+<div class={cn('rounded-sm border', className)}>
+  {@render children()}
+  <div
+    role="button"
+    tabindex="0"
+    bind:this={element}
+    onclick={(e) => focusEditor(editor, e)}
+    onkeydown={(e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        focusEditor(editor, e);
+      }
+    }}
+    class="hide-scrollbar prose h-full min-w-full max-w-2xl cursor-auto p-2 text-foreground/80 dark:prose-invert prose-p:m-0 prose-p:mb-2">
+  </div>
 </div>

@@ -66,6 +66,7 @@
               buttonVariants({ size: 'icon' }),
               'shrink-0 rounded-full bg-accent text-foreground hover:bg-foreground/10'
             )}>
+            <span class="sr-only">go back to novel page</span>
             <ArrowLeft_02 class="h-5 w-5" />
           </button>
           <div class="flex min-w-0 grow justify-center">

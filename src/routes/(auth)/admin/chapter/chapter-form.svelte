@@ -1,77 +1,80 @@
 <script lang="ts">
   import * as Form from '$lib/components/ui/form';
   import { Input } from '$lib/components/ui/input';
-  import { chapterSchema } from '../schema';
-  import { superForm } from 'sveltekit-superforms';
-  import type { Infer, FormResult, SuperValidated } from 'sveltekit-superforms';
-  import { zodClient } from 'sveltekit-superforms/adapters';
-  import type { ActionData } from './$types';
+  import { chapterSchema } from '../admin.validation';
+  import SuperDebug, { superForm } from 'sveltekit-superforms';
+  import type { Infer, SuperValidated } from 'sveltekit-superforms';
+  import { zod4Client } from 'sveltekit-superforms/adapters';
   import { toast } from 'svelte-sonner';
-  import { onMount, onDestroy } from 'svelte';
   import { Editor } from '@tiptap/core';
-  import StarterKit from '@tiptap/starter-kit';
-  import Placeholder from '@tiptap/extension-placeholder';
-  import { focusEditor } from '$lib/utils';
   import Loading from '$lib/components/icons/loading.svelte';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
+  import Tiptap from '$lib/components/tiptap.svelte';
+  import type { Transaction } from '@tiptap/pm/state';
+  import type { CloudinaryResponse } from '$lib/types';
+  import { PUBLIC_CLOUDINARY_CLOUD_NAME, PUBLIC_CLOUDINARY_CLOUD_PRESET } from '$env/static/public';
 
-  export let data: SuperValidated<Infer<typeof chapterSchema>>;
+  interface Props {
+    data: SuperValidated<Infer<typeof chapterSchema>>;
+  }
 
-  let element: Element;
-  let editor: Editor;
-
-  onMount(() => {
-    editor = new Editor({
-      element: element,
-      extensions: [
-        StarterKit,
-        Placeholder.configure({
-          placeholder: 'Write something …'
-        })
-      ],
-      content: $formData.content,
-      onTransaction: () => {
-        // force re-render so `editor.isActive` works as expected
-        editor = editor;
-      },
-
-      onUpdate(props) {
-        $formData.content = props.editor.getText();
-      }
-    });
-  });
-
-  onDestroy(() => {
-    if (editor) {
-      editor.destroy();
-    }
-  });
+  let { data }: Props = $props();
+  let editor = $state<Editor>();
+  let content = $state('');
 
   const form = superForm(data, {
     dataType: 'json',
-    validators: zodClient(chapterSchema),
+    validators: zod4Client(chapterSchema),
     resetForm: false,
+    onChange({}) {},
+    async onSubmit({ cancel }) {
+      await new Promise(async (resolve) => {
+        const blob = new Blob([content], { type: 'text/markdown' });
+        const fileName = `${$formData.novelId.slice(4)}-chapter-${$formData.chapterNum}.md`;
+        const _formData = new FormData();
+        _formData.append('file', blob, fileName);
+        _formData.append('upload_preset', PUBLIC_CLOUDINARY_CLOUD_PRESET);
+        _formData.append('resource_type', 'raw');
+        const upload = await fetch(
+          `https://api.cloudinary.com/v1_1/${PUBLIC_CLOUDINARY_CLOUD_NAME}/raw/upload`,
+          { method: 'POST', body: _formData }
+        );
+        if (!upload.ok) {
+          cancel();
+          toast.error('Cloudinary upload failed');
+          return resolve;
+        }
+        const data: CloudinaryResponse = await upload.json();
+        if (data.existing) {
+          cancel();
+          toast.error('Chapter Already Exist');
+          return resolve;
+        }
+        $formData.content = data.secure_url;
+        resolve(data);
+      });
+    },
     onUpdate({ form, result }) {
-      const action = result.data as FormResult<ActionData>;
-
       if (!form.valid) return;
-      if (action.newChapter.success === false || action.newChapter.error) {
-        toast.error(action.newChapter.error);
-        return;
+      if (result.type === 'failure') {
+        toast.error(form.message);
       }
 
-      editor.commands.clearContent();
-      toast.success(
-        `Chapter ${action.newChapter.data.chapterNum}. ${action.newChapter.data.title} added`
-      );
+      if (result.type === 'success') {
+        toast.success(`Chapter ${form.data.chapterNum}. ${form.data.title} added`);
+      }
     }
   });
 
   const { form: formData, enhance, submitting } = form;
+  $formData.novelId = page.url.searchParams.get('novelId') || '';
 
-  $formData.novelId = $page.url.searchParams.get('novelId') || '';
+  function onUpdate(props: { editor: Editor; transaction: Transaction }) {
+    content = props.editor.getText();
+  }
 </script>
 
+<SuperDebug data={$formData} />
 <form
   method="POST"
   action="?/create"
@@ -94,12 +97,15 @@
           <Form.Label>Novel Id</Form.Label>
           <Form.FieldErrors />
         </div>
-        <Input {...attrs} bind:value={$formData.novelId} class="rounded-sm border-border" />
+        <Input {...attrs} value={$formData.novelId} class="rounded-sm border-border" disabled />
       </Form.Control>
     </Form.Field>
     <Form.Field {form} name="chapterNum" class="w-full">
       <Form.Control let:attrs>
-        <Form.Label>Chapter Number</Form.Label>
+        <div class="flex flex-wrap items-center gap-1 md:justify-between">
+          <Form.Label>Chapter Number</Form.Label>
+          <Form.FieldErrors />
+        </div>
         <Input
           {...attrs}
           type="number"
@@ -111,9 +117,9 @@
     <Form.Button
       variant="outline"
       disabled={$submitting}
-      class="w-full rounded-sm border-border bg-cyan-400 text-background hover:bg-cyan-700 md:w-fit">
+      class="w-full rounded-sm border-border bg-cyan-400 text-background hover:bg-cyan-700">
       {#if $submitting}
-        <Loading class="h-5 w-5 animate-[spin_1.2s_linear_infinite]" />
+        <Loading class="size-5 animate-[spin_1.2s_linear_infinite]" />
       {:else}
         Add
       {/if}
@@ -125,21 +131,9 @@
         <Form.Label>Content</Form.Label>
         <Form.FieldErrors />
       </div>
-      <div class="h-[40rem] rounded-sm border">
-        <textarea class="hidden" {...attrs} bind:value={$formData.content} />
-        <div
-          role="button"
-          tabindex="0"
-          bind:this={element}
-          on:click={(e) => focusEditor(editor, e)}
-          on:keydown={(event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              focusEditor(editor, event);
-            }
-          }}
-          class="hide-scrollbar prose h-full min-w-full max-w-2xl cursor-auto p-2 text-foreground/80 dark:prose-invert prose-p:m-0 prose-p:mb-2">
-        </div>
-      </div>
+      <Tiptap class="h-[40rem]" bind:editor {onUpdate}>
+        <textarea class="hidden" {...attrs} bind:value={content}></textarea>
+      </Tiptap>
     </Form.Control>
   </Form.Field>
 </form>

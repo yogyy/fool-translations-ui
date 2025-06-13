@@ -1,9 +1,9 @@
 <script>
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import Footer from '$lib/components/footer.svelte';
   import Logo from '$lib/components/icons/logo.svelte';
 
-  $: current_url = $page.url.pathname.split('/').filter(Boolean).pop() || '/';
+  $: current_url = page.url.pathname.split('/').filter(Boolean).pop() || '/';
 </script>
 
 <main class="flex min-h-svh justify-center overflow-hidden">

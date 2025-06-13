@@ -1,13 +1,12 @@
 <script lang="ts">
   import Notification from '$lib/components/notification.svelte';
+  import Seo from '$lib/components/SEO.svelte';
   import { buttonVariants } from '$lib/components/ui/button/index.js';
 
-  export let data;
+  let { data } = $props();
 </script>
 
-<svelte:head>
-  <title>Notifications | Fool Translations</title>
-</svelte:head>
+<Seo title="Notifications | Fool Translations" />
 
 <div class="container md:my-6">
   <div class="flex flex-col items-center justify-center md:mx-24 lg:mx-36 xl:mx-48">

@@ -1,15 +1,14 @@
 <script>
-  export let size = '24';
-  export let strokeWidth = '1.5';
+  let { strokeWidth = '1.5', class: className, ...rest } = $props();
 </script>
 
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width={size || $$props.width}
-  height={size || $$props.height}
+  width="24"
+  height="24"
   viewBox="0 0 24 24"
-  class="stroke-2"
-  {...$$props}>
+  class={className}
+  {...rest}>
   <path
     fill="none"
     stroke="currentColor"

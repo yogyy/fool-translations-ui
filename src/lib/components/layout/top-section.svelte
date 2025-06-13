@@ -36,10 +36,7 @@
   }
 </script>
 
-<section
-  aria-labelledby="top-novels"
-  class="order-first bg-complimentary md:order-3 md:border-b"
-  id="top-novels">
+<section class="order-first bg-complimentary md:order-3 md:border-b">
   <div class="md:p-3">
     <h2 class="sr-only">Top Novels</h2>
     <Carousel.Root
@@ -63,10 +60,9 @@
                 <img
                   src={top.cover}
                   alt={top.title}
-                  class="aspect-square object-cover object-top group-hover:border-2 group-hover:border-cyan-300 sm:rounded-xl"
-                  style="max-width: 500px; max-height: 500px; aspect-ratio: 1; width: 100%;"
+                  class="aspect-square w-full max-w-md object-cover object-top group-hover:border-2 group-hover:border-cyan-300 sm:rounded-xl"
                   fetchpriority="high"
-                  loading="eager" />
+                  loading={i <= 2 || i >= 8 ? 'eager' : 'lazy'} />
                 <div
                   class={cn(
                     'absolute bottom-0 left-0 right-0 mb-4 flex flex-col justify-center px-2 py-1 md:px-4 md:py-2',
@@ -81,7 +77,7 @@
                   </div>
                   <span
                     class="mx-auto line-clamp-3 block truncate px-6 text-left text-xs text-zinc-300 md:px-2 md:text-xs lg:text-xs">
-                    {top.genres.join(', ')}
+                    {top.genres?.join(', ')}
                   </span>
                 </div>
                 <p

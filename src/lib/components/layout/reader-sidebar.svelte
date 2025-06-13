@@ -6,17 +6,17 @@
   import Button from '../ui/button/button.svelte';
   import * as Dialog from '../ui/dialog';
   import ScrollArea from '../ui/scroll-area/scroll-area.svelte';
-  import type { Chapter } from '$lib/types';
   import LeftToRightListDash from '../icons/left-to-right-list-dash.svelte';
   import { toast } from 'svelte-sonner';
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
+  import type { Chapter } from '$lib/server/db/schema/novel.schema.js';
 
   type Order = 'desc' | 'asc';
 
   interface Novel {
     title: string;
-    cover: string;
-    banner: string;
+    cover: string | null;
+    banner: string | null;
   }
 
   export let novel: Novel;
@@ -45,6 +45,7 @@
         'shrink-0 rounded-full bg-accent text-foreground hover:bg-foreground/10'
       )}
       on:click|stopPropagation={() => (sidebarState = !sidebarState)}>
+      <span class="sr-only">chapter sidebar menu</span>
       <LeftToRightListDash class="h-5 w-5" />
     </button>
   </Dialog.Trigger>
@@ -62,7 +63,7 @@
     <div class="">
       <div class="flex items-center justify-between bg-accent px-2 py-0.5">
         <p class="px-2 text-sm">{chapters.length} Chapters</p>
-        <Button size="icon" variant="ghost" on:click={toggleOrder}>
+        <Button size="icon" variant="ghost" on:click={toggleOrder} aria-label="sorting chapter">
           {#if order === 'asc'}
             <Sorting_19 class="h-4 w-4" />
           {:else}
@@ -85,7 +86,7 @@
                     id: 'chapter-sidebar',
                     position: 'top-right'
                   })}
-                href={`${$page.url.pathname}#${ch.id}`}
+                href={`${page.url.pathname}#${ch.id}`}
                 class="flex items-center gap-4 px-2.5 py-2 outline-offset-0">
                 {#if novel.cover && !imageError}
                   <img

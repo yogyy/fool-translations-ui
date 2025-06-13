@@ -1,72 +1,46 @@
 <script lang="ts">
   import * as Form from '$lib/components/ui/form';
   import { Input } from '$lib/components/ui/input';
-  import { novelSchema } from '../schema';
+  import { novelSchema } from '../admin.validation';
   import { superForm } from 'sveltekit-superforms';
-  import type { Infer, FormResult, SuperValidated } from 'sveltekit-superforms';
-  import { zodClient } from 'sveltekit-superforms/adapters';
-  import type { ActionData } from './$types';
+  import type { Infer, SuperValidated } from 'sveltekit-superforms';
+  import { zod4Client } from 'sveltekit-superforms/adapters';
   import { toast } from 'svelte-sonner';
   import ImagePreview from '$lib/components/image-preview.svelte';
   import GenresHelper from '$lib/components/genres-helper.svelte';
-  import { onMount, onDestroy } from 'svelte';
   import { Editor } from '@tiptap/core';
-  import StarterKit from '@tiptap/starter-kit';
-  import Placeholder from '@tiptap/extension-placeholder';
-  import { focusEditor } from '$lib/utils';
   import DatePicker from '$lib/components/date-picker.svelte';
   import Loading from '$lib/components/icons/loading.svelte';
+  import Tiptap from '$lib/components/tiptap.svelte';
+  import type { Transaction } from '@tiptap/pm/state';
 
-  export let data: SuperValidated<Infer<typeof novelSchema>>;
-
-  let element: Element;
-  let editor: Editor;
-
-  onMount(() => {
-    editor = new Editor({
-      element: element,
-      extensions: [
-        StarterKit,
-        Placeholder.configure({
-          placeholder: 'Write something …'
-        })
-      ],
-      content: $formData.synopsis,
-      onTransaction: () => {
-        // force re-render so `editor.isActive` works as expected
-        editor = editor;
-      },
-
-      onUpdate(props) {
-        $formData.synopsis = props.editor.getText();
-      }
-    });
-  });
-
-  onDestroy(() => {
-    if (editor) {
-      editor.destroy();
-    }
-  });
+  interface Props {
+    data: SuperValidated<Infer<typeof novelSchema>>;
+  }
+  let { data }: Props = $props();
+  let editor = $state<Editor>();
 
   const form = superForm(data, {
     dataType: 'json',
-    validators: zodClient(novelSchema),
+    validators: zod4Client(novelSchema),
     onUpdate({ form, result }) {
-      const action = result.data as FormResult<ActionData>;
+      if (result.type === 'failure') {
+        if (!result.data.form.message) return;
 
-      if (!form.valid) return;
-      if (action.newNovel.success === false || action.newNovel.error) {
-        toast.error(action.newNovel.error);
-        return;
+        toast.error(form.message);
       }
-
-      editor.commands.clearContent();
-      toast.success(`Novel ${action.newNovel.data.title} added`);
+      if (result.type === 'success') {
+        editor?.commands.clearContent();
+        toast.success(`Novel ${form.data.title} added`);
+      }
     }
   });
 
   const { form: formData, enhance, submitting } = form;
+
+  function onUpdate(props: { editor: Editor; transaction: Transaction }) {
+    $formData.synopsis = props.editor.getText();
+  }
 </script>
 
 <form
@@ -81,7 +55,11 @@
         <Form.Label>Title</Form.Label>
         <Form.FieldErrors />
       </div>
-      <Input {...attrs} bind:value={$formData.title} class="rounded-sm border-border" />
+      <Input
+        {...attrs}
+        placeholder="Code Geass"
+        bind:value={$formData.title}
+        class="rounded-sm border-border" />
     </Form.Control>
   </Form.Field>
   <Form.Field {form} name="synopsis" class="row-span-4">
@@ -90,21 +68,9 @@
         <Form.Label>Synopsis</Form.Label>
         <Form.FieldErrors />
       </div>
-      <div class="h-[20rem] rounded-sm border">
-        <textarea class="hidden" {...attrs} bind:value={$formData.synopsis} />
-        <div
-          role="button"
-          tabindex="0"
-          bind:this={element}
-          on:click={(e) => focusEditor(editor, e)}
-          on:keydown={(event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              focusEditor(editor, event);
-            }
-          }}
-          class="hide-scrollbar prose h-full min-w-full max-w-2xl cursor-auto p-2 text-foreground/80 dark:prose-invert prose-p:m-0 prose-p:mb-2">
-        </div>
-      </div>
+      <Tiptap class="h-[20rem]" bind:editor {onUpdate}>
+        <textarea class="hidden" {...attrs} bind:value={$formData.synopsis}></textarea>
+      </Tiptap>
     </Form.Control>
   </Form.Field>
   <div class="flex flex-col items-end gap-5 *:w-full md:flex-row">
@@ -114,7 +80,11 @@
           <Form.Label>Author</Form.Label>
           <Form.FieldErrors />
         </div>
-        <Input {...attrs} bind:value={$formData.author} class="rounded-sm border-border" />
+        <Input
+          {...attrs}
+          placeholder="yogyy"
+          bind:value={$formData.author}
+          class="rounded-sm border-border" />
       </Form.Control>
     </Form.Field>
     <Form.Field {form} name="publishedAt">
@@ -133,7 +103,11 @@
           <GenresHelper bind:genres={$formData.genres} />
           <Form.FieldErrors class="place-self-end" />
         </div>
-        <Input {...attrs} bind:value={$formData.genres} class="rounded-sm border-border" />
+        <Input
+          {...attrs}
+          bind:value={$formData.genres}
+          class="rounded-sm border-border"
+          placeholder="Action,Adventure,Drama,Fantasy" />
       </Form.Control>
     </Form.Field>
   </div>

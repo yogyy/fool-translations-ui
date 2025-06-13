@@ -1,20 +1,22 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import type { RatingData } from '$lib/types';
   import { cn } from '$lib/utils';
   import { toast } from 'svelte-sonner';
   import Star from '../icons/star.svelte';
   import { goto } from '$app/navigation';
 
-  let className: string = $$props.class;
-  export let data: RatingData;
+  interface Props {
+    class?: string;
+    data: RatingData;
+  }
 
-  export { className as class };
-
-  let userRate = 0;
+  let { class: className, data }: Props = $props();
+  let userRate = $state(0);
 
   async function addRating(rate: number) {
-    const novelId = $page.params.slug;
+    if (userRate === rate) return;
+    const novelId = page.params.slug;
     const res = await fetch(`/api/novel/${novelId}/rating`, {
       method: 'POST',
       body: JSON.stringify({ rating: rate })
@@ -37,7 +39,7 @@
 <div class={cn('mt-4', className)}>
   <div class="flex items-center justify-center">
     {#each [1, 2, 3, 4, 5] as rate}
-      <button on:click={() => addRating(rate)}>
+      <button aria-label={`rate ${rate} star`} onclick={() => addRating(rate)}>
         <Star class={userRate >= rate ? 'fill-[gold] text-[gold]' : 'fill-none'} />
       </button>
     {/each}

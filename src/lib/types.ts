@@ -1,30 +1,4 @@
-export interface Novel {
-  id: string;
-  title: string;
-  author: string;
-  genres: string[];
-  synopsis: string;
-  cover: string | null;
-  banner: string | null;
-  totalViews: number;
-  status: 'ongoing' | 'completed';
-  publishedAt: Date;
-  lastUpdated: Date;
-  averageRating: number;
-}
-
-export interface Chapter {
-  id: string;
-  chapterNum: number;
-  title: string;
-  createdAt: Date;
-  content: string;
-}
-
-export interface NovelResponse {
-  success: boolean;
-  data: Novel;
-}
+import type { Chapter } from './server/db/schema/novel.schema';
 
 export interface SubscribeData {
   isSubscribed: boolean;
@@ -46,6 +20,8 @@ export interface RatingData {
   rating: number;
 }
 
+export type NovelChapters = Array<Omit<Chapter, 'content' | 'novelId'>>;
+
 export interface HotNovel {
   id: number;
   image: string;
@@ -56,8 +32,8 @@ export interface HotNovel {
 export interface Topnovel {
   id: string;
   title: string;
-  cover: string;
-  genres: string[];
+  cover: string | null;
+  genres: string[] | null;
 }
 
 export type MutateResponse =
@@ -79,15 +55,6 @@ export type Session = {
   userId: string;
   expiresAt: Date;
 };
-
-export interface Notification {
-  id: string;
-  userId: string;
-  type: string;
-  isRead: boolean;
-  createdAt: Date;
-  novel: Pick<Novel, 'id' | 'title' | 'cover'>;
-}
 
 export interface GoogleOAuthResponse {
   sub: string;

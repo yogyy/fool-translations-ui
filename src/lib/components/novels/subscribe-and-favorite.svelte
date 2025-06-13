@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { page } from '$app/state';
   import type { MutateResponse, FavoriteData, SubscribeData } from '$lib/types';
   import { cn } from '$lib/utils';
   import { toast } from 'svelte-sonner';
@@ -17,7 +17,7 @@
 
   async function favoriteNovel() {
     isLoading = true;
-    const res = await fetch(`/api/novel/${$page.params.slug}/favorite`, {
+    const res = await fetch(`/api/novel/${page.params.slug}/favorite`, {
       method: 'POST'
     });
 
@@ -41,7 +41,7 @@
 
   async function subscribeNovel() {
     isLoading = true;
-    const res = await fetch(`/api/novel/${$page.params.slug}/subscribe`, {
+    const res = await fetch(`/api/novel/${page.params.slug}/subscribe`, {
       method: 'POST'
     });
 
@@ -77,7 +77,7 @@
       aria-label={subscribe.isSubscribed
         ? 'unsubscribed from this novel'
         : 'subscribed to this novel'}>
-      <Bell class="" size="22" />
+      <Bell class="size-[22px]" />
       <p class="hidden text-center text-xs font-medium opacity-90 md:block">
         {subscribe.total}
       </p>
@@ -92,7 +92,7 @@
       type="button"
       title={favorite.isFavorited ? 'Unfavorite' : 'Favorite'}
       aria-label={favorite.isFavorited ? 'remove from favorites' : 'add to favorites'}>
-      <Favourite size="22" class="stroke-red-600" />
+      <Favourite class="size-[22px]" />
       <p class="hidden text-center text-xs font-medium opacity-90 md:block">
         {favorite.total}
       </p>

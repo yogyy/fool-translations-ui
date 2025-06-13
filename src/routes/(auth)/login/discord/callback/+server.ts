@@ -1,10 +1,10 @@
 import { discord } from '$lib/oauth';
-
 import { error, type RequestEvent } from '@sveltejs/kit';
 import { ArcticFetchError, OAuth2RequestError } from 'arctic';
-import { BE_URL } from '$env/static/private';
-import { parseString } from 'set-cookie-parser';
-import { setSessionTokenCookie } from '$lib/session';
+import type { DiscordOAuthResponse } from '$lib/types';
+import { createUser, getUserFromProviderId } from '$lib/server/service/auth.service';
+import { createSession, generateSessionToken, setSessionTokenCookie } from '$lib/server/auth';
+import { generateRandId } from '$lib/server/utils';
 
 export async function GET(event: RequestEvent): Promise<Response> {
   const code = event.url.searchParams.get('code');
@@ -21,32 +21,46 @@ export async function GET(event: RequestEvent): Promise<Response> {
 
   try {
     let tokens = await discord.validateAuthorizationCode(code, codeVerifier);
-
-    const res = await fetch(`${BE_URL}/oauth/discord`, {
-      headers: { Cookie: `access_token=${tokens.accessToken()}` }
+    const response = await fetch('https://openidconnect.googleapis.com/v1/userinfo', {
+      headers: { Authorization: `Bearer ${tokens.accessToken()}` }
     });
-    const data: { success: boolean } = await res.json();
-    if (!data.success) throw error(500, 'Authentication failed');
 
-    const cookie = parseString(res.headers.get('set-cookie')!);
-    setSessionTokenCookie(event, cookie.value, cookie.expires as Date);
+    const user: DiscordOAuthResponse = await response.json();
 
-    return new Response(null, {
-      status: 302,
-      headers: {
-        Location: '/'
-      }
+    const userExist = await getUserFromProviderId(event.platform!.env, user.id);
+    if (userExist) {
+      const token = generateSessionToken();
+      const session = await createSession(event.platform!.env.DB, token, userExist?.id);
+      setSessionTokenCookie(event, token, session.expiresAt);
+
+      return new Response(null, { status: 302, headers: { Location: '/' } });
+    }
+
+    const userId = generateRandId('usr');
+    await createUser({
+      env: event.platform!.env,
+      email: user.email.toLowerCase(),
+      id: userId,
+      name: user.global_name || user.username,
+      avatar: `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`,
+      provider: 'discord',
+      providerId: user.id
     });
+
+    const token = generateSessionToken();
+    const session = await createSession(event.platform!.env.DB, token, userId);
+    setSessionTokenCookie(event, token, session.expiresAt);
+
+    return new Response(null, { status: 302, headers: { Location: '/' } });
   } catch (e) {
-    console.log(e);
     if (e instanceof OAuth2RequestError) {
-      throw error(500, e.message);
+      return error(500, e.message);
     }
     if (e instanceof ArcticFetchError) {
       const cause = e.cause;
-      throw error(500, cause as string);
+      return error(500, cause as string);
     }
-
-    throw error(500, 'Authentication failed');
+    console.log(e);
+    return error(500, 'Authentication failed');
   }
 }

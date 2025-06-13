@@ -1,12 +1,11 @@
 <script lang="ts">
+  import Seo from '$lib/components/SEO.svelte';
   import { buttonVariants } from '$lib/components/ui/button/index.js';
 
   export let data;
 </script>
 
-<svelte:head>
-  <title>Replies | Fool Translations</title>
-</svelte:head>
+<Seo title="Replies | Fool Translations" />
 
 <div class="container md:my-6">
   <div class="flex flex-col items-center justify-center md:mx-24 lg:mx-36 xl:mx-48">

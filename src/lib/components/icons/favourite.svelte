@@ -1,14 +1,4 @@
-<script>
-  export let size = '24';
-</script>
-
-<svg
-  xmlns="http://www.w3.org/2000/svg"
-  width={size || $$props.width}
-  height={size || $$props.height}
-  viewBox="0 0 24 24"
-  class={$$props.class}
-  {...$$props}>
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" {...$$props}>
   <path
     stroke="currentColor"
     stroke-linecap="round"

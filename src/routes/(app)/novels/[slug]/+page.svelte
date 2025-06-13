@@ -2,27 +2,24 @@
   import ArrowLeft_01 from '$lib/components/icons/arrow-left-01.svelte';
   import FileAdd from '$lib/components/icons/file-add.svelte';
   import BookEdit from '$lib/components/icons/book-edit.svelte';
-  import Chapters from '$lib/components/novels/chapters.svelte';
+  import Chapterlist from '$lib/components/novels/chapter-list.svelte';
   import Rate from '$lib/components/novels/rate.svelte';
   import ReleasedDay from '$lib/components/novels/released-day.svelte';
   import SubscribeAndFavorite from '$lib/components/novels/subscribe-and-favorite.svelte';
   import Summary from '$lib/components/novels/summary.svelte';
   import Synopsis from '$lib/components/novels/synopsis.svelte';
-  import { buttonVariants } from '$lib/components/ui/button/index.js';
+  import { buttonVariants } from '$lib/components/ui/button';
   import { cn } from '$lib/utils.js';
-  import * as Tooltip from '$lib/components/ui/tooltip';
+  import Seo from '$lib/components/SEO.svelte';
 
-  export let data;
-
+  let { data } = $props();
   const { novel, favorite, rating, subscribe, chapters } = data;
 </script>
 
-<svelte:head>
-  <title>{novel.title} | Fool Translations</title>
-</svelte:head>
+<Seo title={`${novel.title} | Fool Translations`} />
 
 <nav
-  class="fixed top-0 z-10 flex h-14 w-full items-center justify-between bg-transparent px-4 md:hidden">
+  class="fixed top-0 z-10 flex h-14 w-full transform-gpu items-center justify-between bg-transparent px-4 backdrop-blur-sm transition-transform md:hidden">
   <a
     class={cn(buttonVariants({ size: 'icon', variant: 'ghost' }), 'hover:bg-opacity-30')}
     href="/"
@@ -35,8 +32,8 @@
 <div class="container min-w-[300px] px-0">
   <div class="grid grid-cols-1 md:mx-12 md:my-2 md:flex md:flex-row md:gap-x-2 md:gap-y-0 lg:mx-24">
     <div
-      class="mx-0 grid grid-cols-1 bg-complimentary md:flex md:flex-col md:items-center md:rounded-xl md:pb-8">
-      <div class="relative">
+      class="mx-0 grid grid-cols-1 bg-complimentary md:flex md:w-[30%] md:flex-col md:items-center md:rounded-xl md:pb-8">
+      <div class="relative w-full">
         <div class="min-h-max overflow-hidden border border-border/20 md:rounded-t-xl">
           <div class="relative w-full">
             <img
@@ -69,29 +66,21 @@
             href="#viewer/somenumber">Start Reading</a>
           {#if data.user?.type === 'admin'}
             <div class="mx-auto flex h-10 w-1/2 gap-2 md:w-full">
-              <Tooltip.Root>
-                <Tooltip.Trigger class="relative w-1/2 flex-1 md:w-full">
-                  <a
-                    href={`/admin/chapter?novelId=${novel.id}`}
-                    class="mx-auto inline-flex h-10 w-full select-none items-center justify-center whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 dark:bg-cyan-300/90 dark:hover:bg-cyan-300/60">
-                    <span class="sr-only">Add New Chapter</span><FileAdd class="size-5" />
-                  </a>
-                </Tooltip.Trigger>
-                <Tooltip.Content class="bg-badge px-2.5 py-2 text-foreground">
-                  Add New Chapter
-                </Tooltip.Content>
-              </Tooltip.Root>
-              <Tooltip.Root>
-                <Tooltip.Trigger class="relative w-1/2 flex-1 md:w-full">
-                  <a
-                    href={`/admin/novel/update?novelId=${novel.id}`}
-                    class="mx-auto inline-flex h-10 w-full select-none items-center justify-center whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 dark:bg-cyan-300/90 dark:hover:bg-cyan-300/60">
-                    <span class="sr-only">Edit Novel</span><BookEdit class="size-5" /></a>
-                </Tooltip.Trigger>
-                <Tooltip.Content class="bg-badge px-2.5 py-2 text-foreground">
-                  Edit Novel
-                </Tooltip.Content>
-              </Tooltip.Root>
+              <div class="relative w-1/2 flex-1 md:w-full">
+                <a
+                  title="Add New Chapter"
+                  href={`/admin/chapter?novelId=${novel.id}`}
+                  class="mx-auto inline-flex h-10 w-full select-none items-center justify-center whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 dark:bg-cyan-300/90 dark:hover:bg-cyan-300/60">
+                  <FileAdd class="size-5" />
+                </a>
+              </div>
+              <div class="relative w-1/2 flex-1 md:w-full">
+                <a
+                  title="Edit Novel"
+                  href={`/admin/novel/update?novelId=${novel.id}`}
+                  class="mx-auto inline-flex h-10 w-full select-none items-center justify-center whitespace-nowrap rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 dark:bg-cyan-300/90 dark:hover:bg-cyan-300/60">
+                  <BookEdit class="size-5" /></a>
+              </div>
             </div>
           {/if}
         </div>
@@ -122,7 +111,7 @@
         </div>
       </div>
       <Synopsis synopsis={novel.synopsis} />
-      <Chapters {chapters} />
+      <Chapterlist {chapters} />
     </div>
   </div>
 </div>
