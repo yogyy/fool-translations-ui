@@ -60,6 +60,7 @@
           <div class="mt-2 flex items-center justify-center gap-4">
             <a
               href="/"
+              aria-label="fool-transitions logo"
               class="inline-flex items-center gap-1.5 text-lg font-semibold transition-colors duration-200 hover:text-cyan-300">
               <Logo style="width: 30px; height: 30px;" />
               <p class="hidden md:block">FOOL</p>
