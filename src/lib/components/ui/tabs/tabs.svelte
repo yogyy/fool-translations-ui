@@ -3,13 +3,15 @@
   import { cn } from '$lib/utils.js';
   let {
     ref = $bindable(null),
+    value = $bindable(''),
     class: className,
     ...restProps
-  }: TabsPrimitive.ContentProps = $props();
+  }: TabsPrimitive.RootProps = $props();
 </script>
 
-<TabsPrimitive.Content
+<TabsPrimitive.Root
   bind:ref
-  data-slot="tabs-content"
-  class={cn('flex-1 outline-none', className)}
+  bind:value
+  data-slot="tabs"
+  class={cn('flex flex-col gap-2', className)}
   {...restProps} />

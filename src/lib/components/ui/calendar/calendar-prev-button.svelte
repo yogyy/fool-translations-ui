@@ -4,23 +4,24 @@
   import { cn } from '$lib/utils.js';
   import ArrowLeft_01 from '$lib/components/icons/arrow-left-01.svelte';
 
-  type $$Props = CalendarPrimitive.PrevButtonProps;
-  type $$Events = CalendarPrimitive.PrevButtonEvents;
-
-  let className: $$Props['class'] = undefined;
-  export { className as class };
+  let {
+    ref = $bindable(null),
+    class: className,
+    children,
+    ...restProps
+  }: CalendarPrimitive.PrevButtonProps = $props();
 </script>
 
+{#snippet Fallback()}
+  <ArrowLeft_01 />
+{/snippet}
+
 <CalendarPrimitive.PrevButton
-  on:click
+  bind:ref
   class={cn(
     buttonVariants({ variant: 'outline' }),
-    'h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100',
+    'size-7 bg-transparent p-0 opacity-50 hover:opacity-100',
     className
   )}
-  {...$$restProps}
-  let:builder>
-  <slot {builder}>
-    <ArrowLeft_01 class="h-4 w-4" />
-  </slot>
-</CalendarPrimitive.PrevButton>
+  {...restProps}
+  children={children || Fallback} />

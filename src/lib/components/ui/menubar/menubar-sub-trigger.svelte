@@ -1,31 +1,27 @@
 <script lang="ts">
   import { Menubar as MenubarPrimitive } from 'bits-ui';
-  import { cn } from '$lib/utils';
+  import { cn } from '$lib/utils.js';
   import ArrowRight_01 from '$lib/components/icons/arrow-right-01.svelte';
 
-  type $$Props = MenubarPrimitive.SubTriggerProps & {
+  let {
+    ref = $bindable(null),
+    class: className,
+    inset,
+    children,
+    ...restProps
+  }: MenubarPrimitive.SubTriggerProps & {
     inset?: boolean;
-  };
-  type $$Events = MenubarPrimitive.SubTriggerEvents;
-
-  let className: $$Props['class'] = undefined;
-  export let inset: $$Props['inset'] = undefined;
-  export { className as class };
+  } = $props();
 </script>
 
 <MenubarPrimitive.SubTrigger
+  bind:ref
   class={cn(
-    'flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-accent data-[state=open]:bg-accent data-[highlighted]:text-accent-foreground data-[state=open]:text-accent-foreground data-[disabled]:opacity-50',
+    'data-[highlighted]:bg-accent data-[state=open]:bg-accent data-[highlighted]:text-accent-foreground data-[state=open]:text-accent-foreground flex cursor-default items-center rounded-xs px-2 py-1.5 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
     inset && 'pl-8',
     className
   )}
-  {...$$restProps}
-  on:click
-  on:keydown
-  on:focusin
-  on:focusout
-  on:pointerleave
-  on:pointermove>
-  <slot />
-  <ArrowRight_01 class="ml-auto h-4 w-4" />
+  {...restProps}>
+  {@render children?.()}
+  <ArrowRight_01 class="ml-auto size-4" />
 </MenubarPrimitive.SubTrigger>

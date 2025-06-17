@@ -1,44 +1,39 @@
 <script lang="ts">
-  import { Menubar as MenubarPrimitive } from 'bits-ui';
-  import { cn } from '$lib/utils';
+  import { Menubar as MenubarPrimitive, type WithoutChildrenOrChild } from 'bits-ui';
+  import { cn } from '$lib/utils.js';
+  import type { Snippet } from 'svelte';
+  import Check from '$lib/components/icons/check.svelte';
+  import Minus from '$lib/components/icons/minus.svelte';
 
-  type $$Props = MenubarPrimitive.CheckboxItemProps;
-  let className: $$Props['class'] = undefined;
-  export { className as class };
-  export let checked: $$Props['checked'] = undefined;
+  let {
+    ref = $bindable(null),
+    checked = $bindable(false),
+    indeterminate = $bindable(false),
+    class: className,
+    children: childrenProp,
+    ...restProps
+  }: WithoutChildrenOrChild<MenubarPrimitive.CheckboxItemProps> & {
+    children?: Snippet;
+  } = $props();
 </script>
 
 <MenubarPrimitive.CheckboxItem
+  bind:ref
   bind:checked
+  bind:indeterminate
   class={cn(
-    'relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground data-[disabled]:opacity-50',
+    'data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground relative flex cursor-default items-center rounded-xs py-1.5 pr-2 pl-8 text-sm outline-hidden select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
     className
   )}
-  {...$$restProps}
-  on:click
-  on:keydown
-  on:focusin
-  on:focusout
-  on:pointerleave
-  on:pointermove
-  on:pointerdown>
-  <span class="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
-    <MenubarPrimitive.CheckboxIndicator>
-      <svg
-        width="15"
-        height="15"
-        viewBox="0 0 15 15"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        class="h-4 w-4">
-        <path
-          d="M11.4669 3.72684C11.7558 3.91574 11.8369 4.30308 11.648 4.59198L7.39799 11.092C7.29783 11.2452 7.13556 11.3467 6.95402 11.3699C6.77247 11.3931 6.58989 11.3355 6.45446 11.2124L3.70446 8.71241C3.44905 8.48022 3.43023 8.08494 3.66242 7.82953C3.89461 7.57412 4.28989 7.55529 4.5453 7.78749L6.75292 9.79441L10.6018 3.90792C10.7907 3.61902 11.178 3.53795 11.4669 3.72684Z"
-          fill="currentColor"
-          fill-rule="evenodd"
-          clip-rule="evenodd">
-        </path>
-      </svg>
-    </MenubarPrimitive.CheckboxIndicator>
-  </span>
-  <slot />
+  {...restProps}>
+  {#snippet children({ checked, indeterminate })}
+    <span class="absolute left-2 flex size-3.5 items-center justify-center">
+      {#if indeterminate}
+        <Minus class="size-4" />
+      {:else}
+        <Check class={cn('size-4', !checked && 'text-transparent')} />
+      {/if}
+    </span>
+    {@render childrenProp?.()}
+  {/snippet}
 </MenubarPrimitive.CheckboxItem>
