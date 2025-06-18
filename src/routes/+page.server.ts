@@ -1,8 +1,6 @@
-import { json, type Actions } from '@sveltejs/kit';
 import { avg, count, desc, eq, sql } from 'drizzle-orm';
 import { createDB } from '$lib/server/db/index.js';
 import { novel, rating } from '$lib/server/db/schema/novel.schema.js';
-import { deleteSessionTokenCookie, invalidateSession } from '$lib/server/auth.js';
 
 export const load = async ({ platform }) => {
   const topNovels = await createDB(platform!.env.DB)
@@ -22,16 +20,3 @@ export const load = async ({ platform }) => {
 
   return { featured: { hot: hotNovels, top: topNovels } };
 };
-
-export const actions = {
-  logout: async (event) => {
-    if (!event.locals.session) {
-      return json('Unauthorized', { status: 401 });
-    }
-
-    await invalidateSession(event.platform!.env.DB, event.locals.session.id);
-    deleteSessionTokenCookie(event);
-
-    return { success: true };
-  }
-} satisfies Actions;
