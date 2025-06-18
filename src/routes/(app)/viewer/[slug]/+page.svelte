@@ -10,14 +10,14 @@
   import { goto } from '$app/navigation';
   import ArrowLeft_02 from '$lib/components/icons/arrow-left-02.svelte';
 
-  export let data;
+  let { data } = $props();
 
-  let paragraphs = data.content.split(/\n\s*\n/).map((p) => p.trim());
+  const paragraphs = data.content.split(/\n\s*\n/).map((p) => p.trim());
 
-  let lastScrollY = 0;
-  let showNav = true;
+  let lastScrollY = $state(0);
+  let showNav = $state(true);
 
-  let isInView: boolean;
+  let isInView = $state(true);
   const options: Options = { rootMargin: '150px' };
 
   const handleChange = ({ detail }: CustomEvent<ObserverEventDetails>) => {
@@ -51,50 +51,54 @@
 <main class="mt-14 min-h-svh overflow-hidden">
   <div
     class="relative z-0 cursor-default select-none focus:outline-none"
-    on:click={() => (showNav = !showNav)}
+    onclick={() => (showNav = !showNav)}
     role="button"
     tabindex="0"
-    on:keypress>
-    <div class="container relative flex flex-col items-center justify-center md:max-w-screen-lg">
+    onkeypress={undefined}>
+    <div class="relative container flex flex-col items-center justify-center md:max-w-screen-lg">
       <ReaderLayout {data} {showNav} {isInView}>
-        <div
-          slot="navbar"
-          class="flex w-full scale-90 gap-3 min-[400px]:scale-100 md:justify-between">
-          <button
-            on:click|stopPropagation={() => goto(`/novels/${data.novel.id.slice(4)}`)}
-            class={cn(
-              buttonVariants({ size: 'icon' }),
-              'shrink-0 rounded-full bg-accent text-foreground hover:bg-foreground/10'
-            )}>
-            <span class="sr-only">go back to novel page</span>
-            <ArrowLeft_02 class="h-5 w-5" />
-          </button>
-          <div class="flex min-w-0 grow justify-center">
-            <div class="flex w-full flex-col items-center gap-1">
-              <button
-                on:click|stopPropagation
-                class={cn(
-                  buttonVariants({ variant: 'secondary' }),
-                  'overflow-hidden rounded-full shadow-md shadow-cyan-400 hover:bg-[#191C1D]'
-                )}>
-                <p class="overflow-hidden text-wrap text-xs font-medium leading-none sm:text-sm">
-                  <span class="opacity-80">Chapter {data.chapter.chapterNum}:</span>
-                  <span>{data.chapter.title} Lorem, ipsum dolor.</span>
-                </p>
-              </button>
+        {#snippet navbar()}
+          <div class="flex w-full scale-90 gap-3 min-[400px]:scale-100 md:justify-between">
+            <button
+              onclick={(e) => {
+                e.stopPropagation();
+                goto(`/novels/${data.novel.id.slice(4)}`);
+              }}
+              class={cn(
+                buttonVariants({ size: 'icon' }),
+                'bg-accent text-foreground hover:bg-foreground/10 shrink-0 rounded-full'
+              )}>
+              <span class="sr-only">go back to novel page</span>
+              <ArrowLeft_02 class="size-5" />
+            </button>
+            <div class="flex min-w-0 grow justify-center">
+              <div class="flex w-full flex-col items-center gap-1">
+                <button
+                  onclick={(e) => e.stopPropagation()}
+                  class={cn(
+                    buttonVariants({ variant: 'secondary' }),
+                    'overflow-hidden rounded-full shadow-md shadow-cyan-400 hover:bg-[#191C1D]'
+                  )}>
+                  <p class="overflow-hidden text-xs leading-none font-medium text-wrap sm:text-sm">
+                    <span class="opacity-80">Chapter {data.chapter.chapterNum}:</span>
+                    <span>{data.chapter.title}</span>
+                  </p>
+                </button>
+              </div>
             </div>
+            <ReaderSidebar
+              chapters={data.chapters}
+              novel={data.novel}
+              currentChapter={data.chapter.chapterNum} />
           </div>
-          <ReaderSidebar
-            chapters={data.chapters}
-            novel={data.novel}
-            currentChapter={data.chapter.chapterNum} />
-        </div>
-        <div class="content prose max-w-pgsize scroll-smooth dark:prose-invert">
+        {/snippet}
+
+        <div class="content prose max-w-pgsize dark:prose-invert scroll-smooth">
           {#each paragraphs as par}
             <p class={cn('', par.startsWith('"') ? 'dialogue' : 'narration')}>{par}</p>
           {/each}
         </div>
-        <div use:inview={options} on:inview_change={handleChange}></div>
+        <div use:inview={options} oninview_change={handleChange}></div>
       </ReaderLayout>
     </div>
   </div>

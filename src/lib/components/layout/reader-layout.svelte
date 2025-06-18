@@ -9,27 +9,35 @@
   import { fly } from 'svelte/transition';
   import { toast } from 'svelte-sonner';
   import { goto } from '$app/navigation';
+  import type { Snippet } from 'svelte';
 
   interface Props {
-    prev: string | null;
-    next: string | null;
+    showNav: boolean;
+    isInView: boolean;
+    data: { prev: string | null; next: string | null };
+    children: Snippet;
+    navbar: Snippet;
   }
-  export let data: Props;
-  export let showNav;
-  export let isInView;
+
+  let { data, showNav, isInView, children, navbar }: Props = $props();
+
+  function nextOrPrev(e: MouseEvent, url: string) {
+    e.stopPropagation();
+    goto(url);
+  }
 </script>
 
-<div class={cn('container fixed top-0 z-50 w-dvw max-w-screen-xl')}>
+<div class={cn('fixed top-0 z-50 container w-dvw max-w-screen-xl')}>
   {#if showNav || !!isInView}
     <div
       in:fly={{ y: -50, duration: 400 }}
       out:fly={{ y: -50, duration: 400 }}
       class="flex h-14 items-center pt-1 md:px-4">
-      <slot name="navbar"></slot>
+      {@render navbar()}
     </div>
   {/if}
 </div>
-<slot></slot>
+{@render children()}
 <div
   class={cn(
     'bottom-0 z-50 h-14 w-dvw max-w-screen-xl bg-transparent md:px-4',
@@ -39,68 +47,70 @@
     <div
       in:fly={{ y: 100, duration: 300 }}
       out:fly={{ y: 100, duration: 300 }}
-      class="mx-auto flex h-full max-w-pgsize justify-end">
+      class="max-w-pgsize mx-auto flex h-full justify-end">
       <div class="mx-[1.25rem] flex min-w-72 scale-90 gap-x-2 min-[400px]:scale-100">
         <Button
           size="icon"
-          on:click={(e) => {
+          onclick={(e) => {
             e.stopPropagation();
             toast.info('This feature is under development', {
               position: 'top-right',
               id: 'chapter-bookmark'
             });
           }}
-          class="rounded-full bg-accent text-foreground hover:bg-background"
+          class="bg-accent text-foreground hover:bg-background rounded-full"
           variant="secondary">
           <span class="sr-only">add chapter to bookmark</span>
-          <BookmarkAdd class="h-5 w-5 [&>path]:fill-red-600 [&>path]:stroke-red-600" />
+          <BookmarkAdd class="size-5 [&>path]:fill-red-600 [&>path]:stroke-red-600" />
         </Button>
         <Button
           size="icon"
-          on:click={(e) => {
+          onclick={(e) => {
             e.stopPropagation();
             window.scrollTo({ top: 0, behavior: 'smooth' });
           }}
-          class="rounded-full bg-accent text-foreground hover:bg-background"
+          class="bg-accent text-foreground hover:bg-background rounded-full"
           variant="secondary">
           <span class="sr-only">scroll to top</span>
-          <ArrowUp_04 class="h-6 w-6 [&>path]:fill-current" />
+          <ArrowUp_04 class="size-6 [&>path]:fill-current" />
         </Button>
         <Button
           size="icon"
-          on:click={(e) => {
+          onclick={(e) => {
             e.stopPropagation();
             toast.info('This feature is under development', {
               position: 'top-right',
               id: 'reader-setting'
             });
           }}
-          class="rounded-full bg-accent text-foreground hover:bg-background"
+          class="bg-accent text-foreground hover:bg-background rounded-full"
           variant="secondary">
           <span class="sr-only">reader settings</span>
-          <Settings_02 class="h-6 w-6 [&>g:first-child>path:first-child]:fill-current" />
+          <Settings_02 class="size-6 [&>g:first-child>path:first-child]:fill-current" />
         </Button>
         <div
-          class="flex h-fit overflow-hidden rounded-full bg-background capitalize shadow-md shadow-cyan-400">
+          class="bg-background flex h-fit overflow-hidden rounded-full capitalize shadow-md shadow-cyan-400">
           <button
+            type="button"
             disabled={data.prev === null}
-            on:click|stopPropagation={() => goto(`/viewer/${data.prev?.slice(3)}`)}
+            onclick={(e) => nextOrPrev(e, `/viewer/${data.prev?.slice(3)}`)}
             class={cn(
               buttonVariants({ variant: 'secondary' }),
-              'items-center rounded-full rounded-br-none rounded-tr-none no-underline hover:bg-background'
+              'hover:bg-background items-center gap-0 rounded-full rounded-tr-none rounded-br-none no-underline'
             )}>
-            <ArrowLeft_01 class="h-5 w-5" />
+            <ArrowLeft_01 class="size-5" />
             <span>prev</span>
           </button>
           <button
+            type="button"
             disabled={data.next === null}
-            on:click|stopPropagation={() => goto(`/viewer/${data.next?.slice(3)}`)}
+            onclick={(e) => nextOrPrev(e, `/viewer/${data.next?.slice(3)}`)}
             class={cn(
               buttonVariants({ variant: 'secondary' }),
-              'items-center rounded-full rounded-bl-none rounded-tl-none no-underline hover:bg-background'
+              'hover:bg-background items-center gap-0 rounded-full rounded-tl-none rounded-bl-none no-underline'
             )}>
             <span>next</span>
-            <ArrowRight_01 class="h-5 w-5" />
+            <ArrowRight_01 class="size-5" />
           </button>
         </div>
       </div>
