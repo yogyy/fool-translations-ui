@@ -11,14 +11,16 @@
   import Trash_2 from './icons/trash-2.svelte';
   import Ellipsis from './icons/ellipsis.svelte';
 
-  type Props = Omit<Notification, 'novelId'> & {
-    novel: Pick<Novel, 'id' | 'title' | 'cover'>;
-  };
+  interface Props {
+    chapter: Omit<Notification, 'novelId'> & {
+      novel: Pick<Novel, 'id' | 'title' | 'cover'>;
+    };
+  }
 
-  export let chapter: Props;
+  let { chapter }: Props = $props();
 
-  let notificationStatus = chapter.isRead;
-  let deleted: boolean | null = null;
+  let notificationStatus = $state(chapter.isRead);
+  let deleted = $state<boolean | null>(null);
 
   const toggleNotificationReadStatus = async (id: string) => {
     const res = await fetch('/api/notification', {
@@ -68,14 +70,14 @@
             src={chapter.novel.cover}
             alt={chapter.novel.title}
             class="aspect-[2/3] h-20 rounded-lg" />
-          <div class="flex w-full flex-col justify-between text-clip pl-1 pr-4 text-start">
-            <p class="text-pretty text-sm text-foreground/75 md:text-base">
-              <span class="font-medium text-foreground">a New Chapter</span> of
+          <div class="flex w-full flex-col justify-between pr-4 pl-1 text-start text-clip">
+            <p class="text-foreground/75 text-sm text-pretty md:text-base">
+              <span class="text-foreground font-medium">a New Chapter</span> of
               <span class="font-medium text-cyan-400">{chapter.novel.title}</span> has been released
             </p>
             <div class="flex items-center justify-start">
               <span class="mr-2 h-2 w-2 rounded-full bg-green-500"></span>
-              <p class="whitespace-nowrap text-xs text-foreground/60">
+              <p class="text-foreground/60 text-xs whitespace-nowrap">
                 <time
                   title="new chapter notification"
                   datetime={new Date(chapter.createdAt!).toISOString()}>
@@ -87,21 +89,21 @@
         </div>
       </div>
     </a>
-    <Menubar.Root class="absolute right-0 top-0 h-auto space-x-0 border-none bg-transparent p-0">
+    <Menubar.Root class="absolute top-0 right-0 h-auto space-x-0 border-none bg-transparent p-0">
       <Menubar.Menu>
         <Menubar.Trigger
-          class="inline-flex h-8 w-8 cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-0 py-0 text-xs font-medium hover:bg-accent hover:text-accent-foreground focus:bg-transparent focus-visible:text-current focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring data-[state=open]:bg-transparent">
+          class="hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-md px-0 py-0 text-xs font-medium whitespace-nowrap focus:bg-transparent focus-visible:text-current focus-visible:ring-1 focus-visible:outline-hidden data-[state=open]:bg-transparent">
           <Ellipsis class="size-5" />
           <span class="sr-only">notification menu</span>
         </Menubar.Trigger>
         <Menubar.Content align="end" class="bg-background text-muted-foreground">
-          <Menubar.Item on:click={() => deleteNotification(chapter.id)}>
+          <Menubar.Item onclick={() => deleteNotification(chapter.id)}>
             <div class="flex cursor-pointer gap-1 text-rose-400">
               <Trash_2 class="size-5" />
               <span>Delete this notification</span>
             </div>
           </Menubar.Item>
-          <Menubar.Item on:click={() => toggleNotificationReadStatus(chapter.id)}>
+          <Menubar.Item onclick={() => toggleNotificationReadStatus(chapter.id)}>
             {#if notificationStatus}
               <p class="flex cursor-pointer gap-1 text-sky-400">
                 <Check class="size-5" />

@@ -2,7 +2,7 @@
   import Seo from '$lib/components/SEO.svelte';
   import { buttonVariants } from '$lib/components/ui/button';
 
-  export let data;
+  let { data } = $props();
 </script>
 
 <Seo title="Announcement | Fool Translations" />
