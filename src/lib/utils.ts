@@ -61,34 +61,6 @@ export interface SlideHorizontalParams {
   duration?: number;
 }
 
-export const slideHorizontal = (
-  node: Element,
-  params: SlideHorizontalParams = { x: 300, duration: 200 }
-): TransitionConfig => {
-  const style = getComputedStyle(node);
-  const transform = style.transform === 'none' ? '' : style.transform;
-
-  const styleToString = (style: Record<string, number | string | undefined>): string => {
-    return Object.keys(style).reduce((str, key) => {
-      if (style[key] === undefined) return str;
-      return str + `${key}:${style[key]};`;
-    }, '');
-  };
-
-  return {
-    duration: params.duration ?? 200,
-    delay: 0,
-    css: (t) => {
-      const x = (params.x ?? 300) * (1 - t); // Animate from `x` to 0
-      return styleToString({
-        transform: `${transform} translate3d(${x}px, 0, 0)`,
-        opacity: t
-      });
-    },
-    easing: cubicOut
-  };
-};
-
 export function focusEditor(editor: Editor | undefined, event?: MouseEvent | KeyboardEvent) {
   if (!editor) return;
   // Check if there is a text selection already (i.e. a non-empty selection)
@@ -112,3 +84,10 @@ export function focusEditor(editor: Editor | undefined, event?: MouseEvent | Key
     editor.chain().focus().run();
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type WithoutChild<T> = T extends { child?: any } ? Omit<T, 'child'> : T;
+export type WithoutChildrenOrChild<T> = WithoutChildren<WithoutChild<T>>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type WithoutChildren<T> = T extends { children?: any } ? Omit<T, 'children'> : T;
+export type WithElementRef<T, U extends HTMLElement = HTMLElement> = T & { ref?: U | null };
