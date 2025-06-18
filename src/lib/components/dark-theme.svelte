@@ -15,16 +15,15 @@
 
 <div class="flex w-full items-center justify-between px-2 py-1.5">
   <span>Theme</span>
-  <div class="theme_switcher flex items-center justify-center rounded-full border border-border/20">
+  <div class="theme_switcher border-border/20 flex items-center justify-center rounded-full border">
     <span class="sr-only">select a display theme:</span>
     {#each themes as theme}
       <button
         type="button"
         title={theme.mode}
-        on:click={() => setMode(theme.mode)}
+        onclick={() => setMode(theme.mode)}
         class:theme_active={userPrefersMode.current === theme.mode}>
-        <svelte:component
-          this={theme.icon}
+        <theme.icon
           class="size-4"
           strokeWidth={userPrefersMode.current === theme.mode ? '2' : '1.5'} />
       </button>
@@ -34,27 +33,29 @@
 
 <style>
   .theme_switcher button {
+    cursor: pointer;
     width: 1.5rem;
     height: 1.5rem;
     border-radius: 9999px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    color: hsl(var(--foreground) / 0.5);
+    color: color-mix(in oklab, var(--foreground) 50%, transparent);
+
     transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
 
     &:not(.theme_active):hover {
-      background-color: hsl(var(--accent) / 0.5);
+      background-color: color-mix(in oklab, var(--accent) 50%, transparent);
     }
   }
 
   .theme_switcher .theme_active {
     box-shadow:
-      0 0 0 1px hsl(var(--border) / 1),
-      0 1px 2px 0 hsl(var(--border) / 1);
-    color: hsl(var(--foreground) / 1);
-    background: hsl(var(--background) / 1);
+      0 0 0 1px var(--border),
+      0 1px 2px 0 var(--border);
+    color: var(--foreground);
+    background: var(--background);
   }
 </style>

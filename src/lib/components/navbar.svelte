@@ -15,10 +15,14 @@
   import Logo from './icons/logo.svelte';
   import { type User } from '$lib/server/db/schema/user.schema';
 
-  export let user: Omit<User, 'provider' | 'password'> | null;
-  let userMenu = false;
-  let lastScrollY = 0;
-  let showNav = true;
+  interface Props {
+    user: Omit<User, 'provider' | 'password'> | null;
+  }
+  let { user }: Props = $props();
+
+  let userMenu = $state(false);
+  let lastScrollY = $state(0);
+  let showNav = $state(true);
 
   function handleScroll() {
     const currentScrollY = window.scrollY;
@@ -47,16 +51,16 @@
   )}>
   {#if showNav}
     <div
-      class="transform-gpu backdrop-blur-sm transition-transform duration-300"
+      class="transform-gpu backdrop-blur-xs transition-transform duration-300"
       in:fly={{ y: -50, duration: 300 }}
       out:fly={{ y: -50, duration: 300 }}>
       <header
         class={cn(
-          'top-0 z-50 w-full bg-gradient-to-b from-zinc-950/80 via-zinc-950/50 to-transparent transition duration-500 md:bg-background md:from-transparent',
-          userMenu ? 'border-b border-opacity-20 ' : '',
-          showNav && lastScrollY > 100 ? 'border-opacity-20 md:border-b' : ''
+          'md:bg-background from-background/80 via-background/50 top-0 z-50 w-full bg-gradient-to-b to-transparent transition duration-300 md:from-transparent',
+          userMenu ? 'border-b' : '',
+          showNav && lastScrollY > 100 ? 'md:border-b' : ''
         )}>
-        <div class="container flex h-14 max-w-pgsize items-center justify-between px-6">
+        <div class="max-w-pgsize container flex h-14 items-center justify-between px-6">
           <div class="mt-2 flex items-center justify-center gap-4">
             <a
               href="/"
@@ -70,7 +74,7 @@
                 <a
                   href={`/${route}`}
                   class={cn(
-                    'anim-text text-base font-medium capitalize transition-colors duration-200 hover:text-foreground/80',
+                    'anim-text hover:text-foreground/80 text-base font-medium capitalize transition-colors duration-200',
                     page.url.pathname.includes(route) ? 'text-foreground' : 'text-muted-foreground'
                   )}>
                   {route}
@@ -83,58 +87,70 @@
               <SearchBar />
               <a
                 href="/notifications/chapters"
-                class="inline-flex h-auto w-8 items-center justify-center whitespace-nowrap rounded-md px-0 text-xs font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
+                class="hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring inline-flex h-auto w-8 items-center justify-center rounded-md px-0 text-xs font-medium whitespace-nowrap transition-colors focus-visible:ring-1 focus-visible:outline-none">
                 <span class="sr-only">notifications</span>
                 <NotificationSquare class="size-5" />
               </a>
               <DropdownMenu.Root bind:open={userMenu}>
                 <DropdownMenu.Trigger
                   aria-label="user-menu"
-                  class="inline-flex h-8 w-8 cursor-pointer items-center justify-center whitespace-nowrap rounded-md px-0 py-0 text-xs font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-transparent focus-visible:text-current focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
+                  class="hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-md px-0 py-0 text-xs font-medium whitespace-nowrap transition-colors focus-visible:bg-transparent focus-visible:text-current focus-visible:ring-1 focus-visible:outline-none">
                   {#if user === null}
-                    <UserCircle class="h-6 w-6" />
+                    <UserCircle class="size-6" />
                   {:else}
                     <img
                       src={user?.avatar ?? '/default-avatar.png'}
                       alt={`${user.name}'s avatar`}
-                      class="h-6 w-6 rounded-full" />
+                      class="size-6 rounded-full" />
                   {/if}
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Content
-                  transition={slide}
                   align="end"
                   side="bottom"
                   sideOffset={7.5}
-                  class="w-full max-w-xs rounded-tl-none rounded-tr-none border-t-0 bg-background">
-                  <DropdownMenu.Item class="p-0">
-                    <DarkTheme />
-                  </DropdownMenu.Item>
-                  {#if user?.type === 'admin'}
-                    <DropdownMenu.Item class="p-0">
-                      <a href="/admin" class="w-full px-2 py-1.5">Admin</a>
-                    </DropdownMenu.Item>
-                  {/if}
-                  <DropdownMenu.Item class="p-0">
-                    {#if user !== null}
-                      <form
-                        action="?/logout"
-                        method="POST"
-                        class="w-full px-2 py-1.5"
-                        use:enhance={() => {
-                          return async ({ result }) => {
-                            user = null;
-                            if (result.type === 'success') {
-                              toast.info('Logout successfully. See you soon!');
-                              goto('/login');
-                            }
-                          };
-                        }}>
-                        <button class="inline-flex w-full">Logout</button>
-                      </form>
-                    {:else}
-                      <a href="/login" class="w-full px-2 py-1.5">Login</a>
+                  forceMount
+                  class="bg-background overflow-hidden rounded-tl-none rounded-tr-none border-t-0">
+                  {#snippet child({ wrapperProps, props, open })}
+                    {#if open}
+                      <div
+                        {...wrapperProps}
+                        class="w-full max-w-xs"
+                        transition:slide={{ duration: 300 }}>
+                        <div {...props}>
+                          <DropdownMenu.Item class="p-0">
+                            <DarkTheme />
+                          </DropdownMenu.Item>
+                          {#if user?.type === 'admin'}
+                            <DropdownMenu.Item class="p-0">
+                              <a href="/admin" class="w-full px-2 py-1.5">Admin</a>
+                            </DropdownMenu.Item>
+                          {/if}
+                          <DropdownMenu.Item class="p-0">
+                            {#if user !== null}
+                              <form
+                                action="/logout"
+                                method="POST"
+                                class="w-full"
+                                use:enhance={() => {
+                                  return async ({ result }) => {
+                                    user = null;
+                                    if (result.type === 'success') {
+                                      toast.info('Logout successfully. See you soon!');
+                                      goto('/login');
+                                    }
+                                  };
+                                }}>
+                                <button class="inline-flex w-full cursor-pointer px-2 py-1.5"
+                                  >Logout</button>
+                              </form>
+                            {:else}
+                              <a href="/login" class="w-full px-2 py-1.5">Login</a>
+                            {/if}
+                          </DropdownMenu.Item>
+                        </div>
+                      </div>
                     {/if}
-                  </DropdownMenu.Item>
+                  {/snippet}
                 </DropdownMenu.Content>
               </DropdownMenu.Root>
             </div>
