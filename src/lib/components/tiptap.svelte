@@ -63,6 +63,6 @@
         focusEditor(editor, e);
       }
     }}
-    class="hide-scrollbar prose h-full min-w-full max-w-2xl cursor-auto p-2 text-foreground/80 dark:prose-invert prose-p:m-0 prose-p:mb-2">
+    class="hide-scrollbar prose text-foreground/80 dark:prose-invert prose-p:m-0 prose-p:mb-2 h-full max-w-2xl min-w-full cursor-auto p-2">
   </div>
 </div>

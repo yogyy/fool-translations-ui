@@ -1,7 +1,7 @@
 <script lang="ts">
   import { toast } from 'svelte-sonner';
 
-  export let genres: string;
+  let { genres = $bindable() } = $props();
 
   function genrehandler() {
     let msg = genres.replace(/([a-z])([A-Z])/g, '$1, $2').replaceAll(' ', '');
@@ -15,6 +15,6 @@
   }
 </script>
 
-<button class="text-sm italic text-sky-400 dark:text-sky-800" type="button" on:click={genrehandler}>
+<button class="text-sm italic text-sky-400 dark:text-sky-800" type="button" onclick={genrehandler}>
   helper
 </button>

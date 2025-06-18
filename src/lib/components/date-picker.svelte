@@ -5,7 +5,6 @@
   import {
     CalendarDate,
     DateFormatter,
-    type DateValue,
     getLocalTimeZone,
     parseDate,
     today
@@ -15,19 +14,21 @@
   const df = new DateFormatter('en-US', {
     dateStyle: 'long'
   });
-  export let date: string;
+  let { date = $bindable() } = $props();
 
-  $: value = date ? parseDate(date) : undefined;
+  let value = $state<CalendarDate>();
+  $effect(() => {
+    value = date ? parseDate(date) : undefined;
+  });
 
-  let placeholder: DateValue = today(getLocalTimeZone());
+  let placeholder = $state(today(getLocalTimeZone()));
 </script>
 
 <Popover.Root>
   <Popover.Trigger
-    {...$$restProps}
     class={cn(
       buttonVariants({ variant: 'outline' }),
-      'w-full justify-start border-border pl-4 text-left font-normal',
+      'border-border w-full justify-start rounded-sm pl-4 text-left font-normal',
       !value && 'text-muted-foreground'
     )}>
     {value ? df.format(value.toDate(getLocalTimeZone())) : 'Pick a date'}
@@ -36,7 +37,7 @@
       width="32"
       height="32"
       viewBox="0 0 24 24"
-      class="ml-auto h-4 w-4 opacity-50">
+      class="ml-auto size-4 opacity-50">
       <path
         fill="none"
         stroke="currentColor"
@@ -47,9 +48,10 @@
         color="currentColor" />
     </svg>
   </Popover.Trigger>
-  <Popover.Content class="w-auto bg-accent p-0" side="top">
+  <Popover.Content class="bg-accent w-auto p-0" side="top">
     <Calendar
-      {value}
+      type="single"
+      bind:value
       bind:placeholder
       minValue={new CalendarDate(1900, 1, 1)}
       maxValue={today(getLocalTimeZone())}
