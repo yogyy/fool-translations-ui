@@ -1,37 +1,37 @@
-<script lang="ts">
+<script>
   import { cn } from '$lib/utils';
 
-  export let synopsis: string;
-
-  let showMore = false;
+  /** @type {{ synopsis: string }} */
+  let { synopsis } = $props();
+  let show = $state(false);
 </script>
 
 <div
-  class="relative mx-2 whitespace-pre-line rounded-xl bg-complimentary p-4 md:mx-0 md:rounded-lg">
+  class="bg-complimentary relative mx-2 rounded-xl p-4 whitespace-pre-line md:mx-0 md:rounded-lg">
   <h4 class="sr-only">Synopsis</h4>
   <p
     class={cn(
-      'prose-sm prose-invert -mt-0.5 text-sm font-normal text-muted-foreground',
-      showMore ? 'line-clamp-none' : 'line-clamp-3'
+      'prose-sm prose-invert text-muted-foreground -mt-0.5 text-sm font-normal',
+      show ? 'line-clamp-none' : 'line-clamp-3'
     )}>
     {synopsis}
   </p>
-  {#if !showMore}
+  {#if !show}
     <div
-      class="pointer-events-none absolute bottom-4 left-0 h-36 w-full bg-gradient-to-t from-complimentary to-transparent">
+      class="from-complimentary pointer-events-none absolute bottom-4 left-0 h-36 w-full bg-gradient-to-t to-transparent">
     </div>
   {/if}
   <div class="relative mt-4">
     <button
-      on:click={() => (showMore = !showMore)}
-      class="group flex w-full items-center justify-center py-2 focus:outline-none">
+      onclick={() => (show = !show)}
+      class="group flex w-full cursor-pointer items-center justify-center py-2 focus:outline-none">
       <div class="absolute inset-0 flex items-center">
-        <div class="w-full border-t border-muted-foreground/30"></div>
+        <div class="border-muted-foreground/30 w-full border-t"></div>
       </div>
-      <div class="relative bg-complimentary px-3">
+      <div class="bg-complimentary relative px-3">
         <span class="flex items-center text-sm font-medium text-cyan-500 dark:text-cyan-300">
-          {showMore ? 'Show Less' : 'Show More'}
-          {#if showMore}
+          {show ? 'Show Less' : 'Show More'}
+          {#if show}
             <svg viewBox="0 0 24 24" width="14" height="14" class="ml-1">
               <path
                 fill="none"

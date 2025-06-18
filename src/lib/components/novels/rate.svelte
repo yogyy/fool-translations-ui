@@ -7,13 +7,13 @@
   import { goto } from '$app/navigation';
 
   interface Props {
-    class?: string;
     data: RatingData;
+    class?: string;
   }
 
-  let { class: className, data }: Props = $props();
-  let userRate = $state(0);
+  let { data, class: className }: Props = $props();
 
+  let userRate = $state(0);
   async function addRating(rate: number) {
     if (userRate === rate) return;
     const novelId = page.params.slug;
@@ -24,7 +24,7 @@
 
     if (res.ok) {
       userRate = rate;
-      toast('Rating Updated', { position: 'top-center' });
+      toast('Rating Updated', { position: 'top-center', id: page.params.slug });
     } else {
       toast.error('Unauthorized', { position: 'top-center' });
       goto('/login');
@@ -39,10 +39,10 @@
 <div class={cn('mt-4', className)}>
   <div class="flex items-center justify-center">
     {#each [1, 2, 3, 4, 5] as rate}
-      <button aria-label={`rate ${rate} star`} onclick={() => addRating(rate)}>
+      <button type="button" aria-label={`rate ${rate} star`} onclick={() => addRating(rate)}>
         <Star class={userRate >= rate ? 'fill-[gold] text-[gold]' : 'fill-none'} />
       </button>
     {/each}
   </div>
-  <p class="mt-2 cursor-default text-center font-medium opacity-85">Rate This Novel</p>
+  <p class="mt-2 text-center font-medium opacity-85">Rate This Novel</p>
 </div>

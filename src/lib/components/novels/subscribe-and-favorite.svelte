@@ -7,13 +7,17 @@
   import Favourite from '../icons/favourite.svelte';
   import { goto } from '$app/navigation';
 
-  export let favorite: FavoriteData;
-  export let subscribe: SubscribeData;
-  let className: string = $$props.class;
+  interface Props {
+    favorite: FavoriteData;
+    subscribe: SubscribeData;
+    class?: string;
+  }
 
-  export { className as class };
+  let { favorite, subscribe, class: className }: Props = $props();
 
-  let isLoading = false;
+  let isLoading = $state(false);
+  let fav = $state(favorite);
+  let sub = $state(subscribe);
 
   async function favoriteNovel() {
     isLoading = true;
@@ -25,12 +29,12 @@
       isLoading = false;
       const data: MutateResponse = await res.json();
       if (data.success && data.action === 'added') {
-        favorite.total += 1;
-        favorite.isFavorited = true;
+        fav.total += 1;
+        fav.isFavorited = true;
         toast('Favorited', { position: 'top-center' });
       } else if (data.success && data.action === 'removed') {
-        favorite.total -= 1;
-        favorite.isFavorited = false;
+        fav.total -= 1;
+        fav.isFavorited = false;
         toast('Unfavorited', { position: 'top-center' });
       }
     } else {
@@ -49,12 +53,12 @@
       isLoading = false;
       const data: MutateResponse = await res.json();
       if (data.success && data.action === 'added') {
-        subscribe.total += 1;
-        subscribe.isSubscribed = true;
+        sub.total += 1;
+        sub.isSubscribed = true;
         toast('Subscribed', { position: 'top-center' });
       } else if (data.success && data.action === 'removed') {
-        subscribe.total -= 1;
-        subscribe.isSubscribed = false;
+        sub.total -= 1;
+        sub.isSubscribed = false;
         toast('Unsubscribed', { position: 'top-center' });
       }
     } else {
@@ -68,33 +72,31 @@
   <div class="flex flex-row items-center justify-center gap-2">
     <button
       disabled={isLoading}
-      on:click={subscribeNovel}
+      onclick={subscribeNovel}
       class={cn(
         'flex cursor-pointer flex-col items-center transition-colors duration-300 active:scale-110',
-        subscribe.isSubscribed ? 'text-[#eab308]' : ''
+        sub.isSubscribed ? 'text-[#eab308]' : ''
       )}
-      title={subscribe.isSubscribed ? 'Unsubscribe' : 'Subscribe'}
-      aria-label={subscribe.isSubscribed
-        ? 'unsubscribed from this novel'
-        : 'subscribed to this novel'}>
+      title={sub.isSubscribed ? 'Unsubscribe' : 'Subscribe'}
+      aria-label={sub.isSubscribed ? 'unsubscribed from this novel' : 'subscribed to this novel'}>
       <Bell class="size-[22px]" />
       <p class="hidden text-center text-xs font-medium opacity-90 md:block">
-        {subscribe.total}
+        {sub.total}
       </p>
     </button>
     <button
       class={cn(
         'flex cursor-pointer flex-col items-center transition-colors duration-300 active:scale-110',
-        favorite.isFavorited ? 'fill-none text-[#ef4444]' : 'fill-none'
+        fav.isFavorited ? 'fill-none text-[#ef4444]' : 'fill-none'
       )}
       disabled={isLoading}
-      on:click={favoriteNovel}
+      onclick={favoriteNovel}
       type="button"
-      title={favorite.isFavorited ? 'Unfavorite' : 'Favorite'}
-      aria-label={favorite.isFavorited ? 'remove from favorites' : 'add to favorites'}>
+      title={fav.isFavorited ? 'Unfavorite' : 'Favorite'}
+      aria-label={fav.isFavorited ? 'remove from favorites' : 'add to favorites'}>
       <Favourite class="size-[22px]" />
       <p class="hidden text-center text-xs font-medium opacity-90 md:block">
-        {favorite.total}
+        {fav.total}
       </p>
     </button>
   </div>
