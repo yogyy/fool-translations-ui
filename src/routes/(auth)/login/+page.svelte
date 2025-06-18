@@ -11,7 +11,7 @@
   import { onMount } from 'svelte';
   import { PUBLIC_TURNSLITE_SITE_KEY, PUBLIC_APP_ENV } from '$env/static/public';
 
-  export let data;
+  let { data } = $props();
 
   const form = superForm(data.form, {
     dataType: 'json',
@@ -32,9 +32,9 @@
   });
   const { form: formData, enhance, submitting } = form;
 
-  let oauthLoading = false;
-  let selectedProvider: 'discord' | 'google' | null = null;
-  let turnstileToken = '';
+  let oauthLoading = $state(false);
+  let selectedProvider = $state<'discord' | 'google' | null>(null);
+  let turnstileToken = $state('');
 
   onMount(() => {
     if (window.turnstile) {
@@ -57,21 +57,25 @@
 
 <form method="POST" use:enhance class="w-full space-y-2">
   <Form.Field {form} name="email">
-    <Form.Control let:attrs>
-      <Form.Label>Email</Form.Label>
-      <Input
-        placeholder="gehrman@sparrow.tarot"
-        type="email"
-        {...attrs}
-        bind:value={$formData.email} />
-      <Form.FieldErrors />
+    <Form.Control>
+      {#snippet children({ props })}
+        <Form.Label>Email</Form.Label>
+        <Input
+          placeholder="gehrman@sparrow.tarot"
+          type="email"
+          {...props}
+          bind:value={$formData.email} />
+        <Form.FieldErrors />
+      {/snippet}
     </Form.Control>
   </Form.Field>
   <Form.Field {form} name="password">
-    <Form.Control let:attrs>
-      <Form.Label>Password</Form.Label>
-      <Input placeholder="****word" type="password" {...attrs} bind:value={$formData.password} />
-      <Form.FieldErrors />
+    <Form.Control>
+      {#snippet children({ props })}
+        <Form.Label>Password</Form.Label>
+        <Input placeholder="****word" type="password" {...props} bind:value={$formData.password} />
+        <Form.FieldErrors />
+      {/snippet}
     </Form.Control>
   </Form.Field>
   <div id="turnstile-widget" data-size="flexible"></div>
@@ -83,7 +87,7 @@
       $formData.password.length < 8}
     class="w-full">
     {#if $submitting}
-      <Loading class="h-5 w-5 animate-[spin_1.2s_linear_infinite]" />
+      <Loading class="size-5 animate-[spin_1.2s_linear_infinite]" />
     {:else}
       Sign in
     {/if}
@@ -100,7 +104,7 @@
     <input type="hidden" bind:value={turnstileToken} name="token" />
     <button
       type="submit"
-      on:click={() => {
+      onclick={() => {
         selectedProvider = 'discord';
         oauthLoading = true;
       }}
@@ -110,7 +114,7 @@
         'flex w-full items-center gap-2 bg-[#5865F2] text-white hover:bg-[#5865F2]/80'
       )}>
       {#if selectedProvider === 'discord'}
-        <Loading class="h-5 w-5 animate-[spin_1.2s_linear_infinite]" />
+        <Loading class="size-5 animate-[spin_1.2s_linear_infinite]" />
       {:else}
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
           <path
@@ -124,7 +128,7 @@
     <input type="hidden" bind:value={turnstileToken} name="token" />
     <button
       type="submit"
-      on:click={() => {
+      onclick={() => {
         selectedProvider = 'google';
         oauthLoading = true;
       }}
@@ -134,7 +138,7 @@
         'flex w-full items-center gap-2 bg-[#D0463B] text-white hover:bg-[#D0463B]/80'
       )}>
       {#if selectedProvider === 'google' && oauthLoading}
-        <Loading class="h-5 w-5 animate-[spin_1.2s_linear_infinite]" />
+        <Loading class="size-5 animate-[spin_1.2s_linear_infinite]" />
       {:else}
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
           <path

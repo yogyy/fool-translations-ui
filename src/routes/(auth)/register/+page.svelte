@@ -9,7 +9,7 @@
   import { onMount } from 'svelte';
   import { PUBLIC_APP_ENV, PUBLIC_TURNSLITE_SITE_KEY } from '$env/static/public';
 
-  export let data;
+  let { data } = $props();
 
   const form = superForm(data.form, {
     dataType: 'json',
@@ -31,7 +31,7 @@
 
   const { form: formData, enhance, submitting } = form;
 
-  let turnstileToken = '';
+  let turnstileToken = $state('');
 
   onMount(() => {
     if (window.turnstile) {
@@ -54,35 +54,47 @@
 
 <form method="POST" use:enhance class="w-full space-y-2">
   <Form.Field {form} name="email">
-    <Form.Control let:attrs>
-      <Form.Label>Email</Form.Label>
-      <Input
-        placeholder="sherlock@moriarty.tarot"
-        type="email"
-        {...attrs}
-        bind:value={$formData.email} />
-      <Form.FieldErrors />
+    <Form.Control>
+      {#snippet children({ props })}
+        <Form.Label>Email</Form.Label>
+        <Input
+          placeholder="sherlock@moriarty.tarot"
+          type="email"
+          {...props}
+          bind:value={$formData.email} />
+        <Form.FieldErrors />
+      {/snippet}
     </Form.Control>
   </Form.Field>
   <Form.Field {form} name="name">
-    <Form.Control let:attrs>
-      <Form.Label>Name</Form.Label>
-      <Input placeholder="Sherlock Moriarty" {...attrs} bind:value={$formData.name} />
-      <Form.FieldErrors />
+    <Form.Control>
+      {#snippet children({ props })}
+        <Form.Label>Name</Form.Label>
+        <Input placeholder="Sherlock Moriarty" {...props} bind:value={$formData.name} />
+        <Form.FieldErrors />
+      {/snippet}
     </Form.Control>
   </Form.Field>
   <Form.Field {form} name="password">
-    <Form.Control let:attrs>
-      <Form.Label>Password</Form.Label>
-      <Input placeholder="****" type="password" {...attrs} bind:value={$formData.password} />
-      <Form.FieldErrors />
+    <Form.Control>
+      {#snippet children({ props })}
+        <Form.Label>Password</Form.Label>
+        <Input placeholder="****" type="password" {...props} bind:value={$formData.password} />
+        <Form.FieldErrors />
+      {/snippet}
     </Form.Control>
   </Form.Field>
   <Form.Field {form} name="confirmPassword">
-    <Form.Control let:attrs>
-      <Form.Label>Confirm Password</Form.Label>
-      <Input placeholder="****" type="password" {...attrs} bind:value={$formData.confirmPassword} />
-      <Form.FieldErrors />
+    <Form.Control>
+      {#snippet children({ props })}
+        <Form.Label>Confirm Password</Form.Label>
+        <Input
+          placeholder="****"
+          type="password"
+          {...props}
+          bind:value={$formData.confirmPassword} />
+        <Form.FieldErrors />
+      {/snippet}
     </Form.Control>
   </Form.Field>
   <div id="turnstile-widget" data-size="flexible"></div>
@@ -96,14 +108,14 @@
       turnstileToken === ''}
     class="w-full">
     {#if $submitting}
-      <Loading class="h-5 w-5 animate-[spin_1.2s_linear_infinite]" />
+      <Loading class="size-5 animate-[spin_1.2s_linear_infinite]" />
     {:else}
       Create Account
     {/if}
   </Form.Button>
 </form>
 
-<div class="flex flex-col gap-4 text-pretty text-center text-sm">
+<div class="flex flex-col gap-4 text-center text-sm text-pretty">
   <p>
     <span class="opacity-80">By clicking continue, you agree to our</span>
     <a
