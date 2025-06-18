@@ -1,27 +1,30 @@
 <script lang="ts">
-  export let title;
-  export let image;
-  export let id: string;
+  interface Props {
+    title: string;
+    image: string;
+    id: string;
+  }
+  let { title, image, id }: Props = $props();
 </script>
 
 <a
   data-sveltekit-preload-data="tap"
   href={`/novels/${id.slice(4)}`}
-  class="card aspect-[2/3] hover:scale-105">
+  class="novel-card aspect-[2/3] hover:scale-105">
   <img
     src={image}
     alt={`${title} Cover`}
     class="h-full w-full rounded-lg"
     style="object-fit: cover; max-width: 400px; max-height: 600px; aspect-ratio: 0.6666666666666666; width: 100%;" />
-  <div class="card-footer rounded-b-lg">
-    <h3 class="text-lg font-semibold leading-tight">
+  <div class="novel-card-footer rounded-b-lg">
+    <h3 class="text-lg leading-tight font-semibold">
       {title}
     </h3>
   </div>
 </a>
 
-<style>
-  .card {
+<style scoped>
+  .novel-card {
     border-radius: 0;
     background-color: transparent;
     --tw-shadow: 0 0 #0000;
@@ -35,9 +38,9 @@
     box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
     position: relative;
     overflow: hidden;
-    transition: transform 0.3s ease;
+    transition: scale 0.3s ease;
   }
-  .card-footer {
+  .novel-card-footer {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -51,7 +54,7 @@
     transition: opacity 0.3s ease;
   }
 
-  .card:hover .card-footer {
+  .novel-card:hover .novel-card-footer {
     opacity: 100;
   }
 </style>
