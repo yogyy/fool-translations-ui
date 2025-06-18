@@ -5,9 +5,7 @@
   import Navbar from '$lib/components/navbar.svelte';
   import Seo from '$lib/components/SEO.svelte';
 
-  export let data;
-
-  const { featured } = data;
+  let { data } = $props();
 </script>
 
 <Seo title="Fool Translations" />
@@ -19,8 +17,8 @@
   </h1>
   <div class="overflow-hidden">
     <div class="flex flex-col">
-      <HotSection data={featured.hot} />
-      <TopSection data={featured.top} />
+      <HotSection data={data.featured.hot} />
+      <TopSection data={data.featured.top} />
     </div>
     <!-- <pre>{JSON.stringify(featured.top, null, 4)}</pre> -->
   </div>

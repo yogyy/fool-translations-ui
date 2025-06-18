@@ -1,9 +1,9 @@
 <script lang="ts">
   import NovelForm from './novel-form.svelte';
 
-  export let data;
+  let { data } = $props();
 </script>
 
-<div class="container max-w-pgsize pt-28">
+<div class="max-w-pgsize container pt-28">
   <NovelForm data={data.form} />
 </div>

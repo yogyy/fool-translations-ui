@@ -1,9 +1,9 @@
 <script>
   import UpdateNovelForm from './update-novel-form.svelte';
 
-  export let data;
+  let { data } = $props();
 </script>
 
-<div class="container max-w-pgsize pt-28">
+<div class="max-w-pgsize container pt-28">
   <UpdateNovelForm data={data.form} novel={data.novel} />
 </div>
