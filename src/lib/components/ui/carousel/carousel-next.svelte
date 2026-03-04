@@ -3,7 +3,7 @@
   import { getEmblaContext } from './context.js';
   import { cn } from '$lib/utils.js';
   import { Button, type Props } from '$lib/components/ui/button/index.js';
-  import ArrowRight_02 from '$lib/components/icons/arrow-right-02.svelte';
+  import ArrowRight01 from '$lib/components/icons/arrow-right-01.svelte';
 
   let {
     ref = $bindable(null),
@@ -31,6 +31,6 @@
   onkeydown={emblaCtx.handleKeyDown}
   bind:ref
   {...restProps}>
-  <ArrowRight_02 />
+  <ArrowRight01 />
   <span class="sr-only">Next slide</span>
 </Button>
